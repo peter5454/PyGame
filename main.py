@@ -25,9 +25,10 @@ enemy = Enemy((200, 300), enemy_image)
 enemy_group.add(enemy)
 
 turret_button = Button(c.SCREEN_WIDTH + 80 ,150, buy_turret_image)
-cancel_button = Button(c.SCREEN_WIDTH + 100 ,200, cancel_image)
+cancel_button = Button(c.SCREEN_WIDTH + 100 ,250, cancel_image)
 
-
+#game variables
+placing_turrets = False
 #game loop
 run = True
 while run:
@@ -41,9 +42,12 @@ while run:
 
   #draw groups
   enemy_group.draw(screen)
-
-  turret_button.draw(screen)
-  cancel_button.draw(screen)
+  if placing_turrets == False:
+    if turret_button.draw(screen):
+      placing_turrets = True
+  if placing_turrets == True:
+    if cancel_button.draw(screen):
+      placing_turrets = False
 
   #event handler
   for event in pg.event.get():
