@@ -41,7 +41,7 @@ run = True
 while run:
 
   clock.tick(c.FPS)
-
+  pg.Surface.fill((0,0,100),c.SIDE_PANEL)
   screen.fill("grey100")
 
   #update groups
@@ -49,6 +49,7 @@ while run:
 
   #draw groups
   enemy_group.draw(screen)
+  turret_group.draw(screen)
   if placing_turrets == False:
     if turret_button.draw(screen):
       placing_turrets = True
@@ -56,7 +57,8 @@ while run:
     cursort_rect = cursor_turret.get_rect()
     cursor_pos = pg.mouse.get_pos()
     cursort_rect.center = cursor_pos
-    screen.blit(cursor_turret, cursort_rect)
+    if cursor_pos[0] <= c.SCREEN_WIDTH:
+      screen.blit(cursor_turret, cursort_rect)
     if cancel_button.draw(screen):
       placing_turrets = False
 
@@ -66,8 +68,8 @@ while run:
     if event.type == pg.QUIT:
       run = False
     if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-      mouse_pos = pg.mouse.get_pos
-      if mouse_pos[0] < c.SCREEN_WIDTH and mouse_pos[1] < c.SCREEN_HEIGHT:
+      mouse_pos = pg.mouse.get_pos()
+      if mouse_pos[0] < c.SCREEN_WIDTH + c.SIDE_PANEL and mouse_pos[1] < c.SCREEN_HEIGHT:
         if placing_turrets == True:
           create_turret(mouse_pos)
     
