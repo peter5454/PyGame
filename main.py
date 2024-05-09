@@ -85,13 +85,11 @@ while run:
     cursort_rect = cursor_turret.get_rect()
     cursor_pos = pg.mouse.get_pos()
     cursort_rect.center = cursor_pos
-
-    if cursor_pos[0] <= c.SCREEN_WIDTH:
-      screen.blit(cursor_turret, cursort_rect)
-      if overlapping_turrets(cursor_pos):
-        draw_circ(255,0,0,200)
-      else:
-        draw_circ(128,128,128,200)
+    screen.blit(cursor_turret, cursort_rect)
+    if overlapping_turrets(cursor_pos):
+      draw_circ(255,0,0,200)
+    else:
+      draw_circ(128,128,128,200)
       
 
     if cancel_button.draw(screen):
