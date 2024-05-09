@@ -3,6 +3,7 @@ from enemy import Enemy
 import constants as c
 from buttons import Button
 from turrets import Turret
+import math as mt
 
 #initialise pygame
 pg.init()
@@ -31,9 +32,20 @@ enemy_group.add(enemy)
 turret_button = Button(c.SCREEN_WIDTH + 80 ,150, buy_turret_image)
 cancel_button = Button(c.SCREEN_WIDTH + 100 ,250, cancel_image)
 
+def distance(point1, point2):
+  return mt.sqrt(((point1[0] - point2[0]) ** 2)+  (point1[1] - point2[1]) **2) #calculate euclidian distance
+
 def create_turret(mouse_pos):
+  close = False
   new_turret = Turret(cursor_turret, mouse_pos)
-  turret_group.add(new_turret)
+  for i in turret_group:
+    dist = distance(mouse_pos, i.rect.center)
+    print (dist)
+    if dist < mt.sqrt((mt.pi * 10)**2 ): #crate circle round the point of radius 10
+      close = True
+      pass
+  if close == False:
+    turret_group.add(new_turret)
 #game variables
 placing_turrets = False
 #game loop
@@ -41,7 +53,6 @@ run = True
 while run:
 
   clock.tick(c.FPS)
-  pg.Surface.fill((0,0,100),c.SIDE_PANEL)
   screen.fill("grey100")
 
   #update groups
@@ -50,15 +61,24 @@ while run:
   #draw groups
   enemy_group.draw(screen)
   turret_group.draw(screen)
+
   if placing_turrets == False:
     if turret_button.draw(screen):
       placing_turrets = True
+  
   if placing_turrets == True:
     cursort_rect = cursor_turret.get_rect()
     cursor_pos = pg.mouse.get_pos()
     cursort_rect.center = cursor_pos
+
     if cursor_pos[0] <= c.SCREEN_WIDTH:
-      screen.blit(cursor_turret, cursort_rect)
+       screen.blit(cursor_turret, cursort_rect)
+       transparent_surface = pg.Surface((c.SCREEN_WIDTH, c.SCREEN_HEIGHT), pg.SRCALPHA)
+       transparent_surface.fill((0, 0, 0, 0))
+       pg.draw.circle(transparent_surface, (128, 128, 128, 50), cursor_pos, 200)
+       screen.blit(transparent_surface, (0, 0))
+      
+
     if cancel_button.draw(screen):
       placing_turrets = False
 
