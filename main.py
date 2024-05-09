@@ -47,6 +47,9 @@ def create_turret(mouse_pos):
   close = overlapping_turrets(mouse_pos)
   if close == False:
     turret_group.add(new_turret)
+    return True
+  else:
+    return False
 
 def overlapping_turrets(mouse_pos):
   if 10 > mouse_pos[0] or mouse_pos[0] > c.SCREEN_WIDTH-10:
@@ -103,7 +106,10 @@ while run:
       mouse_pos = pg.mouse.get_pos()
       if mouse_pos[0] < c.SCREEN_WIDTH + c.SIDE_PANEL and mouse_pos[1] < c.SCREEN_HEIGHT:
         if placing_turrets == True:
-          create_turret(mouse_pos)
+          place_turr = create_turret(mouse_pos)
+          if place_turr:
+            placing_turrets = False
+          
     
   #update display
   pg.display.flip()
