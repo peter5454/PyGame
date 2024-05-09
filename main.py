@@ -43,18 +43,16 @@ def draw_circ(R,G,B,Size):
 
 def create_turret(mouse_pos):
   close = False
-  new_turret = Turret(cursor_turret, mouse_pos)
-  if 10 > mouse_pos[0] or mouse_pos[0] > c.SCREEN_WIDTH-10:
-    close = True
-    pass
-  else:
-    close = overlapping_turrets(mouse_pos)
+  new_turret = Turret(cursor_turret, mouse_pos)  
+  close = overlapping_turrets(mouse_pos)
   if close == False:
     turret_group.add(new_turret)
-  else:
-    draw_circ(230,0,0,200)
 
 def overlapping_turrets(mouse_pos):
+  if 10 > mouse_pos[0] or mouse_pos[0] > c.SCREEN_WIDTH-10:
+    return True
+  if 10 > mouse_pos[1] or mouse_pos[1] > c.SCREEN_HEIGHT-10:
+    return True
   for i in turret_group:
       dist = distance(mouse_pos, i.rect.center)
       if dist < mt.sqrt((mt.pi * 10)**2 ): #create circle around the point of radius 10
@@ -87,7 +85,6 @@ while run:
 
     if cursor_pos[0] <= c.SCREEN_WIDTH:
       screen.blit(cursor_turret, cursort_rect)
-      print (123)
       if overlapping_turrets(cursor_pos):
         draw_circ(255,0,0,200)
       else:
