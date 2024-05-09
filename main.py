@@ -26,7 +26,14 @@ cancel_image = pg.image.load('assets/images/buttons/cancel.png').convert_alpha()
 enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
 
-enemy = Enemy((200, 300), enemy_image)
+waypoints = [
+  (100, 100),
+  (400, 200),
+  (400, 100),
+  (200, 300)
+]
+
+enemy = Enemy(waypoints, enemy_image)
 enemy_group.add(enemy)
 
 turret_button = Button(c.SCREEN_WIDTH + 80 ,150, buy_turret_image)
@@ -54,6 +61,9 @@ while run:
 
   clock.tick(c.FPS)
   screen.fill("grey100")
+
+  #draw enemy path
+  pg.draw.lines(screen, "grey0", False, waypoints)
 
   #update groups
   enemy_group.update()
