@@ -35,17 +35,31 @@ cancel_button = Button(c.SCREEN_WIDTH + 100 ,250, cancel_image)
 def distance(point1, point2):
   return mt.sqrt(((point1[0] - point2[0]) ** 2)+  (point1[1] - point2[1]) **2) #calculate euclidian distance
 
+def draw_circ(R,G,B,Size):
+  transparent_surface = pg.Surface((c.SCREEN_WIDTH, c.SCREEN_HEIGHT), pg.SRCALPHA)
+  transparent_surface.fill((0, 0, 0, 0))
+  pg.draw.circle(transparent_surface, (R, G, B, 50), cursor_pos, Size)
+  screen.blit(transparent_surface, (0, 0))
+
 def create_turret(mouse_pos):
   close = False
   new_turret = Turret(cursor_turret, mouse_pos)
-  for i in turret_group:
-    dist = distance(mouse_pos, i.rect.center)
-    print (dist)
-    if dist < mt.sqrt((mt.pi * 10)**2 ): #crate circle round the point of radius 10
-      close = True
-      pass
+  if 10 > mouse_pos[0] or mouse_pos[0] > c.SCREEN_WIDTH-10:
+    close = True
+    pass
+  else:
+    close = overlapping_turrets(mouse_pos)
   if close == False:
     turret_group.add(new_turret)
+  else:
+    draw_circ(230,0,0,200)
+
+def overlapping_turrets(mouse_pos):
+  for i in turret_group:
+      dist = distance(mouse_pos, i.rect.center)
+      if dist < mt.sqrt((mt.pi * 10)**2 ): #create circle around the point of radius 10
+        return True
+  return False
 #game variables
 placing_turrets = False
 #game loop
@@ -72,11 +86,12 @@ while run:
     cursort_rect.center = cursor_pos
 
     if cursor_pos[0] <= c.SCREEN_WIDTH:
-       screen.blit(cursor_turret, cursort_rect)
-       transparent_surface = pg.Surface((c.SCREEN_WIDTH, c.SCREEN_HEIGHT), pg.SRCALPHA)
-       transparent_surface.fill((0, 0, 0, 0))
-       pg.draw.circle(transparent_surface, (128, 128, 128, 50), cursor_pos, 200)
-       screen.blit(transparent_surface, (0, 0))
+      screen.blit(cursor_turret, cursort_rect)
+      print (123)
+      if overlapping_turrets(cursor_pos):
+        draw_circ(255,0,0,200)
+      else:
+        draw_circ(128,128,128,200)
       
 
     if cancel_button.draw(screen):
