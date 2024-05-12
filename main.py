@@ -1,5 +1,6 @@
 import pygame as pg
 from enemy import Enemy
+from world import World
 import constants as c
 from buttons import Button
 from turrets import Turret
@@ -12,11 +13,19 @@ pg.init()
 clock = pg.time.Clock()
 
 #create game window
-screen = pg.display.set_mode((c.SCREEN_WIDTH + c.SIDE_PANEL, c.SCREEN_HEIGHT))
+screen = pg.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 pg.display.set_caption("Medieval Meltdown")
 
 #load images
+#map
+map_image = pg.image.load('assets/images/maps/map_1.png').convert_alpha()
+#enemies
 enemy_image = pg.image.load('assets/images/enemies/enemy_1.png').convert_alpha()
+
+#create world
+world = World(map_image)
+
+#turret
 cursor_turret = pg.image.load('assets/images/turrets/cursor_turret.png').convert_alpha()
 
 buy_turret_image = pg.image.load('assets/images/buttons/buy_turret.png').convert_alpha()
@@ -36,8 +45,8 @@ waypoints = [
 enemy = Enemy(waypoints, enemy_image)
 enemy_group.add(enemy)
 
-turret_button = Button(c.SCREEN_WIDTH + 80 ,150, buy_turret_image)
-cancel_button = Button(c.SCREEN_WIDTH + 100 ,250, cancel_image)
+turret_button = Button(c.SCREEN_WIDTH - 160 ,150, buy_turret_image)
+cancel_button = Button(c.SCREEN_WIDTH - 200 ,250, cancel_image)
 
 def distance(point1, point2):
   return mt.sqrt(((point1[0] - point2[0]) ** 2)+  (point1[1] - point2[1]) **2) #calculate euclidian distance
@@ -61,6 +70,9 @@ while run:
 
   clock.tick(c.FPS)
   screen.fill("grey100")
+
+  #draw level
+  world.draw(screen)
 
   #draw enemy path
   pg.draw.lines(screen, "grey0", False, waypoints)
@@ -99,7 +111,7 @@ while run:
       run = False
     if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
       mouse_pos = pg.mouse.get_pos()
-      if mouse_pos[0] < c.SCREEN_WIDTH + c.SIDE_PANEL and mouse_pos[1] < c.SCREEN_HEIGHT:
+      if mouse_pos[0] < c.SCREEN_WIDTH and mouse_pos[1] < c.SCREEN_HEIGHT:
         if placing_turrets == True:
           create_turret(mouse_pos)
     
