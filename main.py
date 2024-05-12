@@ -77,6 +77,7 @@ while run:
   enemy_group.draw(screen)
   turret_group.draw(screen)
 
+
   if placing_turrets == False:
     if turret_button.draw(screen):
       placing_turrets = True
