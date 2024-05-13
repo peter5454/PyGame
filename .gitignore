@@ -1,6 +1,6 @@
 # Pygame build process: config.py setup.py
 /Setup
-.pyc
+*.pyc
 /build/
 /src_py/version.py
 
