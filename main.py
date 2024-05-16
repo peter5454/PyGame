@@ -57,14 +57,30 @@ def draw_circ(R,G,B,Size):
   screen.blit(transparent_surface, (0, 0))
 
 def create_turret(mouse_pos):
-  close = False
-  new_turret = Turret(cursor_turret, mouse_pos)  
-  close = overlapping_turrets(mouse_pos)
-  if close == False:
-    turret_group.add(new_turret)
-    return True
-  else:
-    return False
+  #close = False
+  mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
+  mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
+  #calculate the sequential number of the tile
+  mouse_tile_num = (mouse_tile_y * c.COLS) + mouse_tile_x
+  #check if that tile is grass
+  if world.tile_map[mouse_tile_num] == 18:
+    #check that there isn't already a turret there
+    space_is_free = True
+    for turret in turret_group:
+      if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
+        space_is_free = False
+      #if it is a free space then create turret
+    if space_is_free == True:
+      new_turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)  
+      turret_group.add(new_turret)
+"""
+        close = overlapping_turrets(mouse_pos)
+        if close == False:
+          turret_group.add(new_turret)
+          return True
+        else:
+          return False
+"""
 
 def overlapping_turrets(mouse_pos):
   if 10 > mouse_pos[0] or mouse_pos[0] > c.SCREEN_WIDTH-10:
@@ -76,6 +92,7 @@ def overlapping_turrets(mouse_pos):
       if dist < mt.sqrt((mt.pi * 10)**2 ): #create circle around the point of radius 10
         return True
   return False
+
 #game variables
 placing_turrets = False
 #game loop
@@ -90,7 +107,7 @@ while run:
 
   #draw enemy path
   #pg.draw.lines(screen, "grey0", False, world.waypoints)
-
+  #print(turret_group)
   #update groups
   enemy_group.update()
 
@@ -108,11 +125,12 @@ while run:
     cursor_pos = pg.mouse.get_pos()
     cursort_rect.center = cursor_pos
     screen.blit(cursor_turret, cursort_rect)
+
     if overlapping_turrets(cursor_pos):
       draw_circ(255,0,0,200)
     else:
       draw_circ(128,128,128,200)
-      
+
 
     if cancel_button.draw(screen):
       placing_turrets = False
@@ -122,12 +140,15 @@ while run:
     #quit program
     if event.type == pg.QUIT:
       run = False
+    #mouse click
     if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
       mouse_pos = pg.mouse.get_pos()
+      #check if mouse is on the game area
       if mouse_pos[0] < c.SCREEN_WIDTH and mouse_pos[1] < c.SCREEN_HEIGHT:
+
         if placing_turrets == True:
-          place_turr = create_turret(mouse_pos)
-          if place_turr:
+          place_turret = create_turret(mouse_pos)
+          if place_turret:
             placing_turrets = False
           
     
