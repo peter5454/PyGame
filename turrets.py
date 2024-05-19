@@ -6,3 +6,8 @@ class Turret(pg.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = pos
+
+        self.range = 90
+        self.selected = False
+
+    #def pick_target(self, enemy_group):

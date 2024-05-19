@@ -71,13 +71,22 @@ def overlapping_turrets(mouse_pos):
     return True
   if 10 > mouse_pos[1] or mouse_pos[1] > c.SCREEN_HEIGHT-10:
     return True
-  for i in turret_group:
-      dist = distance(mouse_pos, i.rect.center)
-      if dist < mt.sqrt((mt.pi * 10)**2 ): #create circle around the point of radius 10
+  for turret in turret_group:
+      dist = distance(mouse_pos, turret.rect.center)
+      if dist < mt.sqrt((mt.pi * turret.range)**2 ): #create circle around the point of radius 10
         return True
   return False
+
+def selected_turret(mouse_pos):
+  for turret in turret_group:
+    dist = distance(mouse_pos, turret.rect.center)
+    if dist < 10:
+      print (turret)
+      return turret
+
 #game variables
 placing_turrets = False
+selected_turret = None
 #game loop
 run = True
 while run:
