@@ -20,7 +20,7 @@ pg.display.set_caption("Medieval Meltdown")
 #game variables
 last_enemy_spawn = pg.time.get_ticks()
 placing_turrets = False
-
+selected_turret = None
 
 #load images
 #map
@@ -57,11 +57,16 @@ cancel_button = Button(c.SCREEN_WIDTH - 200 ,250, cancel_image)
 def distance(point1, point2):
   return mt.sqrt(((point1[0] - point2[0]) ** 2)+  (point1[1] - point2[1]) **2) #calculate euclidian distance
 
-def draw_circ(R,G,B,Size):
+def draw_circ(R,G,B,Size,location):
   transparent_surface = pg.Surface((c.SCREEN_WIDTH, c.SCREEN_HEIGHT), pg.SRCALPHA)
   transparent_surface.fill((0, 0, 0, 0))
-  pg.draw.circle(transparent_surface, (R, G, B, 50), cursor_pos, Size)
+  pg.draw.circle(transparent_surface, (0, 0, 0, 100), location, Size + 2)
+  pg.draw.circle(transparent_surface, (R, G, B, 70), location, Size)
   screen.blit(transparent_surface, (0, 0))
+
+def clear_selected():
+  for turret in turret_group:
+    turret.selected = False
 
 def create_turret(mouse_pos):
   #close = False
@@ -70,16 +75,17 @@ def create_turret(mouse_pos):
   #calculate the sequential number of the tile
   mouse_tile_num = (mouse_tile_y * c.COLS) + mouse_tile_x
   #check if that tile is grass
-  if world.tile_map[mouse_tile_num] == 18:
+  if mouse_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL: #check if mouse is not on side panel
+    if world.tile_map[mouse_tile_num] == 18:
     #check that there isn't already a turret there
-    space_is_free = True
-    for turret in turret_group:
-      if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
-        space_is_free = False
+      space_is_free = True
+      for turret in turret_group:
+        if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
+          space_is_free = False
       #if it is a free space then create turret
-    if space_is_free == True:
-      new_turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)  
-      turret_group.add(new_turret)
+      if space_is_free == True:
+        new_turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)  
+        turret_group.add(new_turret)
       """
       close = overlapping_turrets(mouse_pos)
       if close == False:
@@ -95,9 +101,10 @@ def tile_occupied(mouse_pos):
   #calculate the sequential number of the tile
   mouse_tile_num = (mouse_tile_y * c.COLS) + mouse_tile_x
   #check if that tile is grass
+ 
   if world.tile_map[mouse_tile_num] != 18:
     return True
-  #chek if mouse tile is occupied
+  #check if mouse tile is occupied
   for turret in turret_group:
     if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
       return True
@@ -114,7 +121,14 @@ def tile_occupied(mouse_pos):
   return False
   """
     
-
+def select_turret(mouse_pos):
+  mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
+  mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
+  for turret in turret_group:
+    if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
+      print (turret)
+      return turret
+  
 #game loop
 run = True
 while run:
@@ -127,6 +141,10 @@ while run:
 
   #update groups
   enemy_group.update()
+  turret_group.update(enemy_group)
+
+  if selected_turret:
+    selected_turret.selected = True
 
 
   #####################
@@ -143,7 +161,8 @@ while run:
 
   #draw groups
   enemy_group.draw(screen)
-  turret_group.draw(screen)
+  for turret in turret_group:
+    turret.draw(screen)
 
   #spawn enemies
   if pg.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN:
@@ -155,6 +174,9 @@ while run:
       last_enemy_spawn = pg.time.get_ticks()
 
   if placing_turrets == False:
+    if selected_turret:
+      selected_turret.selected = True
+      draw_circ(200,200,200,selected_turret.range,(selected_turret.x, selected_turret.y))
     if turret_button.draw(screen):
       placing_turrets = True
   
@@ -165,9 +187,9 @@ while run:
     screen.blit(cursor_turret, cursort_rect)
 
     if tile_occupied(cursor_pos):
-      draw_circ(255,0,0,200)
+      draw_circ(255,0,0,200,cursor_pos)
     else:
-      draw_circ(128,128,128,200)
+      draw_circ(128,128,128,200,cursor_pos)
 
 
     if cancel_button.draw(screen):
@@ -183,11 +205,14 @@ while run:
       mouse_pos = pg.mouse.get_pos()
       #check if mouse is on the game area
       if mouse_pos[0] < c.SCREEN_WIDTH and mouse_pos[1] < c.SCREEN_HEIGHT:
-
+        selected_turret = None
+        clear_selected()
         if placing_turrets == True:
           place_turret = create_turret(mouse_pos)
           if place_turret:
             placing_turrets = False
+        if placing_turrets == False:
+          selected_turret = select_turret(mouse_pos)
           
     
   #update display
