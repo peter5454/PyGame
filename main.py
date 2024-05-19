@@ -32,15 +32,6 @@ enemy_images = {
   "fire_golem": pg.image.load('assets/images/enemies/fire_golem.png').convert_alpha()
 }
 
-#load json data for level
-with open('assets/images/maps/map_1.tmj') as file:
-  world_data = json.load(file)
-
-#create world
-world = World(world_data, map_image)
-world.process_data()
-world.process_enemies()
-
 #turret
 cursor_turret = pg.image.load('assets/images/turrets/cursor_turret.png').convert_alpha()
 
@@ -51,8 +42,28 @@ cancel_image = pg.image.load('assets/images/buttons/cancel.png').convert_alpha()
 enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
 
+#buttons
 turret_button = Button(c.SCREEN_WIDTH - 160 ,150, buy_turret_image)
 cancel_button = Button(c.SCREEN_WIDTH - 200 ,250, cancel_image)
+
+#load json data for level
+with open('assets/images/maps/map_1.tmj') as file:
+  world_data = json.load(file)
+
+#create world
+world = World(world_data, map_image)
+world.process_data()
+world.process_enemies()
+
+#load fonts for displaying text on the screen
+text_font = pg.font.SysFont("Consolas", 24, bold = True)
+large_font = pg.font.SysFont("Consolas", 36)
+
+#function for outputting text onto the screen
+def draw_text(text, font, text_col, x, y):
+  img = font.render(text, True, text_col)
+  screen.blit(img, (x, y))
+
 
 def distance(point1, point2):
   return mt.sqrt(((point1[0] - point2[0]) ** 2)+  (point1[1] - point2[1]) **2) #calculate euclidian distance
@@ -73,13 +84,18 @@ def create_turret(mouse_pos):
   if world.tile_map[mouse_tile_num] == 18:
     #check that there isn't already a turret there
     space_is_free = True
-    for turret in turret_group:
-      if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
-        space_is_free = False
-      #if it is a free space then create turret
+    if mouse_pos[0] > (c.SCREEN_WIDTH - c.SIDE_PANEL - 1):
+      space_is_free = False
+    elif len(turret_group) > 0:
+      for turret in turret_group:
+        if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
+          space_is_free = False
+    #if it is a free space then create turret
     if space_is_free == True:
       new_turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)  
       turret_group.add(new_turret)
+      #deduct cost of turret
+      world.money -= c.BUY_COST
       """
       close = overlapping_turrets(mouse_pos)
       if close == False:
@@ -95,7 +111,7 @@ def tile_occupied(mouse_pos):
   #calculate the sequential number of the tile
   mouse_tile_num = (mouse_tile_y * c.COLS) + mouse_tile_x
   #check if that tile is grass
-  if world.tile_map[mouse_tile_num] != 18:
+  if world.tile_map[mouse_tile_num] != 18 or mouse_pos[0] > (c.SCREEN_WIDTH - c.SIDE_PANEL - 1):
     return True
   #chek if mouse tile is occupied
   for turret in turret_group:
@@ -145,6 +161,10 @@ while run:
   enemy_group.draw(screen)
   turret_group.draw(screen)
 
+  draw_text(str(world.health), text_font, "grey100", 0, 0)
+  draw_text(str(world.money), text_font, "grey100", 0, 30)
+
+
   #spawn enemies
   if pg.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN:
     if world.spawned_enemies < len(world.enemy_list):
@@ -185,7 +205,9 @@ while run:
       if mouse_pos[0] < c.SCREEN_WIDTH and mouse_pos[1] < c.SCREEN_HEIGHT:
 
         if placing_turrets == True:
-          place_turret = create_turret(mouse_pos)
+          #check if there is enough money for a turret
+          if world.money >= c.BUY_COST:
+            place_turret = create_turret(mouse_pos)
           if place_turret:
             placing_turrets = False
           
