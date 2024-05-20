@@ -153,7 +153,7 @@ def select_turret(mouse_pos):
   mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
   for turret in turret_group:
     if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
-      print (turret)
+      #print (turret)
       return turret
   
 #game loop
@@ -227,7 +227,8 @@ while run:
       level_started = False
       last_enemy_spawn = pg.time.get_ticks()
       world.reset_level()
-      world.process_enemies()
+      if world.level <= c.TOTAL_LEVELS:
+        world.process_enemies()
 
     if placing_turrets == False:
       if selected_turret:
