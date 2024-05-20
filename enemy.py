@@ -1,6 +1,7 @@
 import pygame as pg
 from pygame.math import Vector2
 import math
+import constants as c
 from enemy_data import ENEMY_DATA
 
 class Enemy(pg.sprite.Sprite):
@@ -21,6 +22,7 @@ class Enemy(pg.sprite.Sprite):
         self.move(world)
         self.rotate()
         self.check_alive(world)
+
 
     def move(self, world):
         #define a target waypoint
@@ -53,8 +55,9 @@ class Enemy(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
 
+
     def check_alive(self, world):
         if self.health <= 0:
             world.killed_enemies += 1
-            #world.money += c.KILL_REWARD
+            world.money += c.KILL_REWARD
             self.kill()
