@@ -98,21 +98,20 @@ def create_turret(mouse_pos):
   #check if that tile is grass
   if mouse_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL: #check if mouse is not on side panel
     if world.tile_map[mouse_tile_num] == 18:
-    #check that there isn't already a turret there
-
-    space_is_free = True
-    if mouse_pos[0] > (c.SCREEN_WIDTH - c.SIDE_PANEL - 1):
-      space_is_free = False
-    elif len(turret_group) > 0:
-      for turret in turret_group:
-        if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
-          space_is_free = False
-    #if it is a free space then create turret
-    if space_is_free == True:
-      new_turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)  
-      turret_group.add(new_turret)
-      #deduct cost of turret
-      world.money -= c.BUY_COST
+      #check that there isn't already a turret there
+      space_is_free = True
+      if mouse_pos[0] > (c.SCREEN_WIDTH - c.SIDE_PANEL - 1):
+        space_is_free = False
+      elif len(turret_group) > 0:
+        for turret in turret_group:
+          if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
+            space_is_free = False
+      #if it is a free space then create turret
+      if space_is_free == True:
+        new_turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)  
+        turret_group.add(new_turret)
+        #deduct cost of turret
+        world.money -= c.BUY_COST
       """
       close = overlapping_turrets(mouse_pos)
       if close == False:
@@ -243,9 +242,9 @@ while run:
       screen.blit(cursor_turret, cursort_rect)
 
       if tile_occupied(cursor_pos):
-        draw_circ(255,0,0,200)
+        draw_circ(255,0,0,200,cursor_pos)
       else:
-        draw_circ(128,128,128,200)
+        draw_circ(128,128,128,200,cursor_pos)
 
 
       if cancel_button.draw(screen):
