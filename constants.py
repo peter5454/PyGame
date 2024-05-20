@@ -8,3 +8,6 @@ FPS = 60
 
 #enemy constants
 SPAWN_COOLDOWN = 400
+
+#Turret Constants
+DAMAGE = 5
