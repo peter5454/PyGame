@@ -46,7 +46,7 @@ class World():
             return True
 
     def reset_level(self):
-        #rest enemy variables
+        #reset enemy variables
         self.enemy_list = []
         self.spawned_enemies = 0
         self.killed_enemies = 0
