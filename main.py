@@ -112,6 +112,7 @@ def create_turret(mouse_pos):
         turret_group.add(new_turret)
         #deduct cost of turret
         world.money -= c.BUY_COST
+        return True
       """
       close = overlapping_turrets(mouse_pos)
       if close == False:
@@ -242,9 +243,9 @@ while run:
       screen.blit(cursor_turret, cursort_rect)
 
       if tile_occupied(cursor_pos):
-        draw_circ(255,0,0,200,cursor_pos)
+        draw_circ(255,0,0,90,cursor_pos) #need to change to a varible that matches the turret range rather than a number
       else:
-        draw_circ(128,128,128,200,cursor_pos)
+        draw_circ(128,128,128,90,cursor_pos) #need to change to a varible that matches the turret range rather than a number
 
 
       if cancel_button.draw(screen):
@@ -291,6 +292,7 @@ while run:
           if world.money >= c.BUY_COST:
             place_turret = create_turret(mouse_pos)
           if place_turret:
+            print (123)
             placing_turrets = False
         if placing_turrets == False:
           selected_turret = select_turret(mouse_pos)

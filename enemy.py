@@ -1,6 +1,7 @@
 import pygame as pg
 from pygame.math import Vector2
 import math
+import constants as c
 from enemy_data import ENEMY_DATA
 
 class Enemy(pg.sprite.Sprite):
@@ -58,5 +59,5 @@ class Enemy(pg.sprite.Sprite):
     def check_alive(self, world):
         if self.health <= 0:
             world.killed_enemies += 1
-            #world.money += c.KILL_REWARD
+            world.money += c.KILL_REWARD
             self.kill()

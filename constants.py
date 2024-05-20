@@ -11,6 +11,7 @@ TOTAL_LEVELS = 15
 
 #enemy constants
 SPAWN_COOLDOWN = 400
+KILL_REWARD = 200
 
 #turret constants
 BUY_COST = 200
