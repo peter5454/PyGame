@@ -1,6 +1,7 @@
 import pygame as pg
 import constants as c
 import math as math
+from turrets_data import TURRET_DATA
 
 class Turret(pg.sprite.Sprite):
     def __init__(self,image,tile_x,tile_y):
@@ -17,12 +18,14 @@ class Turret(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
         
-
+        self.upgrade_level = 1
+        self.max_level = len(TURRET_DATA)
         self.range = 90
         self.angle = 0
         self.selected = False
         self.target = None
-        self.cooldown = 1000
+        self.cooldown = TURRET_DATA[self.upgrade_level - 1].get("cooldown")
+        self.damage = TURRET_DATA[self.upgrade_level - 1].get("damage")
         self.last_shot = pg.time.get_ticks()
 
     def update (self, enemy_group):
@@ -49,7 +52,7 @@ class Turret(pg.sprite.Sprite):
             y_dist = self.target.pos[1] - self.y
             self.angle = math.degrees(math.atan2(-y_dist, x_dist))
             self.rotate_image()
-            self.target.health -= c.DAMAGE
+            self.target.health -= self.damage
             self.last_shot = pg.time.get_ticks()
 
     def rotate_image(self):
@@ -60,3 +63,8 @@ class Turret(pg.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect)
         
+    def upgrade(self):
+        self.upgrade_level += 1
+        self.cooldown = TURRET_DATA[self.upgrade_level - 1]["cooldown"]
+        self.damage = TURRET_DATA[self.upgrade_level - 1]["damage"]
+            
