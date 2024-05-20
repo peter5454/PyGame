@@ -2,7 +2,7 @@ ENEMY_SPAWN_DATA = [
     {
         #1
         "ice_golem": 5,
-        "fire_golem": 5
+        "fire_golem": 1
     },
     {
         #2
@@ -23,6 +23,6 @@ ENEMY_DATA = {
     },
     "fire_golem": {
         "health": 10,
-        "speed": 2.5
+        "speed": 12.5
     }
 }
