@@ -29,6 +29,13 @@ selected_turret = None
 #map
 map_image = pg.image.load('assets/images/maps/map_1.png').convert_alpha()
 
+#UI
+side_panel = pg.image.load('assets/images/ui_backgrounds/side_panel.png').convert_alpha()
+wood_frame_full = pg.image.load('assets/images/ui_backgrounds/wood_frame_full.png').convert_alpha()
+health_bar = pg.image.load('assets/images/ui_backgrounds/health_bar.png').convert_alpha()
+gold_bar = pg.image.load('assets/images/ui_backgrounds/gold_bar.png').convert_alpha()
+
+
 #enemies
 enemy_images = {
   "enemy_1": pg.image.load('assets/images/enemies/enemy_1.png').convert_alpha(),
@@ -50,9 +57,9 @@ enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
 
 #create buttons
-turret_button = Button(c.SCREEN_WIDTH - 160 ,150, buy_turret_image)
-cancel_button = Button(c.SCREEN_WIDTH - 200 ,250, cancel_image)
-begin_button = Button(c.SCREEN_WIDTH - 200 ,350, begin_image)
+turret_button = Button(c.SCREEN_WIDTH - 200 ,300, buy_turret_image)
+cancel_button = Button(c.SCREEN_WIDTH - 180 ,350, cancel_image)
+begin_button = Button(c.SCREEN_WIDTH - 200 ,700, begin_image)
 restart_button = Button(312.5 , 320, restart_image)
 
 
@@ -201,9 +208,17 @@ while run:
   for turret in turret_group:
     turret.draw(screen)
 
-  draw_text(str(world.health), text_font, "grey100", 0, 0)
-  draw_text(str(world.money), text_font, "grey100", 0, 30)
-  draw_text(str(world.level), text_font, "grey100", 0, 60)
+  #draw side panel
+  screen.blit(side_panel, ((c.SCREEN_WIDTH - c.SIDE_PANEL), 0))
+  screen.blit(wood_frame_full, (796, 26))
+  screen.blit(health_bar, (796, 88))
+  screen.blit(gold_bar, (796, 155))
+
+
+  draw_text("Round", text_font, "grey100", 838, 45)
+  draw_text(str(world.level), text_font, "grey100", 925, 45)
+  draw_text(str(world.health), text_font, "grey100", 890, 110)
+  draw_text(str(world.money), text_font, "grey100", 890, 177)
 
   if game_over == False:
     #check if the level has been started or not

@@ -1,8 +1,8 @@
 ENEMY_SPAWN_DATA = [
     {
         #1
-        "ice_golem": 5,
-        "fire_golem": 0
+        #"ice_golem": 5,
+        "fire_golem": 1
     },
     {
         #2
