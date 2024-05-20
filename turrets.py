@@ -22,14 +22,14 @@ class Turret(pg.sprite.Sprite):
         self.angle = 0
         self.selected = False
         self.target = None
-        self.cooldown = 1500
+        self.cooldown = 1000
         self.last_shot = pg.time.get_ticks()
 
     def update (self, enemy_group):
         if pg.time.get_ticks() - self.last_shot >self.cooldown:
             self.pick_target(enemy_group)
             if self.target:
-                print (self.angle)
+                i = 0
 
 
     def pick_target(self, enemy_group):
@@ -49,6 +49,8 @@ class Turret(pg.sprite.Sprite):
             y_dist = self.target.pos[1] - self.y
             self.angle = math.degrees(math.atan2(-y_dist, x_dist))
             self.rotate_image()
+            self.target.health -= c.DAMAGE
+            self.last_shot = pg.time.get_ticks()
 
     def rotate_image(self):
         """ Rotate the image to face the target """

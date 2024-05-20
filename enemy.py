@@ -22,6 +22,7 @@ class Enemy(pg.sprite.Sprite):
         self.rotate()
         self.check_alive(world)
 
+
     def move(self, world):
         #define a target waypoint
         if self.target_waypoint < len(self.waypoints):
@@ -52,6 +53,7 @@ class Enemy(pg.sprite.Sprite):
         self.image = pg.transform.rotate(self.original_image, self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
+
 
     def check_alive(self, world):
         if self.health <= 0:
