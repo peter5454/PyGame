@@ -40,7 +40,10 @@ gold_bar = pg.image.load('assets/images/ui_backgrounds/gold_bar.png').convert_al
 enemy_images = {
   "enemy_1": pg.image.load('assets/images/enemies/enemy_1.png').convert_alpha(),
   "ice_golem": pg.image.load('assets/images/enemies/ice_golem.png').convert_alpha(),
-  "fire_golem": pg.image.load('assets/images/enemies/fire_golem.png').convert_alpha()
+  "fire_golem": pg.image.load('assets/images/enemies/fire_golem.png').convert_alpha(),
+  "earth_golem": pg.image.load('assets/images/enemies/earth_golem.png').convert_alpha(),
+  "earth_giant": pg.image.load('assets/images/enemies/earth_giant.png').convert_alpha()
+  
 }
 
 #turrets
@@ -62,7 +65,7 @@ turret_button = Button(c.SCREEN_WIDTH - 200 ,300, buy_turret_image)
 cancel_button = Button(c.SCREEN_WIDTH - 180 ,350, cancel_image)
 begin_button = Button(c.SCREEN_WIDTH - 200 ,700, begin_image)
 restart_button = Button(312.5 , 320, restart_image)
-upgrade_button = Button(c.SCREEN_WIDTH - 200, 150, upgrade_image)
+upgrade_button = Button(c.SCREEN_WIDTH - 220, 275, upgrade_image)
 
 
 #load json data for level
