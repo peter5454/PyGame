@@ -80,8 +80,8 @@ world.process_data()
 world.process_enemies()
 
 #load fonts for displaying text on the screen
-text_font = pg.font.SysFont("Consolas", 24, bold = True)
-large_font = pg.font.SysFont("Consolas", 36)
+text_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 24)
+large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 36)
 
 #function for outputting text onto the screen
 def draw_text(text, font, text_col, x, y):
@@ -239,10 +239,10 @@ while run:
   screen.blit(gold_bar, (796, 155))
 
 
-  draw_text("Round", text_font, "grey100", 838, 45)
-  draw_text(str(world.level), text_font, "grey100", 925, 45)
-  draw_text(str(world.health), text_font, "grey100", 890, 110)
-  draw_text(str(world.money), text_font, "grey100", 890, 177)
+  draw_text("Round", text_font, "grey100", 838, 32)
+  draw_text(str(world.level), text_font, "grey100", 925, 32)
+  draw_text(str(world.health), text_font, "grey100", 890, 97)
+  draw_text(str(world.money), text_font, "grey100", 890, 164)
 
   if game_over == False:
     #check if the level has been started or not
