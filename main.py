@@ -138,6 +138,7 @@ def create_turret(mouse_pos):
         turret_group.add(new_turret)
         #deduct cost of turret
         world.money -= new_turret.cost
+        selected_turret = None
         return True
       """
       close = overlapping_turrets(mouse_pos)
