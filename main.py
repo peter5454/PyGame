@@ -340,10 +340,12 @@ while run:
           new_turret = Turret(buy_turret_image,0,0) # add instance for which turret it is
           if world.money >= new_turret.cost:
             place_turret = create_turret(mouse_pos) #need to pass the turret aswell 
+            turret_time = pg.time.get_ticks()
           if place_turret:
             placing_turrets = False
-        if placing_turrets == False:
-          selected_turret = select_turret(mouse_pos)
+        if pg.time.get_ticks() > turret_time + 10:    
+          if placing_turrets == False:
+            selected_turret = select_turret(mouse_pos)
           
     
   #update display
