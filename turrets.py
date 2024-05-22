@@ -4,6 +4,8 @@ import math as math
 from turrets_data import TURRET_DATA
 
 class Turret(pg.sprite.Sprite):
+
+
     def __init__(self,image,tile_x,tile_y):
         pg.sprite.Sprite.__init__(self)
         self.tile_x = tile_x
@@ -26,13 +28,16 @@ class Turret(pg.sprite.Sprite):
         self.target = None
         self.cooldown = TURRET_DATA[self.upgrade_level - 1].get("cooldown")
         self.damage = TURRET_DATA[self.upgrade_level - 1].get("damage")
+        self.cost = TURRET_DATA[self.upgrade_level - 1].get("cost")
+        self.upgrade_cost = TURRET_DATA[self.upgrade_level - 1].get("upgrade_cost")
         self.last_shot = pg.time.get_ticks()
+        self.tower_value = self.cost
 
     def update (self, enemy_group):
         if pg.time.get_ticks() - self.last_shot >self.cooldown:
             self.pick_target(enemy_group)
             if self.target:
-                i = 0
+                i = 0 #animation goes here
 
 
     def pick_target(self, enemy_group):
@@ -67,4 +72,12 @@ class Turret(pg.sprite.Sprite):
         self.upgrade_level += 1
         self.cooldown = TURRET_DATA[self.upgrade_level - 1]["cooldown"]
         self.damage = TURRET_DATA[self.upgrade_level - 1]["damage"]
+        self.upgrade_cost = TURRET_DATA[self.upgrade_level - 1]["upgrade_cost"]
+        self.tower_value += TURRET_DATA[self.upgrade_level - 2]["upgrade_cost"]
+    
+    def sell(self):
+        cost = self.tower_value
+        print (cost)
+        self.kill()
+        return(round(cost*0.8))
             

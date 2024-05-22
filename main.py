@@ -55,6 +55,7 @@ cancel_image = pg.image.load('assets/images/buttons/cancel.png').convert_alpha()
 begin_image = pg.image.load('assets/images/buttons/begin.png').convert_alpha()
 restart_image = pg.image.load('assets/images/buttons/restart.png').convert_alpha()
 upgrade_image = pg.image.load('assets/images/buttons/upgrade_turret.png').convert_alpha()
+sell_image = pg.image.load('assets/images/buttons/sell.png').convert_alpha()
 
 #create groups
 enemy_group = pg.sprite.Group()
@@ -62,10 +63,11 @@ turret_group = pg.sprite.Group()
 
 #create buttons
 turret_button = Button(c.SCREEN_WIDTH - 200 ,300, buy_turret_image)
-cancel_button = Button(c.SCREEN_WIDTH - 180 ,350, cancel_image)
+cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image)
 begin_button = Button(c.SCREEN_WIDTH - 200 ,700, begin_image)
 restart_button = Button(312.5 , 320, restart_image)
 upgrade_button = Button(c.SCREEN_WIDTH - 220, 275, upgrade_image)
+sell_button = Button(c.SCREEN_WIDTH - 220, 350, sell_image)
 
 
 #load json data for level
@@ -102,9 +104,9 @@ def clear_selected():
     turret.selected = False
 
 def upgrade_turret(selected_turret):
-  if world.money - c.UPGRADE_COST >= 0:
+  if world.money - selected_turret.upgrade_cost >= 0:
     if selected_turret.upgrade_level <  selected_turret.max_level:
-      world.money -= c.UPGRADE_COST
+      world.money -= selected_turret.upgrade_cost
       selected_turret.upgrade()
       print (selected_turret.upgrade_level)
       print (selected_turret.damage)
@@ -135,7 +137,7 @@ def create_turret(mouse_pos):
         new_turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)  
         turret_group.add(new_turret)
         #deduct cost of turret
-        world.money -= c.BUY_COST
+        world.money -= new_turret.cost
         return True
       """
       close = overlapping_turrets(mouse_pos)
@@ -172,6 +174,13 @@ def tile_occupied(mouse_pos):
   return False
   """
     
+def sell_turret(selected_turret):
+  sell_value = selected_turret.sell()
+  world.money += sell_value
+
+      
+
+  
 def select_turret(mouse_pos):
   mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
   mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
@@ -265,6 +274,9 @@ while run:
           draw_circ(200,200,200,selected_turret.range,(selected_turret.x, selected_turret.y))
           if upgrade_button.draw(screen):
             upgrade_turret(selected_turret)
+          if sell_button.draw(screen):
+            sell_turret(selected_turret)
+            selected_turret = None
           if cancel_button.draw(screen):
             selected_turret = None
     if placing_turrets == False and selected_turret == None:
@@ -325,8 +337,9 @@ while run:
         clear_selected()
         if placing_turrets == True:
           #check if there is enough money for a turret
-          if world.money >= c.BUY_COST:
-            place_turret = create_turret(mouse_pos)
+          new_turret = Turret(buy_turret_image,0,0) # add instance for which turret it is
+          if world.money >= new_turret.cost:
+            place_turret = create_turret(mouse_pos) #need to pass the turret aswell 
           if place_turret:
             placing_turrets = False
         if placing_turrets == False:
