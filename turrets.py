@@ -23,7 +23,7 @@ class Turret(pg.sprite.Sprite):
         self.update_time = pg.time.get_ticks()
 
         #image
-        self.angle = 0
+        self.angle = 90
         self.original_image = self.animation_list[self.frame_index]
         self.image = pg.transform.rotate(self.original_image, self.angle)
         
