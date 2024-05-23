@@ -6,6 +6,7 @@ import constants as c
 from buttons import Button
 from turrets import Turret
 import math as mt
+from turrets_data import TURRET_DATA
 
 #initialise pygame
 pg.init()
@@ -24,6 +25,7 @@ level_started = False
 last_enemy_spawn = pg.time.get_ticks()
 placing_turrets = False
 selected_turret = None
+turret_equipped = None
 
 #load images
 #map
@@ -48,10 +50,15 @@ enemy_images = {
 
 #turrets
 cursor_turret = pg.image.load('assets/images/turrets/cursor_turret.png').convert_alpha()
+cursor_turret2 = pg.image.load('assets/images/turrets/Xcursor_turret.png').convert_alpha()
 turret_sheet = pg.image.load('assets/images/turrets/cannon_1.png').convert_alpha()
+turret_sheet2 = pg.image.load('assets/images/turrets/turret_1.png').convert_alpha()
+upgraded_sheet = pg.image.load('assets/images/turrets/cannon_2.png').convert_alpha()
+upgraded_sheet2 = pg.image.load('assets/images/turrets/turret_2.png').convert_alpha()
 
 #buttons
-buy_turret_image = pg.image.load('assets/images/buttons/buy_turret.png').convert_alpha()
+buy_turret_image = pg.image.load('assets/images/buttons/Turret_button.png').convert_alpha()
+buy_turret_image2 = pg.image.load('assets/images/buttons/Turret_button2.png').convert_alpha()
 cancel_image = pg.image.load('assets/images/buttons/cancel.png').convert_alpha()
 begin_image = pg.image.load('assets/images/buttons/begin.png').convert_alpha()
 restart_image = pg.image.load('assets/images/buttons/restart.png').convert_alpha()
@@ -63,7 +70,8 @@ enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
 
 #create buttons
-turret_button = Button(c.SCREEN_WIDTH - 200 ,300, buy_turret_image)
+turret_button = Button(c.SCREEN_WIDTH - 220 ,250, buy_turret_image)
+turret_button2 = Button(c.SCREEN_WIDTH - 100 ,250, buy_turret_image2)
 cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image)
 begin_button = Button(c.SCREEN_WIDTH - 200 ,700, begin_image)
 restart_button = Button(312.5 , 320, restart_image)
@@ -116,7 +124,7 @@ def upgrade_turret(selected_turret):
   else:
     print ("Out of Money")
 
-def create_turret(mouse_pos):
+def create_turret(mouse_pos,turret_name,animation_sheet,upgraded_animation_sheet):
   #close = False
   mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
   mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
@@ -135,7 +143,7 @@ def create_turret(mouse_pos):
             space_is_free = False
       #if it is a free space then create turret
       if space_is_free == True:
-        new_turret = Turret(turret_sheet, mouse_tile_x, mouse_tile_y)  
+        new_turret = Turret(animation_sheet, mouse_tile_x, mouse_tile_y,turret_name,upgraded_animation_sheet)  
         turret_group.add(new_turret)
         #deduct cost of turret
         world.money -= new_turret.cost
@@ -283,19 +291,36 @@ while run:
             selected_turret = None
     if placing_turrets == False and selected_turret == None:
       if turret_button.draw(screen):
-        placing_turrets = True
+        turret_equipped = TURRET_DATA.get("TURRET_CANNON", None)
+        new_turret = Turret(turret_sheet,0,0,turret_equipped[0]['name'],upgraded_sheet)
+        if world.money >= new_turret.cost:
+          placing_turrets = True
+        else:
+          turret_equipped = None
+
+      if turret_button2.draw(screen):
+        turret_equipped = TURRET_DATA.get("TURRET_TURRET", None)
+        new_turret = Turret(turret_sheet2,0,0,turret_equipped[0]['name'],upgraded_sheet2) 
+        if world.money >= new_turret.cost:
+          placing_turrets = True
+        else:
+          turret_equipped = None
     
     
     if placing_turrets == True:
       cursort_rect = cursor_turret.get_rect()
       cursor_pos = pg.mouse.get_pos()
       cursort_rect.center = cursor_pos
-      screen.blit(cursor_turret, cursort_rect)
+      if turret_equipped[0]['name'] == "TURRET_TURRET":
+        screen.blit(cursor_turret2, cursort_rect) #create more for differnt turrets
+      else:
+        screen.blit(cursor_turret, cursort_rect) #reove else statement and create more if statments
+
 
       if tile_occupied(cursor_pos):
-        draw_circ(255,0,0,90,cursor_pos) #need to change to a varible that matches the turret range rather than a number
+        draw_circ(255,0,0,turret_equipped[0]['range'],cursor_pos) #need to change to a varible that matches the turret range rather than a number
       else:
-        draw_circ(128,128,128,90,cursor_pos) #need to change to a varible that matches the turret range rather than a number
+        draw_circ(128,128,128,turret_equipped[0]['range'],cursor_pos) #need to change to a varible that matches the turret range rather than a number
 
 
       if cancel_button.draw(screen):
@@ -338,13 +363,10 @@ while run:
         selected_turret = None
         clear_selected()
         if placing_turrets == True:
-          #check if there is enough money for a turret
-          new_turret = Turret(turret_sheet,0,0) # add instance for which turret it is
-          if world.money >= new_turret.cost:
-            place_turret = create_turret(mouse_pos) #need to pass the turret aswell 
-            turret_time = pg.time.get_ticks()
-          if place_turret:
-            placing_turrets = False
+          place_turret = create_turret(mouse_pos,turret_equipped[0]['name'],new_turret.sprite_sheet,new_turret.sprite_upgraded_sheet) #need to pass the turret aswell 
+          turret_time = pg.time.get_ticks()
+        if place_turret:
+          placing_turrets = False
         if pg.time.get_ticks() > turret_time + 10:    
           if placing_turrets == False:
             selected_turret = select_turret(mouse_pos)
