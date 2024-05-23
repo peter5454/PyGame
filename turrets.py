@@ -89,7 +89,6 @@ class Turret(pg.sprite.Sprite):
 
     def play_animation(self):
     #update image
-        print (123)
         self.original_image = self.animation_list[self.frame_index]
     #check if enough time has passed since the last update
         if pg.time.get_ticks() - self.update_time > c.ANIMATION_DELAY:
