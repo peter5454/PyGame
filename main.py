@@ -48,6 +48,7 @@ enemy_images = {
 
 #turrets
 cursor_turret = pg.image.load('assets/images/turrets/cursor_turret.png').convert_alpha()
+turret_sheet = pg.image.load('assets/images/turrets/cannon_1.png').convert_alpha()
 
 #buttons
 buy_turret_image = pg.image.load('assets/images/buttons/buy_turret.png').convert_alpha()
@@ -134,7 +135,7 @@ def create_turret(mouse_pos):
             space_is_free = False
       #if it is a free space then create turret
       if space_is_free == True:
-        new_turret = Turret(cursor_turret, mouse_tile_x, mouse_tile_y)  
+        new_turret = Turret(turret_sheet, mouse_tile_x, mouse_tile_y)  
         turret_group.add(new_turret)
         #deduct cost of turret
         world.money -= new_turret.cost
@@ -338,7 +339,7 @@ while run:
         clear_selected()
         if placing_turrets == True:
           #check if there is enough money for a turret
-          new_turret = Turret(buy_turret_image,0,0) # add instance for which turret it is
+          new_turret = Turret(turret_sheet,0,0) # add instance for which turret it is
           if world.money >= new_turret.cost:
             place_turret = create_turret(mouse_pos) #need to pass the turret aswell 
             turret_time = pg.time.get_ticks()
