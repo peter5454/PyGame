@@ -6,7 +6,7 @@ from turrets_data import TURRET_DATA
 class Turret(pg.sprite.Sprite):
 
 
-    def __init__(self,sprite_sheet,tile_x,tile_y):
+    def __init__(self,sprite_sheet,tile_x,tile_y,Turret_type,sprite_upgraded_sheet):
         pg.sprite.Sprite.__init__(self)
         self.tile_x = tile_x
         self.tile_y = tile_y
@@ -22,6 +22,9 @@ class Turret(pg.sprite.Sprite):
         self.frame_index = 0
         self.update_time = pg.time.get_ticks()
 
+        #upgraded animation
+        self.sprite_upgraded_sheet = sprite_upgraded_sheet
+
         #image
         self.angle = 90
         self.original_image = self.animation_list[self.frame_index]
@@ -33,16 +36,19 @@ class Turret(pg.sprite.Sprite):
         #variables       
         self.upgrade_level = 1
         self.max_level = len(TURRET_DATA)
-        self.range = 90
-        
         self.selected = False
         self.target = None
-        self.cooldown = TURRET_DATA[self.upgrade_level - 1].get("cooldown")
-        self.damage = TURRET_DATA[self.upgrade_level - 1].get("damage")
-        self.cost = TURRET_DATA[self.upgrade_level - 1].get("cost")
-        self.upgrade_cost = TURRET_DATA[self.upgrade_level - 1].get("upgrade_cost")
+        self.type = TURRET_DATA.get(Turret_type, [])
+        self.range = self.type[self.upgrade_level - 1].get("range")
+
+
+        self.cooldown = self.type[self.upgrade_level - 1].get("cooldown")
+        self.damage = self.type[self.upgrade_level - 1].get("damage")
+        self.cost = self.type[self.upgrade_level - 1].get("cost")
+        self.upgrade_cost = self.type[self.upgrade_level - 1].get("upgrade_cost")
         self.last_shot = pg.time.get_ticks()
         self.tower_value = self.cost
+        
 
 
     def load_images(self):
@@ -79,6 +85,7 @@ class Turret(pg.sprite.Sprite):
                     self.angle = math.degrees(math.atan2(-y_dist, x_dist))
           #damage enemy
                     self.target.health -= self.damage
+                    break
 
     def play_animation(self):
     #update image
@@ -105,11 +112,15 @@ class Turret(pg.sprite.Sprite):
         
     def upgrade(self):
         self.upgrade_level += 1
-        self.cooldown = TURRET_DATA[self.upgrade_level - 1]["cooldown"]
-        self.damage = TURRET_DATA[self.upgrade_level - 1]["damage"]
-        self.upgrade_cost = TURRET_DATA[self.upgrade_level - 1]["upgrade_cost"]
-        self.tower_value += TURRET_DATA[self.upgrade_level - 2]["upgrade_cost"]
-    
+        self.range = self.type[self.upgrade_level - 1].get("range")
+        self.cooldown = self.type[self.upgrade_level - 1]["cooldown"]
+        self.damage = self.type[self.upgrade_level - 1]["damage"]
+        self.upgrade_cost = self.type[self.upgrade_level - 1]["upgrade_cost"]
+        self.tower_value += self.type[self.upgrade_level - 2]["upgrade_cost"]
+        self.sprite_sheet = self.sprite_upgraded_sheet
+        self.animation_list = self.load_images()
+        self.original_image = self.animation_list[self.frame_index]
+
     def sell(self):
         cost = self.tower_value
         print (cost)
