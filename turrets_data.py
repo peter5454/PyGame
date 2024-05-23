@@ -1,7 +1,7 @@
 TURRET_DATA =[
     {
         #1
-        "cooldown" : 100,
+        "cooldown" : 1000,
         "damage"  : 2,
         "cost" : 150,
         "upgrade_cost" : 200
