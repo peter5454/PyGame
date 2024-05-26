@@ -44,7 +44,11 @@ enemy_images = {
   "ice_golem": pg.image.load('assets/images/enemies/ice_golem.png').convert_alpha(),
   "fire_golem": pg.image.load('assets/images/enemies/fire_golem.png').convert_alpha(),
   "earth_golem": pg.image.load('assets/images/enemies/earth_golem.png').convert_alpha(),
+  "ice_giant": pg.image.load('assets/images/enemies/ice_giant.png').convert_alpha(),
+  "fire_giant": pg.image.load('assets/images/enemies/fire_giant.png').convert_alpha(),
   "earth_giant": pg.image.load('assets/images/enemies/earth_giant.png').convert_alpha()
+
+
   
 }
 
