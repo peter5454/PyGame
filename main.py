@@ -363,7 +363,7 @@ while run:
         selected_turret = None
         clear_selected()
         if placing_turrets == True:
-          place_turret = create_turret(mouse_pos,turret_equipped[0]['name'],new_turret.sprite_sheet,new_turret.sprite_upgraded_sheet) #need to pass the turret aswell 
+          place_turret = create_turret(mouse_pos,turret_equipped[0]['name'],new_turret.sprite_sheet,new_turret.sprite_upgraded_sheet)
           turret_time = pg.time.get_ticks()
         if place_turret:
           placing_turrets = False
