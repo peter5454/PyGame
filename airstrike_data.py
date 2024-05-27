@@ -7,15 +7,24 @@ AIRSTRIKE_DATA = {
         "waves" : 3
     },
     "airstrike_2": {
-        "health": 5,
-        "speed": 3
+        "damage" : 40,
+        "cooldown" : 500,
+        "size" : 70,
+        "cost" : 200,
+        "waves" : 1
     },
     "airstrike_3": {
-        "health": 15,
-        "speed": 1.5
+        "damage" : 50,
+        "cooldown" : 500,
+        "size" : 80,
+        "cost" : 200,
+        "waves" : 1
     },
     "airstrike_4": {
-        "health": 50,
-        "speed": 1.5
+        "damage" : 60,
+        "cooldown" : 500,
+        "size" : 80,
+        "cost" : 200,
+        "waves" : 1
     }
 }
