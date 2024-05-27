@@ -5,6 +5,7 @@ from world import World
 import constants as c
 from buttons import Button
 from turrets import Turret
+from airstrike import airstrike
 import math as mt
 from turrets_data import TURRET_DATA
 
@@ -26,6 +27,11 @@ last_enemy_spawn = pg.time.get_ticks()
 placing_turrets = False
 selected_turret = None
 turret_equipped = None
+place_turret = None
+placing_ability = False
+turret_time = 0
+active_airstrike = None
+counter = 0
 
 #load images
 #map
@@ -36,6 +42,8 @@ side_panel = pg.image.load('assets/images/ui_backgrounds/side_panel.png').conver
 wood_frame_full = pg.image.load('assets/images/ui_backgrounds/wood_frame_full.png').convert_alpha()
 health_bar = pg.image.load('assets/images/ui_backgrounds/health_bar.png').convert_alpha()
 gold_bar = pg.image.load('assets/images/ui_backgrounds/gold_bar.png').convert_alpha()
+airstrike_banner = pg.image.load('assets/images/ui_backgrounds/airstrike_banner.png').convert_alpha()
+airstrike_ability_image = pg.image.load('assets/images/ui_backgrounds/airstrike_ability.png').convert_alpha()
 
 
 #enemies
@@ -81,6 +89,10 @@ begin_button = Button(c.SCREEN_WIDTH - 200 ,700, begin_image)
 restart_button = Button(312.5 , 320, restart_image)
 upgrade_button = Button(c.SCREEN_WIDTH - 220, 275, upgrade_image)
 sell_button = Button(c.SCREEN_WIDTH - 220, 350, sell_image)
+airstrike_ability = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 175, 0, airstrike_ability_image)
+airstrike_ability2 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 75, 0, airstrike_ability_image)
+airstrike_ability3 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 25, 0, airstrike_ability_image)
+airstrike_ability4 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 125, 0, airstrike_ability_image)
 
 
 #load json data for level
@@ -227,6 +239,9 @@ while run:
     enemy_group.update(world)
     turret_group.update(enemy_group)
 
+    #update airstrike
+
+
 
   #####################
   # DRAWING SECTION
@@ -250,6 +265,9 @@ while run:
   screen.blit(wood_frame_full, (796, 26))
   screen.blit(health_bar, (796, 88))
   screen.blit(gold_bar, (796, 155))
+
+  #draw airstrike_banner
+  screen.blit(airstrike_banner,((c.SCREEN_WIDTH-c.SIDE_PANEL)/2-200,c.SCREEN_HEIGHT-900))
 
 
   draw_text("Round", text_font, "grey100", 838, 32)
@@ -293,6 +311,7 @@ while run:
             selected_turret = None
           if cancel_button.draw(screen):
             selected_turret = None
+
     if placing_turrets == False and selected_turret == None:
       if turret_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_CANNON", None)
@@ -318,7 +337,8 @@ while run:
       if turret_equipped[0]['name'] == "TURRET_TURRET":
         screen.blit(cursor_turret2, cursort_rect) #create more for differnt turrets
       else:
-        screen.blit(cursor_turret, cursort_rect) #reove else statement and create more if statments
+        screen.blit(cursor_turret, cursort_rect) #remove else statement and create more if statments
+    
 
 
       if tile_occupied(cursor_pos):
@@ -329,6 +349,56 @@ while run:
 
       if cancel_button.draw(screen):
         placing_turrets = False
+    if placing_ability == False:
+      if airstrike_ability.draw(screen):
+        new_aristrike = airstrike("airstrike_1")
+        placing_ability = True
+
+      if airstrike_ability2.draw(screen):
+        new_aristrike = airstrike("airstrike_2")
+        placing_ability = True
+
+      if airstrike_ability3.draw(screen):
+        new_aristrike = airstrike("airstrike_3")
+        placing_ability = True
+
+      if airstrike_ability4.draw(screen):
+        new_aristrike = airstrike("airstrike_4")
+        placing_ability = True
+
+
+    if placing_ability:
+      cursor_pos = pg.mouse.get_pos()
+
+      if world.money >= new_aristrike.cost:
+        if cancel_button.draw(screen):
+          placing_ability = False
+        if new_aristrike.airstrike_name == "airstrike_1":
+          draw_circ(128, 255, 128, new_aristrike.size, cursor_pos)
+        if new_aristrike.airstrike_name == "airstrike_2":
+          draw_circ(128, 128, 255, new_aristrike.size, cursor_pos)
+        if new_aristrike.airstrike_name == "airstrike_3":
+          draw_circ(128, 255, 128, new_aristrike.size, cursor_pos)
+        if new_aristrike.airstrike_name == "airstrike_4":
+          draw_circ(128, 128, 128, new_aristrike.size, cursor_pos)
+        if pg.mouse.get_pressed()[0] and cursor_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL and cursor_pos[1] > c.SCREEN_HEIGHT - 700:  # check if left mouse button is clicked
+          world.money -= new_aristrike.cost
+          new_aristrike.start(cursor_pos)
+          active_airstrike = new_aristrike
+          placing_ability = False
+      else:
+        placing_ability = False
+    if active_airstrike:
+      active_airstrike.place_ability(enemy_group, screen)
+      if active_airstrike.shots_fired < active_airstrike.waves:
+        draw_circ(123, 255, 123, active_airstrike.size, (active_airstrike.x,active_airstrike.y)) #if more airstrikes get more waves change this to include the different colour circles
+      if active_airstrike.shots_fired != counter:
+        counter = active_airstrike.shots_fired
+        draw_circ(255, 255, 255, active_airstrike.size, (active_airstrike.x,active_airstrike.y)) #flashes white once the timer is finished
+      if counter >= active_airstrike.waves:
+        counter = 0
+        active_airstrike = None
+
 
   else:
     #game is over
@@ -363,7 +433,7 @@ while run:
     if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
       mouse_pos = pg.mouse.get_pos()
       #check if mouse is on the game area
-      if mouse_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL and mouse_pos[1] < c.SCREEN_HEIGHT:
+      if mouse_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL and mouse_pos[1] > c.SCREEN_HEIGHT-700:
         selected_turret = None
         clear_selected()
         if placing_turrets == True:
@@ -374,6 +444,8 @@ while run:
         if pg.time.get_ticks() > turret_time + 10:    
           if placing_turrets == False:
             selected_turret = select_turret(mouse_pos)
+
+
           
     
   #update display
