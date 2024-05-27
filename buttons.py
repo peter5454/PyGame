@@ -28,6 +28,8 @@ class Button():
             surface.blit(self.image, self.rect)
         
         return action
+    def draw2(self,surface):
+        surface.blit(self.image, self.rect)
 
 
         

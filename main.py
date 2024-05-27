@@ -31,6 +31,7 @@ place_turret = None
 placing_ability = False
 turret_time = 0
 active_airstrike = None
+paused = False
 counter = 0
 
 #load images
@@ -44,6 +45,7 @@ health_bar = pg.image.load('assets/images/ui_backgrounds/health_bar.png').conver
 gold_bar = pg.image.load('assets/images/ui_backgrounds/gold_bar.png').convert_alpha()
 airstrike_banner = pg.image.load('assets/images/ui_backgrounds/airstrike_banner.png').convert_alpha()
 airstrike_ability_image = pg.image.load('assets/images/ui_backgrounds/airstrike_ability.png').convert_alpha()
+
 
 
 #enemies
@@ -76,6 +78,8 @@ begin_image = pg.image.load('assets/images/buttons/begin.png').convert_alpha()
 restart_image = pg.image.load('assets/images/buttons/restart.png').convert_alpha()
 upgrade_image = pg.image.load('assets/images/buttons/upgrade_turret.png').convert_alpha()
 sell_image = pg.image.load('assets/images/buttons/sell.png').convert_alpha()
+pause_button_image = pg.image.load('assets/images/buttons/pause_button.png').convert_alpha()
+exit_button_image = pg.image.load('assets/images/buttons/exit_button.png').convert_alpha()
 
 #create groups
 enemy_group = pg.sprite.Group()
@@ -93,6 +97,9 @@ airstrike_ability = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 175, 0, airstrike_a
 airstrike_ability2 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 75, 0, airstrike_ability_image)
 airstrike_ability3 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 25, 0, airstrike_ability_image)
 airstrike_ability4 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 125, 0, airstrike_ability_image)
+pause_button = Button(5,5, pause_button_image)
+exit_button = Button(5,5, exit_button_image)
+
 
 
 #load json data for level
@@ -329,7 +336,8 @@ while run:
         else:
           turret_equipped = None
     
-    
+    if placing_turrets and placing_ability:
+      placing_turrets = False
     if placing_turrets == True:
       cursort_rect = cursor_turret.get_rect()
       cursor_pos = pg.mouse.get_pos()
@@ -398,30 +406,63 @@ while run:
       if counter >= active_airstrike.waves:
         counter = 0
         active_airstrike = None
-
+    if pause_button.draw(screen):
+        paused = True
+        game_over = True
 
   else:
     #game is over
-    pg.draw.rect(screen, "dodgerblue", (200, 200, 400, 200), border_radius = 30)
-    if game_outcome == -1:
-      draw_text("GAME OVER", large_font, "grey0", 310, 230)
-    elif game_outcome == 1:
-      draw_text("YOU WIN", large_font, "grey0", 315, 230)
+    if paused == True:
+      
+      if placing_ability == False:
+        airstrike_ability.draw2(screen)
+        airstrike_ability2.draw2(screen)
+        airstrike_ability3.draw2(screen)
+        airstrike_ability4.draw2(screen)
+
+      if selected_turret is not None:
+        upgrade_button.draw2(screen)
+        sell_button.draw2(screen)
+
+      if not placing_turrets and selected_turret is None:
+        turret_button.draw2(screen)
+        turret_button2.draw2(screen)
+      if placing_ability or selected_turret or placing_turrets:
+        cancel_button.draw2(screen)
+      draw_circ(128,128,128,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
+
+      if exit_button.draw(screen):
+        game_over = False
+        paused = False
+
+
+
+      
+
+
+    
+    if paused == False and game_over == True:
+
+      pg.draw.rect(screen, "dodgerblue", (200, 200, 400, 200), border_radius = 30)
+      if game_outcome == -1:
+        draw_text("GAME OVER", large_font, "grey0", 310, 230)
+      elif game_outcome == 1:
+        draw_text("YOU WIN", large_font, "grey0", 315, 230)
 
 
     #restart level
-    if restart_button.draw(screen):
-      game_over = False
-      level_started = False
-      placing_turrets = False
-      selected_turret = None
-      last_enemy_spawn = pg.time.get_ticks()
-      world = World(world_data, map_image)
-      world.process_data()
-      world.process_enemies()
+      if restart_button.draw(screen):
+        game_over = False
+        level_started = False
+        placing_turrets = False
+        selected_turret = None
+        last_enemy_spawn = pg.time.get_ticks()
+        world = World(world_data, map_image)
+        world.process_data()
+        world.process_enemies()
       #empty groups
-      enemy_group.empty()
-      turret_group.empty()
+        enemy_group.empty()
+        turret_group.empty()
 
 
   #event handler
@@ -433,7 +474,7 @@ while run:
     if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
       mouse_pos = pg.mouse.get_pos()
       #check if mouse is on the game area
-      if mouse_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL and mouse_pos[1] > c.SCREEN_HEIGHT-700:
+      if mouse_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL and mouse_pos[1] > c.SCREEN_HEIGHT-680:
         selected_turret = None
         clear_selected()
         if placing_turrets == True:
