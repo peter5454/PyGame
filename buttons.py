@@ -7,7 +7,7 @@ class Button():
         self.clicked = False
         self.rect.topleft = (x,y)
         self.text = text
-        self.font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 20)
+        self.font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 18)
 
     def draw(self, surface):
         action = False
