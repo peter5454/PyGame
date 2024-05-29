@@ -93,10 +93,14 @@ enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
 
 #create buttons
-cannon_button = Button(c.SCREEN_WIDTH - 245 ,290, buy_cannon_image)
-ice_button = Button(c.SCREEN_WIDTH - 122 ,290, buy_ice_image)
-fire_button = Button(c.SCREEN_WIDTH - 245 ,360, buy_fire_image)
-earth_button = Button(c.SCREEN_WIDTH - 122 ,360, buy_earth_image)
+turret_cannon_data = TURRET_DATA["TURRET_CANNON"][0]
+cannon_button = Button(c.SCREEN_WIDTH - 245 ,290, buy_cannon_image, str(turret_cannon_data['cost']))
+turret_ice_data = TURRET_DATA["TURRET_ICE"][0]
+ice_button = Button(c.SCREEN_WIDTH - 122 ,290, buy_ice_image, str(turret_ice_data['cost']))
+turret_fire_data = TURRET_DATA["TURRET_FIRE"][0]
+fire_button = Button(c.SCREEN_WIDTH - 245 ,360, buy_fire_image, str(turret_fire_data['cost']))
+turret_earth_data = TURRET_DATA["TURRET_EARTH"][0]
+earth_button = Button(c.SCREEN_WIDTH - 122 ,360, buy_earth_image, str(turret_earth_data['cost']))
 
 cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image)
 begin_button = Button(c.SCREEN_WIDTH - 200 ,700, begin_image)
