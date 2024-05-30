@@ -7,7 +7,7 @@ TURRET_DATA = {
             "cooldown": 1000,
             "damage": 2,
             "cost": 150,
-            "upgrade_cost": 500
+            "upgrade_cost": 100
         },
         {
             "range": 90,
@@ -25,7 +25,7 @@ TURRET_DATA = {
             "cooldown": 2000,
             "damage": 10,
             "cost": 300,
-            "upgrade_cost": 500
+            "upgrade_cost": 100
         },
         {
             "range": 250,
@@ -43,7 +43,7 @@ TURRET_DATA = {
             "cooldown": 2000,
             "damage": 10,
             "cost": 300,
-            "upgrade_cost": 500
+            "upgrade_cost": 100
         },
         {
             "range": 250,
@@ -61,7 +61,7 @@ TURRET_DATA = {
             "cooldown": 2000,
             "damage": 10,
             "cost": 300,
-            "upgrade_cost": 500
+            "upgrade_cost": 100
         },
         {
             "range": 250,
@@ -69,6 +69,15 @@ TURRET_DATA = {
             "cooldown": 1000,
             "damage": 30,
             "upgrade_cost": 0
+        }
+    ],
+    "KING": [
+        {
+            "name" : "KING",
+            "range" : 200,
+            "level": 1,
+            "multiplier": 2,
+            "cost": 300
         }
     ]
     
