@@ -204,8 +204,6 @@ def create_turret(mouse_pos,turret_name,animation_sheet=None,upgraded_animation_
         turret_group.add(new_turret)
         #update support tower effects
         update_supports(turret_group)
-        #deduct cost of turret
-        world.money -= new_turret.cost
         selected_turret = None
         return True
   return False
