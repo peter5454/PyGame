@@ -155,7 +155,6 @@ def create_turret(mouse_pos,turret_name,animation_sheet,upgraded_animation_sheet
   #close = False
   mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
   mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
-  print (mouse_tile_x,mouse_tile_y)
   #calculate the sequential number of the tile
   mouse_tile_num = (mouse_tile_y * c.COLS) + mouse_tile_x
   #check if that tile is grass
@@ -219,15 +218,15 @@ def select_turret(mouse_pos):
       return turret
     
 def save():
-  file = open("saves/save1.csv", "w")
-  file.write('money,health,level' + '\n' + str(c.MONEY) + ','+ str(c.HEALTH) + ',' + str(world.level))
+  file = open("saves/save1/save1_world.csv", "w")
+  file.write('money,health,level' + '\n' + str(world.money) + ','+ str(world.health) + ',' + str(world.level) + ',')
   file.close()
 
-  file = open("saves/save1_turrets.csv", "w")
+  file = open("saves/save1/save1_turrets.csv", "w")
   file.write('')
   file.close()
 
-  file = open("saves/save1_turrets.csv", "a")
+  file = open("saves/save1/save1_turrets.csv", "a")
   file.write("x,y,upgrade_level,turret_type")
   for turret in turret_group:
     file.write("\n{},{},{},{}".format(turret.tile_x, turret.tile_y, turret.upgrade_level, turret.turret_type))
@@ -236,45 +235,44 @@ def save():
 def load():
   turret_group.empty()
 
-  with open('saves/save1.csv', newline='') as constants_file:
+  with open('saves/save1/save1_world.csv', newline='') as constants_file:
     reader = csv.DictReader(constants_file)
     for row in reader:
-      c.MONEY = row['money']
-      c.HEALTH = row['health']
+      world.money = int(row['money'])
+      world.health = int(row['health'])
       world.level = int(row['level'])
+      world.killed_enemies = 0
+      world.missed_enemies = 0 #only works because you cant load and save during rounds
 
   
-  with open('saves/save1_turrets.csv', newline='') as turret_file:
+  with open('saves/save1/save1_turrets.csv', newline='') as turret_file:
     turret_reader = csv.DictReader(turret_file)
     rows = 0
+    x = []
+    y = []
+    upgrade_level = []
+    turret_type = []
+    print (turret_reader)
     sprite_sheet = [[] for _ in range(1000)]
     sprite_upgraded_sheet = [[] for _ in range(1000)]
     for row in turret_reader:
-      x = row['x']
-      y = row['y']
-      upgrade_level = row['upgrade_level']
-      turret_type = row['turret_type']
+      x.append(row['x'])
+      y.append(row['y'])
+      upgrade_level.append(row['upgrade_level'])
+      turret_type.append(row['turret_type'])
       rows += 1
     
     for row in range(rows):
       if turret_type[row] == "TURRET_TURRET":
         sprite_sheet[row] = turret_sheet2
-        print(sprite_sheet[row])
-        sprite_upgraded_sheet[row] = (upgraded_sheet2)
-      if turret_type == "TURRET_CANNON":
-        sprite_sheet[row] = (turret_sheet)
-        sprite_upgraded_sheet[row] = (upgraded_sheet)
-      else:
-        print(325235)
+        sprite_upgraded_sheet[row] = upgraded_sheet2
+      if turret_type[row] == "TURRET_CANNON":
+        sprite_sheet[row] = turret_sheet
+        sprite_upgraded_sheet[row] = upgraded_sheet #add more for the other turrets
     
     if rows > 0:
       for i in range(len(x)):
-        print(532523523)
-        print(int(upgrade_level[i]))
-        print(turret_type[i])
-        print(sprite_sheet[i])
-        print(sprite_sheet)
-        create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type, sprite_sheet[i], sprite_upgraded_sheet[i],int(upgrade_level[i]))
+        create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type[i], sprite_sheet[i], sprite_upgraded_sheet[i],int(upgrade_level[i]))
         print (turret_group)
 
   
@@ -342,7 +340,11 @@ while run:
     #check if the level has been started or not
     if level_started == False:
       if begin_button.draw(screen):
-        level_started = True
+        last_enemy_spawn = pg.time.get_ticks()
+        world.reset_level()
+        if world.level <= c.TOTAL_LEVELS:
+          world.process_enemies()
+          level_started = True
     else:
       #spawn enemies
       if pg.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN:
@@ -357,11 +359,13 @@ while run:
     if world.check_level_complete() == True:
       world.money += c.LEVEL_COMPLETE_REWARD
       world.level += 1
+      print (world.level)
       level_started = False
       last_enemy_spawn = pg.time.get_ticks()
       world.reset_level()
       if world.level <= c.TOTAL_LEVELS:
         world.process_enemies()
+
 
     if placing_turrets == False:
         if selected_turret:
@@ -489,12 +493,21 @@ while run:
       
       if level_started == False:
         begin_button.draw2(screen)
-      draw_circ(128,128,128,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
+        draw_circ(128,128,128,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
+        if load_button.draw(screen):
+          load()
+          selected_turret = None
+          placing_ability = False
+          placing_turrets = False
+          
+        if save_button.draw(screen):
+          save()
 
-      if load_button.draw(screen):
-        load()
-      if save_button.draw(screen):
-        save()
+      if level_started == True:
+        load_button.draw2(screen)
+        save_button.draw2(screen)
+        draw_circ(128,128,128,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
+      
 
       if exit_button.draw(screen):
         game_over = False
@@ -549,6 +562,7 @@ while run:
         if place_turret:
           world.money -= new_turret.cost
           placing_turrets = False
+          place_turret = None
         if pg.time.get_ticks() > turret_time + 10:    
           if placing_turrets == False:
             selected_turret = select_turret(mouse_pos)

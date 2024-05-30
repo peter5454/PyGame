@@ -18,13 +18,11 @@ class Turret(pg.sprite.Sprite):
 
 
         #animation
+        self.sprite_upgraded_sheet = sprite_upgraded_sheet
         self.sprite_sheet = sprite_sheet
         self.animation_list = self.load_images()
         self.frame_index = 0
-        self.update_time = pg.time.get_ticks()
-
-        #upgraded animation
-        self.sprite_upgraded_sheet = sprite_upgraded_sheet
+        self.update_time = pg.time.get_ticks()   
 
         #image
         self.angle = 90
@@ -40,11 +38,7 @@ class Turret(pg.sprite.Sprite):
         self.selected = False
         self.target = None
         self.turret_type = Turret_type
-        print(self.turret_type)
         self.type = TURRET_DATA.get(self.turret_type, [])
-        print(self.upgrade_level - 1)
-        print(self.type)
-        print(self.type[self.upgrade_level - 1])
         
         self.range = self.type[self.upgrade_level - 1].get("range")
 
@@ -133,5 +127,5 @@ class Turret(pg.sprite.Sprite):
         cost = self.tower_value
         print (cost)
         self.kill()
-        return(round(cost*0.8))
+        return(round(cost*0.65))
             
