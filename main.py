@@ -281,12 +281,18 @@ def load():
       rows += 1
     
     for row in range(rows):
-      if turret_type[row] == "TURRET_TURRET":
-        sprite_sheet[row] = turret_sheet2
-        sprite_upgraded_sheet[row] = upgraded_sheet2
+      if turret_type[row] == "TURRET_ICE":
+        sprite_sheet[row] = ice_sheet
+        sprite_upgraded_sheet[row] = upgraded_ice_sheet
+      if turret_type[row] == "TURRET_FIRE":
+        sprite_sheet[row] = fire_sheet
+        sprite_upgraded_sheet[row] = upgraded_fire_sheet
+      if turret_type[row] == "TURRET_EARTH":
+        sprite_sheet[row] = earth_sheet
+        sprite_upgraded_sheet[row] = upgraded_earth_sheet
       if turret_type[row] == "TURRET_CANNON":
-        sprite_sheet[row] = turret_sheet
-        sprite_upgraded_sheet[row] = upgraded_sheet #add more for the other turrets
+        sprite_sheet[row] = cannon_sheet
+        sprite_upgraded_sheet[row] = upgraded_cannon_sheet
     
     if rows > 0:
       for i in range(len(x)):
@@ -402,7 +408,7 @@ while run:
       #cannon
       if cannon_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_CANNON", None)
-        new_turret = Turret(cannon_sheet,0,0,turret_equipped[0]['name'],upgraded_cannon_sheet)
+        new_turret = Turret(cannon_sheet,0,0,turret_equipped[0]['name'],upgraded_cannon_sheet,1)
         if world.money >= new_turret.cost:
           placing_turrets = True
         else:
@@ -411,7 +417,7 @@ while run:
       #ice mage
       if ice_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_ICE", None)
-        new_turret = Turret(ice_sheet,0,0,turret_equipped[0]['name'],upgraded_ice_sheet) 
+        new_turret = Turret(ice_sheet,0,0,turret_equipped[0]['name'],upgraded_ice_sheet,1) 
         if world.money >= new_turret.cost:
           placing_turrets = True
         else:
@@ -419,7 +425,7 @@ while run:
       #fire archer
       if fire_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_FIRE", None)
-        new_turret = Turret(fire_sheet,0,0,turret_equipped[0]['name'],upgraded_fire_sheet) 
+        new_turret = Turret(fire_sheet,0,0,turret_equipped[0]['name'],upgraded_fire_sheet,1) 
         if world.money >= new_turret.cost:
           placing_turrets = True
         else:
@@ -427,7 +433,7 @@ while run:
       #earth catapult
       if earth_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_EARTH", None)
-        new_turret = Turret(earth_sheet,0,0,turret_equipped[0]['name'],upgraded_earth_sheet)
+        new_turret = Turret(earth_sheet,0,0,turret_equipped[0]['name'],upgraded_earth_sheet,1)
         
         if world.money >= new_turret.cost:
           placing_turrets = True
@@ -528,8 +534,10 @@ while run:
         sell_button.draw2(screen)
 
       if not placing_turrets and selected_turret is None:
-        turret_button.draw2(screen)
-        turret_button2.draw2(screen)
+        cannon_button.draw2(screen)
+        ice_button.draw2(screen) 
+        fire_button.draw2(screen) 
+        earth_button.draw2(screen) 
 
       if placing_ability or selected_turret or placing_turrets:
         cancel_button.draw2(screen)
