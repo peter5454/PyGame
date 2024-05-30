@@ -1,9 +1,10 @@
 import pygame as pg
 import constants as c
 import math as math
+from tower import Tower
 from turrets_data import TURRET_DATA
 
-class Turret(pg.sprite.Sprite):
+class Turret(Tower):
 
 
     def __init__(self,sprite_sheet,tile_x,tile_y,Turret_type,sprite_upgraded_sheet,upgrade_level):
@@ -45,6 +46,7 @@ class Turret(pg.sprite.Sprite):
 
         self.cooldown = self.type[self.upgrade_level - 1].get("cooldown")
         self.damage = self.type[self.upgrade_level - 1].get("damage")
+        self.damage_multiplier = 1
         self.cost = self.type[self.upgrade_level - 1].get("cost")
         self.upgrade_cost = self.type[self.upgrade_level - 1].get("upgrade_cost")
         self.last_shot = pg.time.get_ticks()
@@ -70,9 +72,7 @@ class Turret(pg.sprite.Sprite):
       #search for new target once turret has cooled down
             if pg.time.get_ticks() - self.last_shot > (self.cooldown):
                 self.pick_target(enemy_group)
-
-
-    
+        #print(self.damage_multiplier)
 
     def pick_target(self, enemy_group):
         x_dist = 0
@@ -87,7 +87,7 @@ class Turret(pg.sprite.Sprite):
                     self.target = enemy
                     self.angle = math.degrees(math.atan2(-y_dist, x_dist))
           #damage enemy
-                    self.target.health -= self.damage
+                    self.target.health -= self.damage * self.damage_multiplier
                     break
 
     def play_animation(self):
