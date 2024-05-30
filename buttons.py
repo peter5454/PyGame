@@ -40,6 +40,11 @@ class Button():
         return action
     def draw2(self,surface):
         surface.blit(self.image, self.rect)
+        if self.text:
+            text_surface = self.font.render(self.text, True, "grey100")
+            text_rect = text_surface.get_rect(center=self.rect.center)
+            text_rect.x += 33 #move the text right
+            surface.blit(text_surface, text_rect)
 
 
         
