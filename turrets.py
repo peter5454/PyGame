@@ -6,10 +6,11 @@ from turrets_data import TURRET_DATA
 class Turret(pg.sprite.Sprite):
 
 
-    def __init__(self,sprite_sheet,tile_x,tile_y,Turret_type,sprite_upgraded_sheet):
+    def __init__(self,sprite_sheet,tile_x,tile_y,Turret_type,sprite_upgraded_sheet,upgrade_level):
         pg.sprite.Sprite.__init__(self)
         self.tile_x = tile_x
         self.tile_y = tile_y
+        self.upgrade_level = upgrade_level
 
         #calculate center coordinates
         self.x = (self.tile_x + 0.5) * c.TILE_SIZE
@@ -17,13 +18,11 @@ class Turret(pg.sprite.Sprite):
 
 
         #animation
+        self.sprite_upgraded_sheet = sprite_upgraded_sheet
         self.sprite_sheet = sprite_sheet
         self.animation_list = self.load_images()
         self.frame_index = 0
-        self.update_time = pg.time.get_ticks()
-
-        #upgraded animation
-        self.sprite_upgraded_sheet = sprite_upgraded_sheet
+        self.update_time = pg.time.get_ticks()   
 
         #image
         self.angle = 90
@@ -34,11 +33,13 @@ class Turret(pg.sprite.Sprite):
         self.rect.center = (self.x, self.y)
 
         #variables       
-        self.upgrade_level = 1
+        
         self.max_level = len(TURRET_DATA)
         self.selected = False
         self.target = None
-        self.type = TURRET_DATA.get(Turret_type, [])
+        self.turret_type = Turret_type
+        self.type = TURRET_DATA.get(self.turret_type, [])
+        
         self.range = self.type[self.upgrade_level - 1].get("range")
 
 
@@ -53,6 +54,8 @@ class Turret(pg.sprite.Sprite):
 
     def load_images(self):
         #extract individual images from he sprite sheet
+        if self.upgrade_level == 2:
+            self.sprite_sheet = self.sprite_upgraded_sheet
         size = self.sprite_sheet.get_height()
         animation_list = []
         for x in range (c.ANIMATION_STEPS):
@@ -124,5 +127,5 @@ class Turret(pg.sprite.Sprite):
         cost = self.tower_value
         print (cost)
         self.kill()
-        return(round(cost*0.8))
+        return(round(cost*0.65))
             
