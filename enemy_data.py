@@ -1,12 +1,12 @@
 ENEMY_SPAWN_DATA = [
     {
         #1
-        "ice_golem": 1,
-        "fire_golem": 1,
-        "earth_golem": 1,
-        "ice_giant": 1,
-        "fire_giant": 1,
-        "earth_giant": 1
+        "ice_golem": 5,
+        "fire_golem": 0,
+        "earth_golem": 0,
+        "ice_giant": 0,
+        "fire_giant": 0,
+        "earth_giant": 0
     },
     {
         #2
