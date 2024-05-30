@@ -57,23 +57,34 @@ enemy_images = {
   "earth_golem": pg.image.load('assets/images/enemies/earth_golem.png').convert_alpha(),
   "ice_giant": pg.image.load('assets/images/enemies/ice_giant.png').convert_alpha(),
   "fire_giant": pg.image.load('assets/images/enemies/fire_giant.png').convert_alpha(),
-  "earth_giant": pg.image.load('assets/images/enemies/earth_giant.png').convert_alpha()
-
-
-  
+  "earth_giant": pg.image.load('assets/images/enemies/earth_giant.png').convert_alpha()  
 }
 
 #turrets
-cursor_turret = pg.image.load('assets/images/turrets/cursor_turret.png').convert_alpha()
-cursor_turret2 = pg.image.load('assets/images/turrets/Xcursor_turret.png').convert_alpha()
-turret_sheet = pg.image.load('assets/images/turrets/cannon_1.png').convert_alpha()
-turret_sheet2 = pg.image.load('assets/images/turrets/turret_1.png').convert_alpha()
-upgraded_sheet = pg.image.load('assets/images/turrets/cannon_2.png').convert_alpha()
-upgraded_sheet2 = pg.image.load('assets/images/turrets/turret_2.png').convert_alpha()
+#cannon
+cursor_cannon = pg.image.load('assets/images/turrets/cursor_cannon.png').convert_alpha()
+cannon_sheet = pg.image.load('assets/images/turrets/cannon_1.png').convert_alpha()
+upgraded_cannon_sheet = pg.image.load('assets/images/turrets/cannon_2.png').convert_alpha()
+#ice mage
+cursor_ice = pg.image.load('assets/images/turrets/cursor_ice.png').convert_alpha()
+ice_sheet = pg.image.load('assets/images/turrets/ice_mage_1.png').convert_alpha()
+upgraded_ice_sheet = pg.image.load('assets/images/turrets/turret_2.png').convert_alpha()
+#fire archer
+cursor_fire = pg.image.load('assets/images/turrets/cursor_fire.png').convert_alpha()
+fire_sheet = pg.image.load('assets/images/turrets/fire_archer_1.png').convert_alpha()
+upgraded_fire_sheet = pg.image.load('assets/images/turrets/fire_archer_2.png').convert_alpha()
+#earth catapult
+cursor_earth = pg.image.load('assets/images/turrets/cursor_earth.png').convert_alpha()
+earth_sheet = pg.image.load('assets/images/turrets/catapult_1.png').convert_alpha()
+upgraded_earth_sheet = pg.image.load('assets/images/turrets/catapult_2.png').convert_alpha()
+
 
 #buttons
-buy_turret_image = pg.image.load('assets/images/buttons/Turret_button.png').convert_alpha()
-buy_turret_image2 = pg.image.load('assets/images/buttons/Turret_button2.png').convert_alpha()
+buy_cannon_image = pg.image.load('assets/images/buttons/cannon_buy_button.png').convert_alpha()
+buy_ice_image = pg.image.load('assets/images/buttons/ice_buy_button.png').convert_alpha()
+buy_fire_image = pg.image.load('assets/images/buttons/fire_buy_button.png').convert_alpha()
+buy_earth_image = pg.image.load('assets/images/buttons/earth_buy_button.png').convert_alpha()
+
 cancel_image = pg.image.load('assets/images/buttons/cancel.png').convert_alpha()
 begin_image = pg.image.load('assets/images/buttons/begin.png').convert_alpha()
 restart_image = pg.image.load('assets/images/buttons/restart.png').convert_alpha()
@@ -89,8 +100,15 @@ enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
 
 #create buttons
-turret_button = Button(c.SCREEN_WIDTH - 220 ,250, buy_turret_image)
-turret_button2 = Button(c.SCREEN_WIDTH - 100 ,250, buy_turret_image2)
+turret_cannon_data = TURRET_DATA["TURRET_CANNON"][0]
+cannon_button = Button(c.SCREEN_WIDTH - 245 ,290, buy_cannon_image, str(turret_cannon_data['cost']))
+turret_ice_data = TURRET_DATA["TURRET_ICE"][0]
+ice_button = Button(c.SCREEN_WIDTH - 122 ,290, buy_ice_image, str(turret_ice_data['cost']))
+turret_fire_data = TURRET_DATA["TURRET_FIRE"][0]
+fire_button = Button(c.SCREEN_WIDTH - 245 ,360, buy_fire_image, str(turret_fire_data['cost']))
+turret_earth_data = TURRET_DATA["TURRET_EARTH"][0]
+earth_button = Button(c.SCREEN_WIDTH - 122 ,360, buy_earth_image, str(turret_earth_data['cost']))
+
 cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image)
 begin_button = Button(c.SCREEN_WIDTH - 200 ,700, begin_image)
 restart_button = Button(312.5 , 320, restart_image)
@@ -330,7 +348,7 @@ while run:
   #draw airstrike_banner
   screen.blit(airstrike_banner,((c.SCREEN_WIDTH-c.SIDE_PANEL)/2-200,c.SCREEN_HEIGHT-900))
 
-
+  #draw game stats
   draw_text("Round", text_font, "grey100", 838, 32)
   draw_text(str(world.level), text_font, "grey100", 925, 32)
   draw_text(str(world.health), text_font, "grey100", 890, 97)
@@ -379,18 +397,38 @@ while run:
           if cancel_button.draw(screen):
             selected_turret = None
 
+    #buy turrets
     if placing_turrets == False and selected_turret == None:
-      if turret_button.draw(screen):
+      #cannon
+      if cannon_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_CANNON", None)
-        new_turret = Turret(turret_sheet,0,0,turret_equipped[0]['name'],upgraded_sheet,1)
+        new_turret = Turret(cannon_sheet,0,0,turret_equipped[0]['name'],upgraded_cannon_sheet)
         if world.money >= new_turret.cost:
           placing_turrets = True
         else:
           turret_equipped = None
 
-      if turret_button2.draw(screen):
-        turret_equipped = TURRET_DATA.get("TURRET_TURRET", None)
-        new_turret = Turret(turret_sheet2,0,0,turret_equipped[0]['name'],upgraded_sheet2,1) 
+      #ice mage
+      if ice_button.draw(screen):
+        turret_equipped = TURRET_DATA.get("TURRET_ICE", None)
+        new_turret = Turret(ice_sheet,0,0,turret_equipped[0]['name'],upgraded_ice_sheet) 
+        if world.money >= new_turret.cost:
+          placing_turrets = True
+        else:
+          turret_equipped = None
+      #fire archer
+      if fire_button.draw(screen):
+        turret_equipped = TURRET_DATA.get("TURRET_FIRE", None)
+        new_turret = Turret(fire_sheet,0,0,turret_equipped[0]['name'],upgraded_fire_sheet) 
+        if world.money >= new_turret.cost:
+          placing_turrets = True
+        else:
+          turret_equipped = None
+      #earth catapult
+      if earth_button.draw(screen):
+        turret_equipped = TURRET_DATA.get("TURRET_EARTH", None)
+        new_turret = Turret(earth_sheet,0,0,turret_equipped[0]['name'],upgraded_earth_sheet)
+        
         if world.money >= new_turret.cost:
           placing_turrets = True
         else:
@@ -398,14 +436,19 @@ while run:
     
     if placing_turrets and placing_ability:
       placing_turrets = False
+
     if placing_turrets == True:
-      cursort_rect = cursor_turret.get_rect()
+      cursort_rect = cursor_cannon.get_rect()
       cursor_pos = pg.mouse.get_pos()
       cursort_rect.center = cursor_pos
-      if turret_equipped[0]['name'] == "TURRET_TURRET":
-        screen.blit(cursor_turret2, cursort_rect) #create more for differnt turrets
+      if turret_equipped[0]['name'] == "TURRET_ICE":
+        screen.blit(cursor_ice, cursort_rect) #create more for different turrets
+      elif turret_equipped[0]['name'] == "TURRET_FIRE":
+        screen.blit(cursor_fire, cursort_rect)
+      elif turret_equipped[0]['name'] == "TURRET_EARTH":
+        screen.blit(cursor_earth, cursort_rect)
       else:
-        screen.blit(cursor_turret, cursort_rect) #remove else statement and create more if statments
+        screen.blit(cursor_cannon, cursort_rect) #remove else statement and create more if statments
     
 
 

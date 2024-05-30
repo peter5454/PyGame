@@ -17,9 +17,45 @@ TURRET_DATA = {
             "upgrade_cost": 0
         }
     ],
-    "TURRET_TURRET": [
+    "TURRET_ICE": [
         {
-            "name" : "TURRET_TURRET",
+            "name" : "TURRET_ICE",
+            "range": 200,
+            "level": 1,
+            "cooldown": 2000,
+            "damage": 10,
+            "cost": 300,
+            "upgrade_cost": 500
+        },
+        {
+            "range": 250,
+            "level": 2,
+            "cooldown": 1000,
+            "damage": 30,
+            "upgrade_cost": 0
+        }
+    ],
+    "TURRET_FIRE": [
+        {
+            "name" : "TURRET_FIRE",
+            "range": 200,
+            "level": 1,
+            "cooldown": 2000,
+            "damage": 10,
+            "cost": 300,
+            "upgrade_cost": 500
+        },
+        {
+            "range": 250,
+            "level": 2,
+            "cooldown": 1000,
+            "damage": 30,
+            "upgrade_cost": 0
+        }
+    ],
+    "TURRET_EARTH": [
+        {
+            "name" : "TURRET_EARTH",
             "range": 200,
             "level": 1,
             "cooldown": 2000,
