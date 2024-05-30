@@ -34,6 +34,7 @@ turret_time = 0
 active_airstrike = None
 paused = False
 counter = 0
+save_error = False
 
 #load images
 #map
@@ -94,6 +95,7 @@ pause_button_image = pg.image.load('assets/images/buttons/pause_button.png').con
 exit_button_image = pg.image.load('assets/images/buttons/exit_button.png').convert_alpha()
 load_button_image = pg.image.load('assets/images/buttons/load_button.png').convert_alpha()
 save_button_image = pg.image.load('assets/images/buttons/save_button.png').convert_alpha()
+menu_button_image = pg.image.load('assets/images/buttons/menu_button.png').convert_alpha()
 
 #create groups
 enemy_group = pg.sprite.Group()
@@ -122,6 +124,7 @@ pause_button = Button(5,5, pause_button_image)
 exit_button = Button(5,5, exit_button_image)
 save_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 100, save_button_image)
 load_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2, load_button_image)
+menu_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 200, menu_button_image)
 
 
 #load json data for level
@@ -136,6 +139,7 @@ world.process_enemies()
 #load fonts for displaying text on the screen
 text_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 24)
 large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 36)
+error_font = pg.font.Font("assets/fonts/Aller_Bd.ttf", 24)
 
 #function for outputting text onto the screen
 def draw_text(text, font, text_col, x, y):
@@ -555,14 +559,26 @@ while run:
           save()
 
       if level_started == True:
-        load_button.draw2(screen)
-        save_button.draw2(screen)
+        if load_button.draw(screen):
+            save_error = True
+          
+        if save_button.draw(screen):
+            save_error = True
+            
         draw_circ(128,128,128,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
+        if save_error == True:
+          draw_text("Can't save or load while in a round", error_font, (0, 0, 0), 250, 450)
+          draw_text("Wait until the end", error_font, (0, 0, 0), 350, 500)
+      if menu_button.draw(screen):
+        print (123)
+
       
 
       if exit_button.draw(screen):
+        save_error == False
         game_over = False
         paused = False
+        
 
 
 
