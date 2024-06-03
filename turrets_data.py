@@ -7,6 +7,7 @@ TURRET_DATA = {
             "cooldown": 1000,
             "damage": 2,
             "cost": 150,
+            "element": "N",
             "upgrade_cost": 100
         },
         {
@@ -14,6 +15,7 @@ TURRET_DATA = {
             "level": 2,
             "cooldown": 400,
             "damage": 7,
+            "element": "N",
             "upgrade_cost": 0
         }
     ],
@@ -25,6 +27,7 @@ TURRET_DATA = {
             "cooldown": 2000,
             "damage": 10,
             "cost": 300,
+            "element": "I",
             "upgrade_cost": 100
         },
         {
@@ -32,6 +35,7 @@ TURRET_DATA = {
             "level": 2,
             "cooldown": 1000,
             "damage": 30,
+            "element": "I",
             "upgrade_cost": 0
         }
     ],
@@ -43,6 +47,7 @@ TURRET_DATA = {
             "cooldown": 2000,
             "damage": 10,
             "cost": 300,
+            "element": "F",
             "upgrade_cost": 100
         },
         {
@@ -50,6 +55,7 @@ TURRET_DATA = {
             "level": 2,
             "cooldown": 1000,
             "damage": 30,
+            "element": "F",
             "upgrade_cost": 0
         }
     ],
@@ -61,6 +67,7 @@ TURRET_DATA = {
             "cooldown": 2000,
             "damage": 10,
             "cost": 300,
+            "element": "E",
             "upgrade_cost": 100
         },
         {
@@ -68,6 +75,7 @@ TURRET_DATA = {
             "level": 2,
             "cooldown": 1000,
             "damage": 30,
+            "element": "E",
             "upgrade_cost": 0
         }
     ],

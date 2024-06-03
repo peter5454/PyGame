@@ -4,6 +4,31 @@ import math as math
 from tower import Tower
 from turrets_data import TURRET_DATA
 
+def damage_calc(element, enemy):
+        if element == "N":
+            return 0.75
+        elif enemy.element == "F":
+            if element == "F":
+                return 1
+            elif element == "I":
+                return 0.5
+            else:
+                return 1.5
+        elif enemy.element == "I":
+            if element == "F":
+                return 1.5
+            elif element == "I":
+                return 1
+            else:
+                return 0.5
+        elif enemy.element == "E":
+            if element == "F":
+                return 0.5
+            elif element == "I":
+                return 1.5
+            else:
+                return 1
+
 class Turret(Tower):
 
 
@@ -52,9 +77,12 @@ class Turret(Tower):
         self.upgrade_cost = self.type[self.upgrade_level - 1].get("upgrade_cost")
         self.last_shot = pg.time.get_ticks()
         self.tower_value = self.cost
+        self.element = self.type[self.upgrade_level - 1].get("element")
+
         
 
-
+    
+            
     def load_images(self):
         #extract individual images from he sprite sheet
         if self.upgrade_level == 2:
@@ -87,8 +115,10 @@ class Turret(Tower):
                 if dist < self.range:
                     self.target = enemy
                     self.angle = math.degrees(math.atan2(-y_dist, x_dist))
+                    element_dmg = damage_calc(self.element,enemy)
+                    print (element_dmg)
           #damage enemy
-                    self.target.health -= self.damage * self.damage_multiplier
+                    self.target.health -= self.damage * element_dmg * self.damage_multiplier 
                     if self.target.health <= 0:
                         world.money += c.KILL_REWARD * self.reward_multiplier
                     break
@@ -131,4 +161,7 @@ class Turret(Tower):
         print (cost)
         self.kill()
         return(round(cost*0.65))
-            
+    
+  
+        
+

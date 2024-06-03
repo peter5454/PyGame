@@ -11,6 +11,7 @@ class Enemy(pg.sprite.Sprite):
         self.pos = Vector2(self.waypoints[0])
         self.target_waypoint = 1
         self.health = ENEMY_DATA.get(enemy_type)["health"]
+        self.element = ENEMY_DATA.get(enemy_type)["element"]
         self.speed = ENEMY_DATA.get(enemy_type)["speed"]
         self.angle = 0
         self.original_image = images.get(enemy_type)
