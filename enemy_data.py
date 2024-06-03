@@ -34,7 +34,7 @@ ENEMY_DATA = {
     "ice_golem": {
         "health": 4,
         "element": "I",
-        "speed": 2
+        "speed": 10
     },
     "fire_golem": {
         "health": 5,

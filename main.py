@@ -1,6 +1,7 @@
 import pygame as pg
 import json
 from enemy import Enemy
+from health_bars import HealthBar
 from world import World
 import constants as c
 from buttons import Button
@@ -44,7 +45,7 @@ map_image = pg.image.load('assets/images/maps/map_1.png').convert_alpha()
 #UI
 side_panel = pg.image.load('assets/images/ui_backgrounds/side_panel.png').convert_alpha()
 wood_frame_full = pg.image.load('assets/images/ui_backgrounds/wood_frame_full.png').convert_alpha()
-health_bar = pg.image.load('assets/images/ui_backgrounds/health_bar.png').convert_alpha()
+health_bar_side_panel = pg.image.load('assets/images/ui_backgrounds/health_bar.png').convert_alpha()
 gold_bar = pg.image.load('assets/images/ui_backgrounds/gold_bar.png').convert_alpha()
 airstrike_banner = pg.image.load('assets/images/ui_backgrounds/airstrike_banner.png').convert_alpha()
 airstrike_ability_image = pg.image.load('assets/images/ui_backgrounds/airstrike_ability.png').convert_alpha()
@@ -106,6 +107,7 @@ menu_button_image = pg.image.load('assets/images/buttons/menu_button.png').conve
 #create groups
 enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
+health_bars = []
 
 #create buttons
 turret_cannon_data = TURRET_DATA["TURRET_CANNON"][0]
@@ -360,6 +362,7 @@ while run:
     enemy_group.update(world)
     turret_group.update(enemy_group, world)
 
+
     #update airstrike
 
 
@@ -384,7 +387,7 @@ while run:
   #draw side panel
   screen.blit(side_panel, ((c.SCREEN_WIDTH - c.SIDE_PANEL), 0))
   screen.blit(wood_frame_full, (796, 26))
-  screen.blit(health_bar, (796, 88))
+  screen.blit(health_bar_side_panel, (796, 88))
   screen.blit(gold_bar, (796, 155))
 
   #draw airstrike_banner
@@ -395,6 +398,13 @@ while run:
   draw_text(str(world.level), text_font, "grey100", 925, 32)
   draw_text(str(world.health), text_font, "grey100", 890, 97)
   draw_text(str(world.money), text_font, "grey100", 890, 164)
+
+  index = len(health_bars) - 1
+  while index >= 0:
+    if health_bars[index].update(screen):
+        health_bars.pop(index)
+    index -= 1
+
 
   if game_over == False:
     #check if the level has been started or not
@@ -411,6 +421,7 @@ while run:
         if world.spawned_enemies < len(world.enemy_list):
           enemy_type = world.enemy_list[world.spawned_enemies]
           enemy = Enemy(enemy_type, world.waypoints, enemy_images)
+          health_bars.append(HealthBar(enemy))
           enemy_group.add(enemy)
           world.spawned_enemies += 1
           last_enemy_spawn = pg.time.get_ticks()
