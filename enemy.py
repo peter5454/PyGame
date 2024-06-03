@@ -11,9 +11,11 @@ class Enemy(pg.sprite.Sprite):
         self.pos = Vector2(self.waypoints[0])
         self.target_waypoint = 1
         self.health = ENEMY_DATA.get(enemy_type)["health"]
+        self.max_health = ENEMY_DATA.get(enemy_type)["health"]
         self.element = ENEMY_DATA.get(enemy_type)["element"]
         self.speed = ENEMY_DATA.get(enemy_type)["speed"]
         self.angle = 0
+        self.finished = False
         self.original_image = images.get(enemy_type)
         self.image = pg.transform.rotate(self.original_image, self.angle)
         self.rect = self.image.get_rect()
@@ -32,6 +34,7 @@ class Enemy(pg.sprite.Sprite):
             self.movement = self.target - self.pos
         else:
             #enemy has reached end of path
+            self.finished = True
             self.kill()
             world.health -= 1
             world.missed_enemies += 1
@@ -62,3 +65,6 @@ class Enemy(pg.sprite.Sprite):
             world.killed_enemies += 1
             #where money used to update
             self.kill()
+    
+    def get_coords(self):
+        return self.pos.x,self.pos.y
