@@ -1,6 +1,7 @@
 import pygame as pg
 import constants as c
 import math as math
+import turrets as t
 from airstrike_data import AIRSTRIKE_DATA
 
 class airstrike ():
@@ -12,6 +13,7 @@ class airstrike ():
         self.cooldown = self.type.get("cooldown")
         self.cost = self.type.get("cost")
         self.waves = self.type.get("waves")
+        self.element = self.type.get("element")
         self.last_shot = 0
         self.shots_fired = 0
         self.running = False
@@ -32,7 +34,9 @@ class airstrike ():
                     y_dist = enemy.pos[1] - self.y
                     dist = math.sqrt(x_dist ** 2 + y_dist ** 2)
                     if dist < self.size:
-                        enemy.health -= self.damage
+                        element_damage = t.damage_calc(self.element, enemy)
+                        enemy.health -= self.damage * element_damage
+                        print (element_damage)
             self.last_shot = current_time
             self.shots_fired += 1
             if self.shots_fired >= self.waves:
@@ -47,6 +51,8 @@ class airstrike ():
         self.running = True
         self.shots_fired = 0
         self.next_shot_time = 0
+
+    
 
 
 
