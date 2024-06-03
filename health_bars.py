@@ -9,15 +9,15 @@ class HealthBar():
         self.y = 0
         self.hp = enemy.health
         self.max_hp = enemy.max_health
-        self.w = 50
-        self.h = 10
+        self.w = 40
+        self.h = 5
     
 
     def draw(self, surface):
         #calculate health ratio
         ratio = self.hp / self.max_hp
-        pg.draw.rect(surface, "red", (self.x, self.y-20, self.w, self.h))
-        pg.draw.rect(surface, "green", (self.x, self.y-20, self.w * ratio, self.h))
+        pg.draw.rect(surface, "red", (self.x-20, self.y-30, self.w, self.h))
+        pg.draw.rect(surface, "green", (self.x-20, self.y-30, self.w * ratio, self.h))
 
     def update(self,surface):
         self.x,self.y = self.enemy.get_coords()
