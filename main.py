@@ -314,19 +314,24 @@ def load():
       if turret_type[row] == "TURRET_ICE":
         sprite_sheet[row] = ice_sheet
         sprite_upgraded_sheet[row] = upgraded_ice_sheet
-      if turret_type[row] == "TURRET_FIRE":
+      elif turret_type[row] == "TURRET_FIRE":
         sprite_sheet[row] = fire_sheet
         sprite_upgraded_sheet[row] = upgraded_fire_sheet
-      if turret_type[row] == "TURRET_EARTH":
+      elif turret_type[row] == "TURRET_EARTH":
         sprite_sheet[row] = earth_sheet
         sprite_upgraded_sheet[row] = upgraded_earth_sheet
-      if turret_type[row] == "TURRET_CANNON":
+      elif turret_type[row] == "TURRET_CANNON":
         sprite_sheet[row] = cannon_sheet
         sprite_upgraded_sheet[row] = upgraded_cannon_sheet
     
     if rows > 0:
       for i in range(len(x)):
-        create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type[i], sprite_sheet[i], sprite_upgraded_sheet[i],int(upgrade_level[i]))
+        if turret_type[i] == "KING":
+          create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type[i], None, None,int(upgrade_level[i]), cursor_king)
+        elif turret_type[i] == "MARKET":
+          create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type[i], None, None,int(upgrade_level[i]), cursor_market)
+        else:
+          create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type[i], sprite_sheet[i], sprite_upgraded_sheet[i],int(upgrade_level[i]))
         print (turret_group)
 
   
