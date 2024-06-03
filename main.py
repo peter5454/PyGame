@@ -81,6 +81,8 @@ earth_sheet = pg.image.load('assets/images/turrets/catapult_1.png').convert_alph
 upgraded_earth_sheet = pg.image.load('assets/images/turrets/catapult_2.png').convert_alpha()
 #king
 cursor_king = pg.image.load('assets/images/turrets/cursor_king.png').convert_alpha()
+#market
+cursor_market = pg.image.load('assets/images/turrets/cursor_market.png').convert_alpha()
 
 #buttons
 buy_cannon_image = pg.image.load('assets/images/buttons/cannon_buy_button.png').convert_alpha()
@@ -88,6 +90,7 @@ buy_ice_image = pg.image.load('assets/images/buttons/ice_buy_button.png').conver
 buy_fire_image = pg.image.load('assets/images/buttons/fire_buy_button.png').convert_alpha()
 buy_earth_image = pg.image.load('assets/images/buttons/earth_buy_button.png').convert_alpha()
 buy_king_image = pg.image.load('assets/images/buttons/king_buy_button.png').convert_alpha()
+buy_market_image = pg.image.load('assets/images/buttons/market_buy_button.png').convert_alpha()
 
 cancel_image = pg.image.load('assets/images/buttons/cancel.png').convert_alpha()
 begin_image = pg.image.load('assets/images/buttons/begin.png').convert_alpha()
@@ -115,6 +118,8 @@ turret_earth_data = TURRET_DATA["TURRET_EARTH"][0]
 earth_button = Button(c.SCREEN_WIDTH - 122 ,360, buy_earth_image, str(turret_earth_data['cost']))
 king_data = TURRET_DATA["KING"][0]
 king_button = Button(c.SCREEN_WIDTH - 245 ,430, buy_king_image, str(king_data['cost']))
+market_data = TURRET_DATA["MARKET"][0]
+market_button = Button(c.SCREEN_WIDTH - 122 ,430, buy_market_image, str(market_data['cost']))
 
 cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image)
 begin_button = Button(c.SCREEN_WIDTH - 200 ,700, begin_image)
@@ -197,8 +202,8 @@ def create_turret(mouse_pos,turret_name,animation_sheet=None,upgraded_animation_
             space_is_free = False
       #if it is a free space then create turret
       if space_is_free == True:
-        if turret_name != "KING":
-          new_turret = Turret(animation_sheet, mouse_tile_x, mouse_tile_y,turret_name,upgraded_animation_sheet, upgrade_level)  
+        if turret_name != "KING" and turret_name != "MARKET":
+          new_turret = Turret(animation_sheet, mouse_tile_x, mouse_tile_y,turret_name,upgraded_animation_sheet, upgrade_level)
         else:
           new_turret = Tower(mouse_tile_x, mouse_tile_y,turret_name,sprite)
         turret_group.add(new_turret)
@@ -252,12 +257,12 @@ def update_supports(turret_group):
   for tower in turret_group:
     if tower.type[0]['name'] != "KING" and tower.type[0]['name'] != "MARKET":
       tower.damage_multiplier = 1
+      tower.reward_multiplier = 1
   for tower in turret_group:
     if tower.type[0]['name'] == "KING":
       tower.update_king(turret_group)
     elif tower.type[0]['name'] == "MARKET":
-      #market code here
-      pass
+      tower.update_market(turret_group)
 
     
 def save():
@@ -348,7 +353,7 @@ while run:
 
     #update groups
     enemy_group.update(world)
-    turret_group.update(enemy_group)
+    turret_group.update(enemy_group, world)
 
     #update airstrike
 
@@ -473,6 +478,14 @@ while run:
           placing_turrets = True
         else:
           turret_equipped = None
+      #market
+      if market_button.draw(screen):
+        turret_equipped = TURRET_DATA.get("MARKET", None)
+        new_turret = Tower(0,0,turret_equipped[0]['name'],cursor_market) 
+        if world.money >= new_turret.cost:
+          placing_turrets = True
+        else:
+          turret_equipped = None
     
     if placing_turrets and placing_ability:
       placing_turrets = False
@@ -488,7 +501,9 @@ while run:
       elif turret_equipped[0]['name'] == "TURRET_EARTH":
         screen.blit(cursor_earth, cursort_rect)
       elif turret_equipped[0]['name'] == "KING":
-        screen.blit(cursor_king, cursort_rect) #create more for different turrets
+        screen.blit(cursor_king, cursort_rect)
+      elif turret_equipped[0]['name'] == "MARKET":
+        screen.blit(cursor_market, cursort_rect) #create more for different turrets
       else:
         screen.blit(cursor_cannon, cursort_rect) #remove else statement and create more if statments
     
@@ -658,6 +673,8 @@ while run:
           #check if support tower
           if turret_equipped[0]['name'] == "KING":
             place_turret = create_turret(mouse_pos, turret_equipped[0]['name'],None, None, None, cursor_king)
+          elif turret_equipped[0]['name'] == "MARKET":
+            place_turret = create_turret(mouse_pos, turret_equipped[0]['name'],None, None, None, cursor_market)
           else: #damage tower
             place_turret = create_turret(mouse_pos,turret_equipped[0]['name'],new_turret.sprite_sheet,new_turret.sprite_upgraded_sheet,1)
           turret_time = pg.time.get_ticks()

@@ -79,6 +79,15 @@ TURRET_DATA = {
             "multiplier": 2,
             "cost": 300
         }
+    ],
+    "MARKET": [
+        {
+            "name" : "MARKET",
+            "range" : 200,
+            "level": 1,
+            "multiplier": 2,
+            "cost": 300
+        }
     ]
     
 }

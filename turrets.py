@@ -47,6 +47,7 @@ class Turret(Tower):
         self.cooldown = self.type[self.upgrade_level - 1].get("cooldown")
         self.damage = self.type[self.upgrade_level - 1].get("damage")
         self.damage_multiplier = 1
+        self.reward_multiplier = 1
         self.cost = self.type[self.upgrade_level - 1].get("cost")
         self.upgrade_cost = self.type[self.upgrade_level - 1].get("upgrade_cost")
         self.last_shot = pg.time.get_ticks()
@@ -65,16 +66,16 @@ class Turret(Tower):
             animation_list.append(temp_img)
         return animation_list
     
-    def update(self, enemy_group):
+    def update(self, enemy_group, world):
         if self.target:
             self.play_animation()
         else:
       #search for new target once turret has cooled down
             if pg.time.get_ticks() - self.last_shot > (self.cooldown):
-                self.pick_target(enemy_group)
+                self.pick_target(enemy_group, world)
         #print(self.damage_multiplier)
 
-    def pick_target(self, enemy_group):
+    def pick_target(self, enemy_group, world):
         x_dist = 0
         y_dist = 0
     #check distance to each enemy to see if it is in range
@@ -88,6 +89,8 @@ class Turret(Tower):
                     self.angle = math.degrees(math.atan2(-y_dist, x_dist))
           #damage enemy
                     self.target.health -= self.damage * self.damage_multiplier
+                    if self.target.health <= 0:
+                        world.money += c.KILL_REWARD * self.reward_multiplier
                     break
 
     def play_animation(self):

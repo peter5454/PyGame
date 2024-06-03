@@ -38,14 +38,27 @@ class Tower(pg.sprite.Sprite):
     #check distance to each tower to see if it is in range
         for tower in turret_group:
             #print(tower.type[0]['name'])
-            if tower.type[0]['name'] != "KING":
+            if tower.type[0]['name'] != "KING" and tower.type[0]['name'] != "MARKET":
                 x_dist = tower.x - self.x
                 y_dist = tower.y - self.y
                 dist = math.sqrt(x_dist ** 2 + y_dist ** 2)
                 #change damage multiplier for towers in range
                 if dist < self.range:
                     tower.damage_multiplier = 2
-            
+    
+    def update_market(self, turret_group):
+        x_dist = 0
+        y_dist = 0
+    #check distance to each tower to see if it is in range
+        for tower in turret_group:
+            #print(tower.type[0]['name'])
+            if tower.type[0]['name'] != "KING" and tower.type[0]['name'] != "MARKET":
+                x_dist = tower.x - self.x
+                y_dist = tower.y - self.y
+                dist = math.sqrt(x_dist ** 2 + y_dist ** 2)
+                #change reward multiplier for towers in range
+                if dist < self.range:
+                    tower.reward_multiplier += 1
 
     def draw(self, surface):
         self.rect = self.image.get_rect()
