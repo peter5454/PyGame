@@ -431,8 +431,9 @@ while run:
         if selected_turret:
           selected_turret.selected = True
           draw_circ(200,200,200,selected_turret.range,(selected_turret.x, selected_turret.y))
-          if upgrade_button.draw(screen):
-            upgrade_turret(selected_turret)
+          if selected_turret.turret_type != "KING" and selected_turret.turret_type != "MARKET":
+            if upgrade_button.draw(screen):
+              upgrade_turret(selected_turret)
           if sell_button.draw(screen):
             sell_turret(selected_turret)
             selected_turret = None
@@ -495,11 +496,14 @@ while run:
     if placing_turrets and placing_ability:
       placing_turrets = False
 
+    #cursor blit
     if placing_turrets == True:
       cursort_rect = cursor_cannon.get_rect()
       cursor_pos = pg.mouse.get_pos()
       cursort_rect.center = cursor_pos
-      if turret_equipped[0]['name'] == "TURRET_ICE":
+      if turret_equipped[0]['name'] == "TURRET_CANNON":
+        screen.blit(cursor_cannon, cursort_rect)
+      elif turret_equipped[0]['name'] == "TURRET_ICE":
         screen.blit(cursor_ice, cursort_rect) 
       elif turret_equipped[0]['name'] == "TURRET_FIRE":
         screen.blit(cursor_fire, cursort_rect)
@@ -508,9 +512,7 @@ while run:
       elif turret_equipped[0]['name'] == "KING":
         screen.blit(cursor_king, cursort_rect)
       elif turret_equipped[0]['name'] == "MARKET":
-        screen.blit(cursor_market, cursort_rect) #create more for different turrets
-      else:
-        screen.blit(cursor_cannon, cursort_rect) #remove else statement and create more if statments
+        screen.blit(cursor_market, cursort_rect)
     
 
 
