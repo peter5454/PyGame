@@ -11,6 +11,8 @@ from airstrike import airstrike
 import math as mt
 import csv
 from turrets_data import TURRET_DATA
+from airstrike_data import AIRSTRIKE_DATA
+
 
 #initialise pygame
 pg.init()
@@ -48,7 +50,11 @@ wood_frame_full = pg.image.load('assets/images/ui_backgrounds/wood_frame_full.pn
 health_bar_side_panel = pg.image.load('assets/images/ui_backgrounds/health_bar.png').convert_alpha()
 gold_bar = pg.image.load('assets/images/ui_backgrounds/gold_bar.png').convert_alpha()
 airstrike_banner = pg.image.load('assets/images/ui_backgrounds/airstrike_banner.png').convert_alpha()
-airstrike_ability_image = pg.image.load('assets/images/ui_backgrounds/airstrike_ability.png').convert_alpha()
+arrow_strike_ability_image = pg.image.load('assets/images/buttons/arrow_strike_button.png').convert_alpha()
+ice_strike_ability_image = pg.image.load('assets/images/buttons/ice_strike_button.png').convert_alpha()
+fire_strike_ability_image = pg.image.load('assets/images/buttons/fire_strike_button.png').convert_alpha()
+earth_strike_ability_image = pg.image.load('assets/images/buttons/earth_strike_button.png').convert_alpha()
+
 
 
 
@@ -94,7 +100,7 @@ buy_king_image = pg.image.load('assets/images/buttons/king_buy_button.png').conv
 buy_market_image = pg.image.load('assets/images/buttons/market_buy_button.png').convert_alpha()
 
 cancel_image = pg.image.load('assets/images/buttons/cancel.png').convert_alpha()
-begin_image = pg.image.load('assets/images/buttons/begin.png').convert_alpha()
+start_image = pg.image.load('assets/images/buttons/start_button.png').convert_alpha()
 restart_image = pg.image.load('assets/images/buttons/restart.png').convert_alpha()
 upgrade_image = pg.image.load('assets/images/buttons/upgrade_turret.png').convert_alpha()
 sell_image = pg.image.load('assets/images/buttons/sell.png').convert_alpha()
@@ -110,28 +116,22 @@ turret_group = pg.sprite.Group()
 health_bars = []
 
 #create buttons
-turret_cannon_data = TURRET_DATA["TURRET_CANNON"][0]
-cannon_button = Button(c.SCREEN_WIDTH - 245 ,290, buy_cannon_image, str(turret_cannon_data['cost']))
-turret_ice_data = TURRET_DATA["TURRET_ICE"][0]
-ice_button = Button(c.SCREEN_WIDTH - 122 ,290, buy_ice_image, str(turret_ice_data['cost']))
-turret_fire_data = TURRET_DATA["TURRET_FIRE"][0]
-fire_button = Button(c.SCREEN_WIDTH - 245 ,360, buy_fire_image, str(turret_fire_data['cost']))
-turret_earth_data = TURRET_DATA["TURRET_EARTH"][0]
-earth_button = Button(c.SCREEN_WIDTH - 122 ,360, buy_earth_image, str(turret_earth_data['cost']))
-king_data = TURRET_DATA["KING"][0]
-king_button = Button(c.SCREEN_WIDTH - 245 ,430, buy_king_image, str(king_data['cost']))
-market_data = TURRET_DATA["MARKET"][0]
-market_button = Button(c.SCREEN_WIDTH - 122 ,430, buy_market_image, str(market_data['cost']))
+cannon_button = Button(c.SCREEN_WIDTH - 245 ,290, buy_cannon_image, str(TURRET_DATA["TURRET_CANNON"][0].get('cost')), 33)
+ice_button = Button(c.SCREEN_WIDTH - 122 ,290, buy_ice_image, str(TURRET_DATA["TURRET_ICE"][0].get('cost')), 33)
+fire_button = Button(c.SCREEN_WIDTH - 245 ,360, buy_fire_image, str(TURRET_DATA["TURRET_FIRE"][0].get('cost')), 33)
+earth_button = Button(c.SCREEN_WIDTH - 122 ,360, buy_earth_image, str(TURRET_DATA["TURRET_EARTH"][0].get('cost')), 33)
+king_button = Button(c.SCREEN_WIDTH - 245 ,430, buy_king_image, str(TURRET_DATA["KING"][0].get('cost')), 33)
+market_button = Button(c.SCREEN_WIDTH - 122 ,430, buy_market_image, str(TURRET_DATA["MARKET"][0].get('cost')), 33)
 
 cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image)
-begin_button = Button(c.SCREEN_WIDTH - 200 ,700, begin_image)
+begin_button = Button(c.SCREEN_WIDTH - 242 ,670, start_image, "START ROUND")
 restart_button = Button(312.5 , 320, restart_image)
 upgrade_button = Button(c.SCREEN_WIDTH - 220, 275, upgrade_image)
 sell_button = Button(c.SCREEN_WIDTH - 220, 350, sell_image)
-airstrike_ability = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 175, 0, airstrike_ability_image)
-airstrike_ability2 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 75, 0, airstrike_ability_image)
-airstrike_ability3 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 25, 0, airstrike_ability_image)
-airstrike_ability4 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 125, 0, airstrike_ability_image)
+airstrike_ability = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 164, 5, arrow_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_1"].get("cost")), 7, 45, 'airstrike')
+airstrike_ability2 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 76, 5, ice_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_2"].get("cost")), 7, 45, 'airstrike')
+airstrike_ability3 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 12, 5, fire_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_3"].get("cost")), 7, 45, 'airstrike')
+airstrike_ability4 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 100, 5, earth_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_4"].get("cost")), 7, 45, 'airstrike')
 pause_button = Button(5,5, pause_button_image)
 exit_button = Button(5,5, exit_button_image)
 save_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 100, save_button_image)
@@ -391,7 +391,7 @@ while run:
   screen.blit(gold_bar, (796, 155))
 
   #draw airstrike_banner
-  screen.blit(airstrike_banner,((c.SCREEN_WIDTH-c.SIDE_PANEL)/2-200,c.SCREEN_HEIGHT-900))
+  screen.blit(airstrike_banner,((c.SCREEN_WIDTH-c.SIDE_PANEL)/2-200,c.SCREEN_HEIGHT-815))
 
   #draw game stats
   draw_text("Round", text_font, "grey100", 838, 32)
@@ -535,6 +535,8 @@ while run:
 
       if cancel_button.draw(screen):
         placing_turrets = False
+
+    #airstrikes
     if placing_ability == False:
       if airstrike_ability.draw(screen):
         new_aristrike = airstrike("airstrike_1")
@@ -607,6 +609,9 @@ while run:
         ice_button.draw2(screen) 
         fire_button.draw2(screen) 
         earth_button.draw2(screen) 
+        king_button.draw2(screen)
+        market_button.draw2(screen)
+
 
       if placing_ability or selected_turret or placing_turrets:
         cancel_button.draw2(screen)

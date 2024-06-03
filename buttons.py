@@ -1,13 +1,19 @@
 import pygame as pg
 
 class Button():
-    def __init__(self,x,y,image, text=''):
+    def __init__(self,x,y,image, text='', x_offset=0, y_offset=0, type=''):
         self.image = image
         self.rect = self.image.get_rect()
         self.clicked = False
         self.rect.topleft = (x,y)
         self.text = text
         self.font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 18)
+        self.alt_font = pg.font.Font("assets/fonts/MedievalSharp-Book.ttf", 32)
+        self.y_offset = y_offset
+        self.x_offset = x_offset
+        self.coin_image = pg.image.load('assets/images/ui_backgrounds/coin.png')
+        self.type = type
+
 
     def draw(self, surface):
         action = False
@@ -32,10 +38,19 @@ class Button():
         
         #render text
         if self.text:
+            if self.text == "START ROUND":
+                self.font = self.alt_font
             text_surface = self.font.render(self.text, True, "grey100")
             text_rect = text_surface.get_rect(center=self.rect.center)
-            text_rect.x += 33 #move the text right
+            text_rect.x += self.x_offset #move the text right
+            text_rect.y += self.y_offset #move text down
             surface.blit(text_surface, text_rect)
+        
+        #render coin if airstrike
+        if self.type == 'airstrike':
+            coin_rect = self.rect.copy()
+            coin_rect.y += 66
+            surface.blit(self.coin_image, coin_rect)
         
         return action
     def draw2(self,surface):
@@ -43,7 +58,8 @@ class Button():
         if self.text:
             text_surface = self.font.render(self.text, True, "grey100")
             text_rect = text_surface.get_rect(center=self.rect.center)
-            text_rect.x += 33 #move the text right
+            text_rect.x += self.x_offset #move the text right
+            text_rect.y += self.y_offset #move text down
             surface.blit(text_surface, text_rect)
 
 
