@@ -27,7 +27,8 @@ class Tower(pg.sprite.Sprite):
         self.target = None
         self.type = TURRET_DATA.get(Turret_type, [])
         self.range = self.type[0].get("range")
-
+        self.upgrade_level = 1
+        self.turret_type = Turret_type
         self.cost = self.type[0].get("cost")
         self.tower_value = self.cost
 
