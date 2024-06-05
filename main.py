@@ -88,8 +88,10 @@ earth_sheet = pg.image.load('assets/images/turrets/catapult_1.png').convert_alph
 upgraded_earth_sheet = pg.image.load('assets/images/turrets/catapult_2.png').convert_alpha()
 #king
 cursor_king = pg.image.load('assets/images/turrets/cursor_king.png').convert_alpha()
+tower_king = pg.image.load('assets/images/turrets/tower_king.png').convert_alpha()
 #market
 cursor_market = pg.image.load('assets/images/turrets/cursor_market.png').convert_alpha()
+tower_market = pg.image.load('assets/images/turrets/tower_market.png').convert_alpha()
 
 #buttons
 buy_cannon_image = pg.image.load('assets/images/buttons/cannon_buy_button.png').convert_alpha()
@@ -123,10 +125,10 @@ earth_button = Button(c.SCREEN_WIDTH - 122 ,360, buy_earth_image, str(TURRET_DAT
 king_button = Button(c.SCREEN_WIDTH - 245 ,430, buy_king_image, str(TURRET_DATA["KING"][0].get('cost')), 33)
 market_button = Button(c.SCREEN_WIDTH - 122 ,430, buy_market_image, str(TURRET_DATA["MARKET"][0].get('cost')), 33)
 
-cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image)
-begin_button = Button(c.SCREEN_WIDTH - 242 ,670, start_image, "START ROUND")
+cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image, "CANCEL",0,0,"alt_font", 24)
+begin_button = Button(c.SCREEN_WIDTH - 242 ,670, start_image, "START ROUND",0,0,"alt_font")
 restart_button = Button(312.5 , 320, restart_image)
-upgrade_button = Button(c.SCREEN_WIDTH - 220, 275, upgrade_image)
+upgrade_button = Button(c.SCREEN_WIDTH - 210, 275, upgrade_image,"UPGRADE",10,10,"alt_font_with_coin",18)
 sell_button = Button(c.SCREEN_WIDTH - 220, 350, sell_image)
 airstrike_ability = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 164, 5, arrow_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_1"].get("cost")), 7, 45, 'airstrike')
 airstrike_ability2 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 76, 5, ice_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_2"].get("cost")), 7, 45, 'airstrike')
@@ -442,7 +444,14 @@ while run:
         if selected_turret:
           selected_turret.selected = True
           draw_circ(200,200,200,selected_turret.range,(selected_turret.x, selected_turret.y))
-          if selected_turret.turret_type != "KING" and selected_turret.turret_type != "MARKET":
+          if selected_turret.turret_type != "KING" and selected_turret.turret_type != "MARKET" and selected_turret.upgrade_level < 2:
+            #check if enough money
+            if world.money < selected_turret.upgrade_cost:
+              upgrade_button.font_red()
+            else:
+              upgrade_button.font_white()
+            upgrade_button.text = str(selected_turret.upgrade_cost)
+            upgrade_button.coin_cost(0,0,20,0,'cost')
             if upgrade_button.draw(screen):
               upgrade_turret(selected_turret)
           if sell_button.draw(screen):
