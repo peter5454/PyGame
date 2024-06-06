@@ -354,8 +354,7 @@ def main_menu():
     if quit_button.draw(screen):
       pg.quit()
     pg.display.flip()
-    print(465)
-    pg.time.delay(1)
+    pg.time.delay(10)
     for event in pg.event.get():
     #quit program
       if event.type == pg.QUIT:
@@ -667,7 +666,7 @@ while run:
           draw_text("Can't save or load while in a round", error_font, (0, 0, 0), 250, 450)
           draw_text("Wait until the end", error_font, (0, 0, 0), 350, 500)
       if menu_button.draw(screen):
-        print (123)
+        main_menu()
 
       
 
