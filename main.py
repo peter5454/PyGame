@@ -39,6 +39,7 @@ active_airstrike = None
 paused = False
 counter = 0
 save_error = False
+menu_counter = 0
 
 #load images
 #map
@@ -109,6 +110,8 @@ exit_button_image = pg.image.load('assets/images/buttons/exit_button.png').conve
 load_button_image = pg.image.load('assets/images/buttons/load_button.png').convert_alpha()
 save_button_image = pg.image.load('assets/images/buttons/save_button.png').convert_alpha()
 menu_button_image = pg.image.load('assets/images/buttons/menu_button.png').convert_alpha()
+quit_button_image = pg.image.load('assets/images/buttons/Quit_button.png').convert_alpha()
+play_button_image = pg.image.load('assets/images/buttons/Play_button.png').convert_alpha()
 
 #create groups
 enemy_group = pg.sprite.Group()
@@ -137,6 +140,8 @@ exit_button = Button(5,5, exit_button_image)
 save_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 100, save_button_image)
 load_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2, load_button_image)
 menu_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 200, menu_button_image)
+play_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 200, play_button_image)
+quit_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 + 200, quit_button_image)
 
 
 #load json data for level
@@ -337,10 +342,32 @@ def load():
         print (turret_group)
 
   
+def main_menu():
+  run2 = True
+  screen.fill("grey100")
+  while run2:
+    if play_button.draw(screen):
+      return(1)
+    if load_button.draw(screen):
+      load()
+      return(1)
+    if quit_button.draw(screen):
+      pg.quit()
+    pg.display.flip()
+    print(465)
+    pg.time.delay(1)
+    for event in pg.event.get():
+    #quit program
+      if event.type == pg.QUIT:
+        pg.quit()
+
+
 
 #game loop
 run = True
 while run:
+  if menu_counter == 0 :
+    menu_counter  = main_menu()
 
   clock.tick(c.FPS)
 
