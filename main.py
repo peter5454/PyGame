@@ -395,6 +395,7 @@ def reset_game():
   selected_turret = None
   global last_enemy_spawn
   last_enemy_spawn = pg.time.get_ticks()
+  global world
   world = World(world_data, map_image)
   world.process_data()
   world.process_enemies()
