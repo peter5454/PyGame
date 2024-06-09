@@ -159,9 +159,9 @@ exit_button = Button(5,5, exit_button_image)
 save_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 100, save_button_image)
 load_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2, load_button_image)
 menu_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 200, menu_button_image)
-play_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2 - 100, menu_base_button_image, "Play")
-quit_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2 + 100, menu_base_button_image, "Quit")
-menu_load_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2, menu_base_button_image, "Load")
+play_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2 - 100, menu_base_button_image, "PLAY",0,0,'alt_font',30)
+menu_load_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2, menu_base_button_image, "LOAD",0,0,'alt_font',30)
+quit_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2 + 100, menu_base_button_image, "EXIT",0,0,'alt_font',30)
 
 
 
@@ -384,7 +384,23 @@ def main_menu():
       if event.type == pg.QUIT:
         pg.quit()
 
-
+def reset_game():
+  global game_over
+  game_over = False
+  global level_started
+  level_started = False
+  global placing_turrets
+  placing_turrets = False
+  global selected_turret
+  selected_turret = None
+  global last_enemy_spawn
+  last_enemy_spawn = pg.time.get_ticks()
+  world = World(world_data, map_image)
+  world.process_data()
+  world.process_enemies()
+  #empty groups
+  enemy_group.empty()
+  turret_group.empty()
 
 #game loop
 run = True
@@ -761,6 +777,7 @@ while run:
           draw_text("Can't save or load while in a round", error_font, (0, 0, 0), 250, 450)
           draw_text("Wait until the end", error_font, (0, 0, 0), 350, 500)
       if menu_button.draw(screen):
+        reset_game()
         main_menu()
 
       

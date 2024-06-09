@@ -1,13 +1,13 @@
 import pygame as pg
 
 class Button():
-    def __init__(self,x,y,image, text='', text_x_offset=0, text_y_offset=0, type='', font_size=32):
+    def __init__(self,x,y,image, text='', text_x_offset=0, text_y_offset=0, type='', font_size=18):
         self.image = image
         self.rect = self.image.get_rect()
         self.clicked = False
         self.rect.topleft = (x,y)
         self.text = text
-        self.font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 18)
+        self.font = pg.font.Font("assets/fonts/Amita-Regular.ttf", font_size)
         self.alt_font = pg.font.Font("assets/fonts/MedievalSharp-Book.ttf", font_size)
         self.font_color = "grey100"
         self.y_offset = text_y_offset
