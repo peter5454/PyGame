@@ -71,5 +71,8 @@ class Tower(pg.sprite.Sprite):
         cost = self.tower_value
         print (cost)
         self.kill()
-        return(round(cost*0.8))
+        return(round(cost*0.65))
+
+    def sell_price(self):
+        return(round(self.tower_value*0.65))
             

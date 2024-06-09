@@ -3,7 +3,7 @@ AIRSTRIKE_DATA = {
         "damage" : 10,
         "cooldown" : 500,
         "size" : 50,
-        "cost" : 200,
+        "cost" : 100,
         "waves" : 3,
         "element": "N"
     },
@@ -11,7 +11,7 @@ AIRSTRIKE_DATA = {
         "damage" : 40,
         "cooldown" : 500,
         "size" : 70,
-        "cost" : 200,
+        "cost" : 150,
         "waves" : 1,
         "element": "F"
     },
@@ -27,7 +27,7 @@ AIRSTRIKE_DATA = {
         "damage" : 60,
         "cooldown" : 500,
         "size" : 80,
-        "cost" : 200,
+        "cost" : 250,
         "waves" : 1,
         "element": "I"
     }
