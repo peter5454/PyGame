@@ -823,24 +823,25 @@ while run:
       mouse_pos = pg.mouse.get_pos()
       #check if mouse is on the game area
       if mouse_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL and mouse_pos[1] > c.SCREEN_HEIGHT-680:
-        selected_turret = None
-        clear_selected()
-        if placing_turrets == True:
-          #check if support tower
-          if turret_equipped[0]['name'] == "KING":
-            place_turret = create_turret(mouse_pos, turret_equipped[0]['name'],None, None, None, cursor_king)
-          elif turret_equipped[0]['name'] == "MARKET":
-            place_turret = create_turret(mouse_pos, turret_equipped[0]['name'],None, None, None, cursor_market)
-          else: #damage tower
-            place_turret = create_turret(mouse_pos,turret_equipped[0]['name'],new_turret.sprite_sheet,new_turret.sprite_upgraded_sheet,1)
-          turret_time = pg.time.get_ticks()
-        if place_turret:
-          world.money -= new_turret.cost
-          placing_turrets = False
-          place_turret = None
-        if pg.time.get_ticks() > turret_time + 10:    
-          if placing_turrets == False:
-            selected_turret = select_turret(mouse_pos)
+        if not paused:
+          selected_turret = None
+          clear_selected()
+          if placing_turrets == True:
+            #check if support tower
+            if turret_equipped[0]['name'] == "KING":
+              place_turret = create_turret(mouse_pos, turret_equipped[0]['name'],None, None, None, cursor_king)
+            elif turret_equipped[0]['name'] == "MARKET":
+              place_turret = create_turret(mouse_pos, turret_equipped[0]['name'],None, None, None, cursor_market)
+            else: #damage tower
+              place_turret = create_turret(mouse_pos,turret_equipped[0]['name'],new_turret.sprite_sheet,new_turret.sprite_upgraded_sheet,1)
+            turret_time = pg.time.get_ticks()
+          if place_turret:
+            world.money -= new_turret.cost
+            placing_turrets = False
+            place_turret = None
+          if pg.time.get_ticks() > turret_time + 10:    
+            if placing_turrets == False:
+              selected_turret = select_turret(mouse_pos)
 
 
           
