@@ -46,9 +46,17 @@ class Button():
         if self.clicked:
             scaled_image = pg.transform.scale(self.image, (self.rect.width - 5, self.rect.height - 5))
             surface.blit(scaled_image, self.rect)
+            self.draw2(surface,True)
+
         else:
             surface.blit(self.image, self.rect)
+            self.draw2(surface)
         
+        return action
+    
+    def draw2(self,surface,scaled=False):
+        if not scaled:
+            surface.blit(self.image, self.rect)
         #render text
         if self.text:
             if self.type == "alt_font":
@@ -65,24 +73,6 @@ class Button():
             surface.blit(self.cost_text_surface, self.cost_text_rect)
             if self.has_coin:
                 surface.blit(self.coin_image, self.coin_rect)
-
-
-        #render coin if airstrike
-        if self.type == 'airstrike':
-            coin_rect = self.rect.copy()
-            coin_rect.y += 66
-            surface.blit(self.coin_image, coin_rect)
-        
-        return action
-    
-    def draw2(self,surface):
-        surface.blit(self.image, self.rect)
-        if self.text:
-            text_surface = self.font.render(self.text, True, self.font_color)
-            text_rect = text_surface.get_rect(center=self.rect.center) # Center text surface rect
-            text_rect.x += self.x_offset # Apply x offset
-            text_rect.y += self.y_offset # Apply y offset
-            surface.blit(text_surface, text_rect)
 
     #method for just cost
     def cost(self, text_x, text_y, cost='', size=24, color='grey100'):

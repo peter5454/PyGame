@@ -118,6 +118,7 @@ turret_group = pg.sprite.Group()
 health_bars = []
 
 #create buttons
+#buy buttons
 cannon_button = Button(c.SCREEN_WIDTH - 245 ,290, buy_cannon_image)
 cannon_button.cost(33,-2,str(TURRET_DATA["TURRET_CANNON"][0].get('cost')), 18)
 ice_button = Button(c.SCREEN_WIDTH - 122 ,290, buy_ice_image)
@@ -131,15 +132,24 @@ king_button.cost(33,-2,str(TURRET_DATA["KING"][0].get('cost')), 18)
 market_button = Button(c.SCREEN_WIDTH - 122 ,430, buy_market_image)
 market_button.cost(33,-2,str(TURRET_DATA["MARKET"][0].get('cost')), 18)
 
+#selected tower
 cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image, "CANCEL",0,0,"alt_font",24)
 begin_button = Button(c.SCREEN_WIDTH - 242 ,670, start_image, "START ROUND",0,0,"alt_font")
 restart_button = Button(312.5 , 320, restart_image)
 upgrade_button = Button(c.SCREEN_WIDTH - 210, 275, upgrade_image,"UPGRADE",0,-13, "alt_font",22)
 sell_button = Button(c.SCREEN_WIDTH - 210, 350, sell_image, "SELL",0,-13,"alt_font",22)
-airstrike_ability = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 164, 5, arrow_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_1"].get("cost")), 7, 45, 'airstrike')
-airstrike_ability2 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 76, 5, ice_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_2"].get("cost")), 7, 45, 'airstrike')
-airstrike_ability3 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 12, 5, fire_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_3"].get("cost")), 7, 45, 'airstrike')
-airstrike_ability4 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 100, 5, earth_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_4"].get("cost")), 7, 45, 'airstrike')
+
+#airstrike buttons
+airstrike_ability = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 164, 5, arrow_strike_ability_image)
+airstrike_ability.coin_cost(-22,44,8,45,str(AIRSTRIKE_DATA["airstrike_1"].get("cost")),18)
+airstrike_ability2 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 76, 5, ice_strike_ability_image)
+airstrike_ability2.coin_cost(-22,44,8,45,str(AIRSTRIKE_DATA["airstrike_2"].get("cost")),18)
+airstrike_ability3 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 12, 5, fire_strike_ability_image)
+airstrike_ability3.coin_cost(-22,44,8,45,str(AIRSTRIKE_DATA["airstrike_3"].get("cost")),18)
+airstrike_ability4 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 100, 5, earth_strike_ability_image)
+airstrike_ability4.coin_cost(-22,44,8,45,str(AIRSTRIKE_DATA["airstrike_4"].get("cost")),18)
+
+#puase menu
 pause_button = Button(5,5, pause_button_image)
 exit_button = Button(5,5, exit_button_image)
 save_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 100, save_button_image)
@@ -596,18 +606,39 @@ while run:
 
     #airstrikes
     if placing_ability == False:
+
+      #airstrike 1
+      if world.money < AIRSTRIKE_DATA["airstrike_1"]["cost"]:
+        airstrike_ability.change_cost_color("firebrick2")
+      else:
+        airstrike_ability.change_cost_color("grey100")
       if airstrike_ability.draw(screen):
         new_aristrike = airstrike("airstrike_1")
         placing_ability = True
 
+      #airstrike 2
+      if world.money < AIRSTRIKE_DATA["airstrike_2"]["cost"]:
+        airstrike_ability2.change_cost_color("firebrick2")
+      else:
+        airstrike_ability2.change_cost_color("grey100")
       if airstrike_ability2.draw(screen):
         new_aristrike = airstrike("airstrike_2")
         placing_ability = True
 
+      #airstrike 3
+      if world.money < AIRSTRIKE_DATA["airstrike_3"]["cost"]:
+        airstrike_ability3.change_cost_color("firebrick2")
+      else:
+        airstrike_ability3.change_cost_color("grey100")
       if airstrike_ability3.draw(screen):
         new_aristrike = airstrike("airstrike_3")
         placing_ability = True
 
+      #airstrike 4
+      if world.money < AIRSTRIKE_DATA["airstrike_4"]["cost"]:
+        airstrike_ability4.change_cost_color("firebrick2")
+      else:
+        airstrike_ability4.change_cost_color("grey100")
       if airstrike_ability4.draw(screen):
         new_aristrike = airstrike("airstrike_4")
         placing_ability = True
@@ -705,14 +736,7 @@ while run:
       if exit_button.draw(screen):
         save_error == False
         game_over = False
-        paused = False
-        
-
-
-
-      
-
-
+        paused = False 
     
     if paused == False and game_over == True:
 
