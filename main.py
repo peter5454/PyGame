@@ -778,12 +778,13 @@ while run:
           draw_text("Wait until the end", error_font, (0, 0, 0), 350, 500)
       if menu_button.draw(screen):
         reset_game()
+        paused = False
         main_menu()
 
       
 
       if exit_button.draw(screen):
-        save_error == False
+        save_error = False
         game_over = False
         paused = False 
     
