@@ -105,7 +105,7 @@ cancel_image = pg.image.load('assets/images/buttons/cancel.png').convert_alpha()
 start_image = pg.image.load('assets/images/buttons/start_button.png').convert_alpha()
 restart_image = pg.image.load('assets/images/buttons/restart.png').convert_alpha()
 upgrade_image = pg.image.load('assets/images/buttons/upgrade_turret.png').convert_alpha()
-sell_image = pg.image.load('assets/images/buttons/sell.png').convert_alpha()
+sell_image = pg.image.load('assets/images/buttons/sell_button.png').convert_alpha()
 pause_button_image = pg.image.load('assets/images/buttons/pause_button.png').convert_alpha()
 exit_button_image = pg.image.load('assets/images/buttons/exit_button.png').convert_alpha()
 load_button_image = pg.image.load('assets/images/buttons/load_button.png').convert_alpha()
@@ -118,18 +118,24 @@ turret_group = pg.sprite.Group()
 health_bars = []
 
 #create buttons
-cannon_button = Button(c.SCREEN_WIDTH - 245 ,290, buy_cannon_image, str(TURRET_DATA["TURRET_CANNON"][0].get('cost')), 33)
-ice_button = Button(c.SCREEN_WIDTH - 122 ,290, buy_ice_image, str(TURRET_DATA["TURRET_ICE"][0].get('cost')), 33)
-fire_button = Button(c.SCREEN_WIDTH - 245 ,360, buy_fire_image, str(TURRET_DATA["TURRET_FIRE"][0].get('cost')), 33)
-earth_button = Button(c.SCREEN_WIDTH - 122 ,360, buy_earth_image, str(TURRET_DATA["TURRET_EARTH"][0].get('cost')), 33)
-king_button = Button(c.SCREEN_WIDTH - 245 ,430, buy_king_image, str(TURRET_DATA["KING"][0].get('cost')), 33)
-market_button = Button(c.SCREEN_WIDTH - 122 ,430, buy_market_image, str(TURRET_DATA["MARKET"][0].get('cost')), 33)
+cannon_button = Button(c.SCREEN_WIDTH - 245 ,290, buy_cannon_image)
+cannon_button.cost(33,-2,str(TURRET_DATA["TURRET_CANNON"][0].get('cost')), 18)
+ice_button = Button(c.SCREEN_WIDTH - 122 ,290, buy_ice_image)
+ice_button.cost(33,-2,str(TURRET_DATA["TURRET_ICE"][0].get('cost')), 18)
+fire_button = Button(c.SCREEN_WIDTH - 245 ,360, buy_fire_image)
+fire_button.cost(33,-2,str(TURRET_DATA["TURRET_FIRE"][0].get('cost')), 18)
+earth_button = Button(c.SCREEN_WIDTH - 122 ,360, buy_earth_image)
+earth_button.cost(33,-2,str(TURRET_DATA["TURRET_EARTH"][0].get('cost')), 18)
+king_button = Button(c.SCREEN_WIDTH - 245 ,430, buy_king_image)
+king_button.cost(33,-2,str(TURRET_DATA["KING"][0].get('cost')), 18)
+market_button = Button(c.SCREEN_WIDTH - 122 ,430, buy_market_image)
+market_button.cost(33,-2,str(TURRET_DATA["MARKET"][0].get('cost')), 18)
 
-cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image, "CANCEL",0,0,"alt_font", 24)
+cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image, "CANCEL",0,0,"alt_font",24)
 begin_button = Button(c.SCREEN_WIDTH - 242 ,670, start_image, "START ROUND",0,0,"alt_font")
 restart_button = Button(312.5 , 320, restart_image)
-upgrade_button = Button(c.SCREEN_WIDTH - 210, 275, upgrade_image,"UPGRADE",10,10,"alt_font_with_coin",18)
-sell_button = Button(c.SCREEN_WIDTH - 220, 350, sell_image)
+upgrade_button = Button(c.SCREEN_WIDTH - 210, 275, upgrade_image,"UPGRADE",0,-13, "alt_font",22)
+sell_button = Button(c.SCREEN_WIDTH - 210, 350, sell_image, "SELL",0,-13,"alt_font",22)
 airstrike_ability = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 164, 5, arrow_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_1"].get("cost")), 7, 45, 'airstrike')
 airstrike_ability2 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 76, 5, ice_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_2"].get("cost")), 7, 45, 'airstrike')
 airstrike_ability3 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 12, 5, fire_strike_ability_image, str(AIRSTRIKE_DATA["airstrike_3"].get("cost")), 7, 45, 'airstrike')
@@ -439,30 +445,44 @@ while run:
       if world.level <= c.TOTAL_LEVELS:
         world.process_enemies()
 
-
+    #selected turret
     if placing_turrets == False:
         if selected_turret:
           selected_turret.selected = True
           draw_circ(200,200,200,selected_turret.range,(selected_turret.x, selected_turret.y))
+
+          #UPGRADE BUTTON
+          #check if turret is upgradable
           if selected_turret.turret_type != "KING" and selected_turret.turret_type != "MARKET" and selected_turret.upgrade_level < 2:
-            #check if enough money
+            upgrade_button.coin_cost(-20,8,10,10,str(selected_turret.upgrade_cost), 20) #add coin & cost to button
+            #set cost color based on available money
             if world.money < selected_turret.upgrade_cost:
-              upgrade_button.font_red()
+              upgrade_button.change_cost_color("firebrick2")
             else:
-              upgrade_button.font_white()
-            upgrade_button.text = str(selected_turret.upgrade_cost)
-            upgrade_button.coin_cost(0,0,20,0,'cost')
+              upgrade_button.change_cost_color("grey100")
             if upgrade_button.draw(screen):
               upgrade_turret(selected_turret)
+          
+          #SELL BUTTON
+          sell_button.coin_cost(-20,8,10,10,"+"+str(selected_turret.sell_price()), 20) #add coin & sell price to button
+          sell_button.change_cost_color("green1")
           if sell_button.draw(screen):
             sell_turret(selected_turret)
             selected_turret = None
+
+          #CANCEL BUTTON
           if cancel_button.draw(screen):
             selected_turret = None
 
     #buy turrets
     if placing_turrets == False and selected_turret == None:
+      
       #cannon
+      if world.money < TURRET_DATA["TURRET_CANNON"][0]["cost"]:
+        cannon_button.change_cost_color("firebrick2")
+      else:
+        cannon_button.change_cost_color("grey100")
+
       if cannon_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_CANNON", None)
         new_turret = Turret(cannon_sheet,0,0,turret_equipped[0]['name'],upgraded_cannon_sheet,1)
@@ -472,6 +492,11 @@ while run:
           turret_equipped = None
 
       #ice mage
+      if world.money < TURRET_DATA["TURRET_ICE"][0]["cost"]:
+        ice_button.change_cost_color("firebrick2")
+      else:
+        ice_button.change_cost_color("grey100")
+
       if ice_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_ICE", None)
         new_turret = Turret(ice_sheet,0,0,turret_equipped[0]['name'],upgraded_ice_sheet,1) 
@@ -479,7 +504,13 @@ while run:
           placing_turrets = True
         else:
           turret_equipped = None
+      
       #fire archer
+      if world.money < TURRET_DATA["TURRET_FIRE"][0]["cost"]:
+        fire_button.change_cost_color("firebrick2")
+      else:
+        fire_button.change_cost_color("grey100")
+
       if fire_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_FIRE", None)
         new_turret = Turret(fire_sheet,0,0,turret_equipped[0]['name'],upgraded_fire_sheet,1) 
@@ -487,7 +518,13 @@ while run:
           placing_turrets = True
         else:
           turret_equipped = None
+      
       #earth catapult
+      if world.money < TURRET_DATA["TURRET_EARTH"][0]["cost"]:
+        earth_button.change_cost_color("firebrick2")
+      else:
+        earth_button.change_cost_color("grey100")
+
       if earth_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_EARTH", None)
         new_turret = Turret(earth_sheet,0,0,turret_equipped[0]['name'],upgraded_earth_sheet,1)
@@ -496,7 +533,13 @@ while run:
           placing_turrets = True
         else:
           turret_equipped = None
+      
       #king
+      if world.money < TURRET_DATA["KING"][0]["cost"]:
+        king_button.change_cost_color("firebrick2")
+      else:
+        king_button.change_cost_color("grey100")
+
       if king_button.draw(screen):
         turret_equipped = TURRET_DATA.get("KING", None)
         new_turret = Tower(0,0,turret_equipped[0]['name'],cursor_king) 
@@ -504,7 +547,13 @@ while run:
           placing_turrets = True
         else:
           turret_equipped = None
+      
       #market
+      if world.money < TURRET_DATA["MARKET"][0]["cost"]:
+        market_button.change_cost_color("firebrick2")
+      else:
+        market_button.change_cost_color("grey100")
+
       if market_button.draw(screen):
         turret_equipped = TURRET_DATA.get("MARKET", None)
         new_turret = Tower(0,0,turret_equipped[0]['name'],cursor_market) 

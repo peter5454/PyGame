@@ -15,9 +15,12 @@ class Button():
         self.type = type
         
         #coin and cost
-        self.has_coin_cost = False
+        self.has_cost = False
+        self.has_coin = False
         self.coin_image = pg.image.load('assets/images/ui_backgrounds/coin.png')
         self.coin_rect = self.rect.copy()
+        self.cost_text_rect = self.rect.copy()
+        self.cost_text_surface = None
         self.cost_text = 'N/A'
         self.cost_color = "grey100"
         self.cost_text_x = 0
@@ -50,26 +53,18 @@ class Button():
         if self.text:
             if self.type == "alt_font":
                 self.font = self.alt_font
-            elif self.type == "alt_font_with_coin": #adds coin with alt font for side panel buttons
-                self.font = self.alt_font
-                coin_rect = self.rect.copy()
-                coin_rect.y += 30
-                coin_rect.x += 55
-                surface.blit(self.coin_image, coin_rect)
-            text_surface = self.font.render(self.text, True, self.font_color)
+            text_surface = self.font.render(self.text, True, "grey100")
             text_rect = text_surface.get_rect(center=self.rect.center)
             text_rect.x += self.x_offset #move the text right
             text_rect.y += self.y_offset #move text down
             surface.blit(text_surface, text_rect)
         
-        if self.has_coin_cost:
-            print("has coin cost!")
-            cost_text_surface = self.cost_font.render(self.cost_text, True, self.cost_color)
-            cost_text_rect = cost_text_surface.get_rect(center=self.rect.center)
-            cost_text_rect.x = self.cost_text_x
-            cost_text_rect.y = self.cost_text_y
-            surface.blit(cost_text_surface, cost_text_rect)
-            surface.blit(self.coin_image, coin_rect)
+        #render cost and coin image if applicable
+        if self.has_cost:
+            self.cost_text_surface = self.cost_font.render(self.cost_text, True, self.cost_color)
+            surface.blit(self.cost_text_surface, self.cost_text_rect)
+            if self.has_coin:
+                surface.blit(self.coin_image, self.coin_rect)
 
 
         #render coin if airstrike
@@ -84,24 +79,33 @@ class Button():
         surface.blit(self.image, self.rect)
         if self.text:
             text_surface = self.font.render(self.text, True, self.font_color)
-            text_rect = text_surface.get_rect(center=self.rect.center)
-            text_rect.x += self.x_offset #move the text right
-            text_rect.y += self.y_offset #move text down
+            text_rect = text_surface.get_rect(center=self.rect.center) # Center text surface rect
+            text_rect.x += self.x_offset # Apply x offset
+            text_rect.y += self.y_offset # Apply y offset
             surface.blit(text_surface, text_rect)
 
-    def font_red(self):
-        self.font_color = "firebrick2"
-    
-    def font_white(self):
-        self.font_color = "grey100"
-
-    def coin_cost(self,coin_x,coin_y, text_x, text_y, cost='', color='grey100', size=24):
-        self.has_coin_cost = True
-        self.coin_rect.x += coin_x
-        self.coin_rect.y += coin_y
+    #method for just cost
+    def cost(self, text_x, text_y, cost='', size=24, color='grey100'):
+        self.has_cost = True
         self.cost_text = cost
         self.cost_color = color
+        self.cost_size = size
+        self.cost_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", size)
+        self.cost_text_surface = self.cost_font.render(self.cost_text, True, self.cost_color)
+        self.cost_text_rect = self.cost_text_surface.get_rect(center=self.rect.center)
+        self.cost_text_rect.x += text_x
+        self.cost_text_rect.y += text_y
         self.cost_text_x = text_x
         self.cost_text_y = text_y
-        self.cost_size = size
+
+    #method for coin image and cost
+    def coin_cost(self, coin_x, coin_y, text_x, text_y, cost='', size=24, color='grey100'):
+        self.has_coin = True
+        self.coin_rect = self.coin_image.get_rect(center=self.rect.center)
+        self.coin_rect.x += coin_x  # Apply x offset
+        self.coin_rect.y += coin_y  # Apply y offset
+        self.cost(text_x, text_y, cost, size, color)
         
+    def change_cost_color(self, color='grey100'):
+        self.cost_color = color
+

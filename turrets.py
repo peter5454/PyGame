@@ -156,11 +156,6 @@ class Turret(Tower):
         self.animation_list = self.load_images()
         self.original_image = self.animation_list[self.frame_index]
 
-    def sell(self):
-        cost = self.tower_value
-        print (cost)
-        self.kill()
-        return(round(cost*0.65))
     
   
         
