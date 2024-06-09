@@ -39,6 +39,7 @@ active_airstrike = None
 paused = False
 counter = 0
 save_error = False
+menu_counter = 0
 
 #load images
 #map
@@ -54,7 +55,9 @@ arrow_strike_ability_image = pg.image.load('assets/images/buttons/arrow_strike_b
 ice_strike_ability_image = pg.image.load('assets/images/buttons/ice_strike_button.png').convert_alpha()
 fire_strike_ability_image = pg.image.load('assets/images/buttons/fire_strike_button.png').convert_alpha()
 earth_strike_ability_image = pg.image.load('assets/images/buttons/earth_strike_button.png').convert_alpha()
-
+menu_background = pg.image.load('assets/images/ui_backgrounds/MenuBG.png').convert_alpha()
+medieval = pg.image.load('assets/images/ui_backgrounds/Medieval.png').convert_alpha()
+meltdown = pg.image.load('assets/images/ui_backgrounds/Meltdown.png').convert_alpha()
 
 
 
@@ -108,9 +111,10 @@ upgrade_image = pg.image.load('assets/images/buttons/upgrade_turret.png').conver
 sell_image = pg.image.load('assets/images/buttons/sell_button.png').convert_alpha()
 pause_button_image = pg.image.load('assets/images/buttons/pause_button.png').convert_alpha()
 exit_button_image = pg.image.load('assets/images/buttons/exit_button.png').convert_alpha()
-load_button_image = pg.image.load('assets/images/buttons/load_button.png').convert_alpha()
+load_button_image = pg.image.load('assets/images/buttons/load_button1.png').convert_alpha()
 save_button_image = pg.image.load('assets/images/buttons/save_button.png').convert_alpha()
 menu_button_image = pg.image.load('assets/images/buttons/menu_button.png').convert_alpha()
+menu_base_button_image = pg.image.load('assets/images/buttons/Menu_base_button.png').convert_alpha()
 
 #create groups
 enemy_group = pg.sprite.Group()
@@ -155,6 +159,10 @@ exit_button = Button(5,5, exit_button_image)
 save_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 100, save_button_image)
 load_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2, load_button_image)
 menu_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 200, menu_button_image)
+play_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2 - 100, menu_base_button_image, "Play")
+quit_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2 + 100, menu_base_button_image, "Quit")
+menu_load_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2, menu_base_button_image, "Load")
+
 
 
 #load json data for level
@@ -355,10 +363,34 @@ def load():
         print (turret_group)
 
   
+def main_menu():
+  run2 = True
+  menu_bg = pg.transform.scale(menu_background,(1024,768))
+  while run2:
+    screen.blit(menu_bg, (0,0))
+    screen.blit(medieval, (c.SCREEN_WIDTH/2 - 200,40))
+    screen.blit(meltdown, (c.SCREEN_WIDTH/2 - 220,140))
+    if play_button.draw(screen):
+      return(1)
+    if menu_load_button.draw(screen):
+      load()
+      return(1)
+    if quit_button.draw(screen):
+      pg.quit()
+    pg.display.flip()
+    pg.time.delay(10)
+    for event in pg.event.get():
+    #quit program
+      if event.type == pg.QUIT:
+        pg.quit()
+
+
 
 #game loop
 run = True
 while run:
+  if menu_counter == 0 :
+    menu_counter  = main_menu()
 
   clock.tick(c.FPS)
 
@@ -729,7 +761,7 @@ while run:
           draw_text("Can't save or load while in a round", error_font, (0, 0, 0), 250, 450)
           draw_text("Wait until the end", error_font, (0, 0, 0), 350, 500)
       if menu_button.draw(screen):
-        print (123)
+        main_menu()
 
       
 
