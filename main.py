@@ -137,11 +137,11 @@ market_button = Button(c.SCREEN_WIDTH - 122 ,430, buy_market_image)
 market_button.cost(33,-2,str(TURRET_DATA["MARKET"][0].get('cost')), 18)
 
 #selected tower
-cancel_button = Button(c.SCREEN_WIDTH - 180 ,500, cancel_image, "CANCEL",0,0,"alt_font",24)
+cancel_button = Button(c.SCREEN_WIDTH - 190 ,450, cancel_image, "CANCEL",0,0,"alt_font",24)
 begin_button = Button(c.SCREEN_WIDTH - 242 ,670, start_image, "START ROUND",0,0,"alt_font")
 restart_button = Button(312.5 , 320, restart_image)
-upgrade_button = Button(c.SCREEN_WIDTH - 210, 275, upgrade_image,"UPGRADE",0,-13, "alt_font",22)
-sell_button = Button(c.SCREEN_WIDTH - 210, 350, sell_image, "SELL",0,-13,"alt_font",22)
+upgrade_button = Button(c.SCREEN_WIDTH - 210, 290, upgrade_image,"UPGRADE",0,-13, "alt_font",22)
+sell_button = Button(c.SCREEN_WIDTH - 210, 360, sell_image, "SELL",0,-13,"alt_font",22)
 
 #airstrike buttons
 airstrike_ability = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 164, 5, arrow_strike_ability_image)
@@ -153,7 +153,7 @@ airstrike_ability3.coin_cost(-22,44,8,45,str(AIRSTRIKE_DATA["airstrike_3"].get("
 airstrike_ability4 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 100, 5, earth_strike_ability_image)
 airstrike_ability4.coin_cost(-22,44,8,45,str(AIRSTRIKE_DATA["airstrike_4"].get("cost")),18)
 
-#puase menu
+#pause menu
 pause_button = Button(5,5, pause_button_image)
 exit_button = Button(5,5, exit_button_image)
 save_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 100, save_button_image)
@@ -162,8 +162,6 @@ menu_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 200,
 play_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2 - 100, menu_base_button_image, "PLAY",0,0,'alt_font',30)
 menu_load_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2, menu_base_button_image, "LOAD",0,0,'alt_font',30)
 quit_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2 + 100, menu_base_button_image, "EXIT",0,0,'alt_font',30)
-
-
 
 #load json data for level
 with open('assets/images/maps/map_1.tmj') as file:
@@ -177,7 +175,12 @@ world.process_enemies()
 #load fonts for displaying text on the screen
 text_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 24)
 large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 36)
+alt_text_font = pg.font.Font("assets/fonts/MedievalSharp-Book.ttf", 36)
 error_font = pg.font.Font("assets/fonts/Aller_Bd.ttf", 24)
+
+#text
+buy_text_surface = alt_text_font.render("BUY", True, "grey100")
+
 
 #function for outputting text onto the screen
 def draw_text(text, font, text_col, x, y):
@@ -509,6 +512,7 @@ while run:
         if selected_turret:
           selected_turret.selected = True
           draw_circ(200,200,200,selected_turret.range,(selected_turret.x, selected_turret.y))
+          draw_text(str(selected_turret.type),alt_text_font, "grey100", 825, 240)
 
           #UPGRADE BUTTON
           #check if turret is upgradable
@@ -535,7 +539,7 @@ while run:
 
     #buy turrets
     if placing_turrets == False and selected_turret == None:
-      
+      screen.blit(buy_text_surface, (865, 240))
       #cannon
       if world.money < TURRET_DATA["TURRET_CANNON"][0]["cost"]:
         cannon_button.change_cost_color("firebrick2")
@@ -743,6 +747,7 @@ while run:
         sell_button.draw2(screen)
 
       if not placing_turrets and selected_turret is None:
+        screen.blit(buy_text_surface, (865, 240))
         cannon_button.draw2(screen)
         ice_button.draw2(screen) 
         fire_button.draw2(screen) 
