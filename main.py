@@ -138,7 +138,7 @@ market_button.cost(33,-2,str(TURRET_DATA["MARKET"][0].get('cost')), 18)
 
 #selected tower
 cancel_button = Button(c.SCREEN_WIDTH - 190 ,450, cancel_image, "CANCEL",0,0,"alt_font",24)
-begin_button = Button(c.SCREEN_WIDTH - 242 ,670, start_image, "START ROUND",0,0,"alt_font")
+begin_button = Button(c.SCREEN_WIDTH - 242 ,670, start_image, "START ROUND",0,-2,"alt_font",30)
 restart_button = Button(312.5 , 320, restart_image)
 upgrade_button = Button(c.SCREEN_WIDTH - 210, 290, upgrade_image,"UPGRADE",0,-13, "alt_font",22)
 sell_button = Button(c.SCREEN_WIDTH - 210, 360, sell_image, "SELL",0,-13,"alt_font",22)
@@ -152,16 +152,18 @@ airstrike_ability3 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 12, 5, fire_strike
 airstrike_ability3.coin_cost(-22,44,8,45,str(AIRSTRIKE_DATA["airstrike_3"].get("cost")),18)
 airstrike_ability4 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 + 100, 5, earth_strike_ability_image)
 airstrike_ability4.coin_cost(-22,44,8,45,str(AIRSTRIKE_DATA["airstrike_4"].get("cost")),18)
+airstrike_cancel_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 60 ,25, cancel_image, "CANCEL",0,0,"alt_font",24)
 
 #pause menu
 pause_button = Button(5,5, pause_button_image)
 exit_button = Button(5,5, exit_button_image)
-save_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 100, save_button_image)
-load_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2, load_button_image)
-menu_button = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2, c.SCREEN_HEIGHT / 2 - 200, menu_button_image)
-play_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2 - 100, menu_base_button_image, "PLAY",0,0,'alt_font',30)
-menu_load_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2, menu_base_button_image, "LOAD",0,0,'alt_font',30)
-quit_button = Button((c.SCREEN_WIDTH)/2 - 100, c.SCREEN_HEIGHT / 2 + 100, menu_base_button_image, "EXIT",0,0,'alt_font',30)
+resume_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2 - 120, menu_base_button_image, "RESUME",0,0,'alt_font',30)
+save_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2 - 30, menu_base_button_image, "SAVE",0,0,'alt_font',30)
+load_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2 + 60, menu_base_button_image, "LOAD",0,0,'alt_font',30)
+menu_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2 + 150, menu_base_button_image, "MENU",0,0,'alt_font',30)
+play_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2, menu_base_button_image, "PLAY",0,0,'alt_font',30)
+menu_load_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2 + 100, menu_base_button_image, "LOAD",0,0,'alt_font',30)
+quit_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2 + 200, menu_base_button_image, "EXIT",0,0,'alt_font',30)
 
 #load json data for level
 with open('assets/images/maps/map_1.tmj') as file:
@@ -175,17 +177,21 @@ world.process_enemies()
 #load fonts for displaying text on the screen
 text_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 24)
 large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 36)
+extra_large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 48)
 alt_text_font = pg.font.Font("assets/fonts/MedievalSharp-Book.ttf", 36)
 error_font = pg.font.Font("assets/fonts/Aller_Bd.ttf", 24)
 
-#text
-buy_text_surface = alt_text_font.render("BUY", True, "grey100")
-
-
 #function for outputting text onto the screen
-def draw_text(text, font, text_col, x, y):
-  img = font.render(text, True, text_col)
-  screen.blit(img, (x, y))
+def draw_text(text, font, text_col, x, y, centered=False):
+    img = font.render(text, True, text_col)
+    text_rect = img.get_rect()
+    
+    if centered:
+        text_rect.center = (x, y)
+    else:
+        text_rect.topleft = (x, y)
+    
+    screen.blit(img, text_rect)
 
 
 def distance(point1, point2):
@@ -371,8 +377,8 @@ def main_menu():
   menu_bg = pg.transform.scale(menu_background,(1024,768))
   while run2:
     screen.blit(menu_bg, (0,0))
-    screen.blit(medieval, (c.SCREEN_WIDTH/2 - 200,40))
-    screen.blit(meltdown, (c.SCREEN_WIDTH/2 - 220,140))
+    screen.blit(medieval, (c.SCREEN_WIDTH/2 - 200,100))
+    screen.blit(meltdown, (c.SCREEN_WIDTH/2 - 220,210))
     if play_button.draw(screen):
       return(1)
     if menu_load_button.draw(screen):
@@ -405,6 +411,30 @@ def reset_game():
   #empty groups
   enemy_group.empty()
   turret_group.empty()
+
+def buttons_draw2():
+  if placing_ability == False:
+    airstrike_ability.draw2(screen)
+    airstrike_ability2.draw2(screen)
+    airstrike_ability3.draw2(screen)
+    airstrike_ability4.draw2(screen)
+
+  if selected_turret is not None:
+    #sidepanel with tower selected
+    draw_text(str(selected_turret.type_name),alt_text_font, "grey100", 900, 260,centered=True) #draw name of tower type
+    upgrade_button.draw2(screen)
+    sell_button.draw2(screen)
+
+  if not placing_turrets and selected_turret is None:
+    #sidepanel default
+    draw_text("BUY",alt_text_font,"grey100",900,260,centered=True)
+    cannon_button.draw2(screen)
+    ice_button.draw2(screen) 
+    fire_button.draw2(screen) 
+    earth_button.draw2(screen) 
+    king_button.draw2(screen)
+    market_button.draw2(screen)
+
 
 #game loop
 run = True
@@ -464,10 +494,10 @@ while run:
   screen.blit(airstrike_banner,((c.SCREEN_WIDTH-c.SIDE_PANEL)/2-200,c.SCREEN_HEIGHT-815))
 
   #draw game stats
-  draw_text("Round", text_font, "grey100", 838, 32)
-  draw_text(str(world.level), text_font, "grey100", 925, 32)
-  draw_text(str(world.health), text_font, "grey100", 890, 97)
-  draw_text(str(world.money), text_font, "grey100", 890, 164)
+  draw_text("Round", text_font, "grey100", 846, 32)
+  draw_text(str(world.level), text_font, "grey100", 930, 32)
+  draw_text(str(world.health), text_font, "grey100", 910, 119, centered=True)
+  draw_text(str(world.money), text_font, "grey100", 910, 187, centered=True)
 
   index = len(health_bars) - 1
   while index >= 0:
@@ -511,8 +541,8 @@ while run:
     if placing_turrets == False:
         if selected_turret:
           selected_turret.selected = True
-          draw_circ(200,200,200,selected_turret.range,(selected_turret.x, selected_turret.y))
-          draw_text(str(selected_turret.type),alt_text_font, "grey100", 825, 240)
+          draw_circ(200,200,200,selected_turret.range,(selected_turret.x, selected_turret.y)) #draw range circle
+          draw_text(str(selected_turret.type_name),alt_text_font, "grey100", 900, 260,centered=True) #draw name of tower type
 
           #UPGRADE BUTTON
           #check if turret is upgradable
@@ -539,7 +569,8 @@ while run:
 
     #buy turrets
     if placing_turrets == False and selected_turret == None:
-      screen.blit(buy_text_surface, (865, 240))
+      #buy text
+      draw_text("BUY",alt_text_font,"grey100",900,260,centered=True)
       #cannon
       if world.money < TURRET_DATA["TURRET_CANNON"][0]["cost"]:
         cannon_button.change_cost_color("firebrick2")
@@ -649,9 +680,9 @@ while run:
 
 
       if tile_occupied(cursor_pos):
-        draw_circ(255,0,0,turret_equipped[0]['range'],cursor_pos) #need to change to a varible that matches the turret range rather than a number
+        draw_circ(255,0,0,turret_equipped[0]['range'],cursor_pos) #draw turret range in red
       else:
-        draw_circ(128,128,128,turret_equipped[0]['range'],cursor_pos) #need to change to a varible that matches the turret range rather than a number
+        draw_circ(128,128,128,turret_equipped[0]['range'],cursor_pos) #draw turret range in white
 
 
       if cancel_button.draw(screen):
@@ -701,7 +732,7 @@ while run:
       cursor_pos = pg.mouse.get_pos()
 
       if world.money >= new_aristrike.cost:
-        if cancel_button.draw(screen):
+        if airstrike_cancel_button.draw(screen):
           placing_ability = False
         if new_aristrike.airstrike_name == "airstrike_1":
           draw_circ(128, 255, 128, new_aristrike.size, cursor_pos)
@@ -728,6 +759,7 @@ while run:
       if counter >= active_airstrike.waves:
         counter = 0
         active_airstrike = None
+
     if pause_button.draw(screen):
         paused = True
         game_over = True
@@ -735,25 +767,8 @@ while run:
   else:
     #game is over
     if paused == True:
-      
-      if placing_ability == False:
-        airstrike_ability.draw2(screen)
-        airstrike_ability2.draw2(screen)
-        airstrike_ability3.draw2(screen)
-        airstrike_ability4.draw2(screen)
-
-      if selected_turret is not None:
-        upgrade_button.draw2(screen)
-        sell_button.draw2(screen)
-
-      if not placing_turrets and selected_turret is None:
-        screen.blit(buy_text_surface, (865, 240))
-        cannon_button.draw2(screen)
-        ice_button.draw2(screen) 
-        fire_button.draw2(screen) 
-        earth_button.draw2(screen) 
-        king_button.draw2(screen)
-        market_button.draw2(screen)
+  
+      buttons_draw2()
 
 
       if placing_ability or selected_turret or placing_turrets:
@@ -761,27 +776,49 @@ while run:
       
       if level_started == False:
         begin_button.draw2(screen)
-        draw_circ(128,128,128,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
+        draw_circ(0,0,0,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
+
+        #load button
+        if load_button.font_color != "grey100":
+          load_button.change_text_color("grey100")
         if load_button.draw(screen):
           load()
           selected_turret = None
           placing_ability = False
           placing_turrets = False
-          
+        
+        #save button
+        if save_button.font_color != "grey100":
+          save_button.change_text_color("grey100")
         if save_button.draw(screen):
           save()
 
+      draw_text("Paused",extra_large_font, "grey100", (c.SCREEN_WIDTH/2), 180, centered=True)#draw "PAUSED" text
+      
       if level_started == True:
-        if load_button.draw(screen):
+        draw_circ(0,0,0,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
+        
+        #load button
+        if load_button.font_color != "grey60":
+          load_button.change_text_color("grey60")
+        if load_button.draw2(screen):
             save_error = True
-          
-        if save_button.draw(screen):
+
+        #save button
+        if save_button.font_color != "grey60":
+          save_button.change_text_color("grey60")
+        if save_button.draw2(screen):
             save_error = True
             
-        draw_circ(128,128,128,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
         if save_error == True:
           draw_text("Can't save or load while in a round", error_font, (0, 0, 0), 250, 450)
           draw_text("Wait until the end", error_font, (0, 0, 0), 350, 500)
+
+      if resume_button.draw(screen):
+          save_error = False
+          paused = False
+          game_over = False
+
       if menu_button.draw(screen):
         reset_game()
         paused = False
@@ -789,14 +826,13 @@ while run:
 
       
 
-      if exit_button.draw(screen):
-        save_error = False
-        game_over = False
-        paused = False 
+      exit_button.draw2(screen)
+
     
     if paused == False and game_over == True:
 
-      pg.draw.rect(screen, "dodgerblue", (200, 200, 400, 200), border_radius = 30)
+      buttons_draw2()
+      draw_circ(0,0,0,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
       if game_outcome == -1:
         draw_text("GAME OVER", large_font, "grey0", 310, 230)
       elif game_outcome == 1:

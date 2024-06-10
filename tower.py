@@ -31,6 +31,7 @@ class Tower(pg.sprite.Sprite):
         self.turret_type = Turret_type
         self.cost = self.type[0].get("cost")
         self.tower_value = self.cost
+        self.type_name = self.type[0].get("type_name")
 
 
     def update_king(self, turret_group):
