@@ -65,6 +65,7 @@ class Turret(Tower):
         self.target = None
         self.turret_type = Turret_type
         self.type = TURRET_DATA.get(self.turret_type, [])
+        self.type_name = self.type[0].get("type_name")
         
         self.range = self.type[self.upgrade_level - 1].get("range")
 
