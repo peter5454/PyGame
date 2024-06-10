@@ -32,7 +32,7 @@ def damage_calc(element, enemy):
 class Turret(Tower):
 
 
-    def __init__(self,sprite_sheet,tile_x,tile_y,Turret_type,sprite_upgraded_sheet,upgrade_level):
+    def __init__(self,sprite_sheet,tile_x,tile_y,Turret_type,sprite_upgraded_sheet,upgrade_level,sound):
         pg.sprite.Sprite.__init__(self)
         self.tile_x = tile_x
         self.tile_y = tile_y
@@ -79,6 +79,7 @@ class Turret(Tower):
         self.last_shot = pg.time.get_ticks()
         self.tower_value = self.cost
         self.element = self.type[self.upgrade_level - 1].get("element")
+        self.sound = sound
 
         
 
@@ -119,7 +120,8 @@ class Turret(Tower):
                     element_dmg = damage_calc(self.element,enemy)
                     print (element_dmg)
           #damage enemy
-                    self.target.health -= self.damage * element_dmg * self.damage_multiplier 
+                    self.target.health -= self.damage * element_dmg * self.damage_multiplier
+                    self.sound.play() 
                     if self.target.health <= 0:
                         world.money += c.KILL_REWARD * self.reward_multiplier
                     break

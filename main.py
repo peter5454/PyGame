@@ -165,6 +165,17 @@ play_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2, menu_base_bu
 menu_load_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2 + 100, menu_base_button_image, "LOAD",0,0,'alt_font',30)
 quit_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2 + 200, menu_base_button_image, "EXIT",0,0,'alt_font',30)
 
+#sounds
+cannon_shot = pg.mixer.Sound('assets/audio/cannon_Sound.mp3')
+cannon_shot.set_volume(0.6)
+archer_shot = pg.mixer.Sound('assets/audio/fire_archer_sound.mp3')
+archer_shot.set_volume(0.3)
+mage_shot = pg.mixer.Sound('assets/audio/mage_sound.mp3')
+mage_shot.set_volume(0.7)
+catapult_shot = pg.mixer.Sound('assets/audio/catapult_sound.mp3')
+catapult_shot.set_volume(0.8)
+place_turret_sound = pg.mixer.Sound('assets/audio/place_sound.mp3')
+
 #load json data for level
 with open('assets/images/maps/map_1.tmj') as file:
   world_data = json.load(file)
@@ -220,7 +231,7 @@ def upgrade_turret(selected_turret):
   else:
     print ("Out of Money")
 
-def create_turret(mouse_pos,turret_name,animation_sheet=None,upgraded_animation_sheet=None,upgrade_level=None,sprite=None):
+def create_turret(mouse_pos,turret_name,animation_sheet=None,upgraded_animation_sheet=None,upgrade_level=None,sprite=None, sound= None, load = None):
   #close = False
   mouse_tile_x = mouse_pos[0] // c.TILE_SIZE
   mouse_tile_y = mouse_pos[1] // c.TILE_SIZE
@@ -240,9 +251,11 @@ def create_turret(mouse_pos,turret_name,animation_sheet=None,upgraded_animation_
       #if it is a free space then create turret
       if space_is_free == True:
         if turret_name != "KING" and turret_name != "MARKET":
-          new_turret = Turret(animation_sheet, mouse_tile_x, mouse_tile_y,turret_name,upgraded_animation_sheet, upgrade_level)
+          new_turret = Turret(animation_sheet, mouse_tile_x, mouse_tile_y,turret_name,upgraded_animation_sheet, upgrade_level,sound)
         else:
           new_turret = Tower(mouse_tile_x, mouse_tile_y,turret_name,sprite)
+        if not load:
+          place_turret_sound.play()
         turret_group.add(new_turret)
         #update support tower effects
         update_supports(turret_group)
@@ -340,6 +353,7 @@ def load():
     print (turret_reader)
     sprite_sheet = [[] for _ in range(1000)]
     sprite_upgraded_sheet = [[] for _ in range(1000)]
+    sprite_sound = [[] for _ in range(1000)]
     for row in turret_reader:
       x.append(row['x'])
       y.append(row['y'])
@@ -351,24 +365,28 @@ def load():
       if turret_type[row] == "TURRET_ICE":
         sprite_sheet[row] = ice_sheet
         sprite_upgraded_sheet[row] = upgraded_ice_sheet
+        sprite_sound[row] = mage_shot
       elif turret_type[row] == "TURRET_FIRE":
         sprite_sheet[row] = fire_sheet
         sprite_upgraded_sheet[row] = upgraded_fire_sheet
+        sprite_sound[row] = archer_shot
       elif turret_type[row] == "TURRET_EARTH":
         sprite_sheet[row] = earth_sheet
+        sprite_sound[row] = catapult_shot
         sprite_upgraded_sheet[row] = upgraded_earth_sheet
       elif turret_type[row] == "TURRET_CANNON":
         sprite_sheet[row] = cannon_sheet
+        sprite_sound[row] = cannon_shot
         sprite_upgraded_sheet[row] = upgraded_cannon_sheet
     
     if rows > 0:
       for i in range(len(x)):
         if turret_type[i] == "KING":
-          create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type[i], None, None,int(upgrade_level[i]), cursor_king)
+          create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type[i], None, None,int(upgrade_level[i]), cursor_king, load = True)
         elif turret_type[i] == "MARKET":
-          create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type[i], None, None,int(upgrade_level[i]), cursor_market)
+          create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type[i], None, None,int(upgrade_level[i]), cursor_market,load = True)
         else:
-          create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type[i], sprite_sheet[i], sprite_upgraded_sheet[i],int(upgrade_level[i]))
+          create_turret((int(x[i]) * c.TILE_SIZE, int(y[i]) * c.TILE_SIZE), turret_type[i], sprite_sheet[i], sprite_upgraded_sheet[i],int(upgrade_level[i]),sound=sprite_sound[i],load=True)
         print (turret_group)
 
   
@@ -579,7 +597,7 @@ while run:
 
       if cannon_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_CANNON", None)
-        new_turret = Turret(cannon_sheet,0,0,turret_equipped[0]['name'],upgraded_cannon_sheet,1)
+        new_turret = Turret(cannon_sheet,0,0,turret_equipped[0]['name'],upgraded_cannon_sheet,1,cannon_shot)
         if world.money >= new_turret.cost:
           placing_turrets = True
         else:
@@ -593,7 +611,7 @@ while run:
 
       if ice_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_ICE", None)
-        new_turret = Turret(ice_sheet,0,0,turret_equipped[0]['name'],upgraded_ice_sheet,1) 
+        new_turret = Turret(ice_sheet,0,0,turret_equipped[0]['name'],upgraded_ice_sheet,1,mage_shot) 
         if world.money >= new_turret.cost:
           placing_turrets = True
         else:
@@ -607,7 +625,7 @@ while run:
 
       if fire_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_FIRE", None)
-        new_turret = Turret(fire_sheet,0,0,turret_equipped[0]['name'],upgraded_fire_sheet,1) 
+        new_turret = Turret(fire_sheet,0,0,turret_equipped[0]['name'],upgraded_fire_sheet,1,archer_shot) 
         if world.money >= new_turret.cost:
           placing_turrets = True
         else:
@@ -621,7 +639,7 @@ while run:
 
       if earth_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_EARTH", None)
-        new_turret = Turret(earth_sheet,0,0,turret_equipped[0]['name'],upgraded_earth_sheet,1)
+        new_turret = Turret(earth_sheet,0,0,turret_equipped[0]['name'],upgraded_earth_sheet,1, catapult_shot)
         
         if world.money >= new_turret.cost:
           placing_turrets = True
@@ -874,7 +892,7 @@ while run:
             elif turret_equipped[0]['name'] == "MARKET":
               place_turret = create_turret(mouse_pos, turret_equipped[0]['name'],None, None, None, cursor_market)
             else: #damage tower
-              place_turret = create_turret(mouse_pos,turret_equipped[0]['name'],new_turret.sprite_sheet,new_turret.sprite_upgraded_sheet,1)
+              place_turret = create_turret(mouse_pos,turret_equipped[0]['name'],new_turret.sprite_sheet,new_turret.sprite_upgraded_sheet,1, sound = new_turret.sound)
             turret_time = pg.time.get_ticks()
           if place_turret:
             world.money -= new_turret.cost
