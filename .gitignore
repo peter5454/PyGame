@@ -53,3 +53,5 @@ src_c/_sdl2/video.c
 src_c/_sprite.c
 src_c/pypm.c
 /Saves
+Saves/save1/save1_turrets.csv
+Saves/save1/save1_world.csv
