@@ -82,7 +82,7 @@ upgraded_cannon_sheet = pg.image.load('assets/images/turrets/cannon_2.png').conv
 #ice mage
 cursor_ice = pg.image.load('assets/images/turrets/cursor_ice.png').convert_alpha()
 ice_sheet = pg.image.load('assets/images/turrets/ice_mage_1.png').convert_alpha()
-upgraded_ice_sheet = pg.image.load('assets/images/turrets/turret_2.png').convert_alpha()
+upgraded_ice_sheet = pg.image.load('assets/images/turrets/ice_mage_2.png').convert_alpha()
 #fire archer
 cursor_fire = pg.image.load('assets/images/turrets/cursor_fire.png').convert_alpha()
 fire_sheet = pg.image.load('assets/images/turrets/fire_archer_1.png').convert_alpha()
@@ -93,10 +93,10 @@ earth_sheet = pg.image.load('assets/images/turrets/catapult_1.png').convert_alph
 upgraded_earth_sheet = pg.image.load('assets/images/turrets/catapult_2.png').convert_alpha()
 #king
 cursor_king = pg.image.load('assets/images/turrets/cursor_king.png').convert_alpha()
-tower_king = pg.image.load('assets/images/turrets/tower_king.png').convert_alpha()
+#tower_king = pg.image.load('assets/images/turrets/tower_king.png').convert_alpha()
 #market
 cursor_market = pg.image.load('assets/images/turrets/cursor_market.png').convert_alpha()
-tower_market = pg.image.load('assets/images/turrets/tower_market.png').convert_alpha()
+#tower_market = pg.image.load('assets/images/turrets/tower_market.png').convert_alpha()
 
 #buttons
 buy_cannon_image = pg.image.load('assets/images/buttons/cannon_buy_button.png').convert_alpha()
