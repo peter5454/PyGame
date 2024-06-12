@@ -101,3 +101,10 @@ class Button():
 
     def change_text_color(self, color='grey100'):
         self.font_color = color
+
+    def Hovered(self):
+        pos = pg.mouse.get_pos()
+        if self.rect.collidepoint(pos):
+            return True
+        else:
+            return False

@@ -203,6 +203,7 @@ large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 36)
 extra_large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 48)
 alt_text_font = pg.font.Font("assets/fonts/MedievalSharp-Book.ttf", 36)
 error_font = pg.font.Font("assets/fonts/Aller_Bd.ttf", 24)
+small_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 18)
 
 #function for outputting text onto the screen
 def draw_text(text, font, text_col, x, y, centered=False):
@@ -649,6 +650,12 @@ while run:
         cannon_button.change_cost_color("firebrick2")
       else:
         cannon_button.change_cost_color("grey100")
+      
+      if cannon_button.Hovered():
+        draw_text("Cannon Tower",alt_text_font,(255,255,255), 900,520, True)
+        draw_text("This is a normal Tower",small_font,(255,255,255), 900,560, True)
+        draw_text("It does small damage",small_font,(255,255,255), 900,590, True)
+        draw_text("To every Type",small_font,(255,255,255), 900,620, True)
 
       if cannon_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_CANNON", None)
@@ -664,6 +671,11 @@ while run:
       else:
         ice_button.change_cost_color("grey100")
 
+      if ice_button.Hovered():
+        draw_text("Ice Mage",alt_text_font,(255,255,255), 900,520, True)
+        draw_text("Deals more damage to Earth",small_font,(255,255,255), 900,560, True)
+        draw_text("But deals less damage to Fire",small_font,(255,255,255), 900,590, True)
+
       if ice_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_ICE", None)
         new_turret = Turret(ice_sheet,0,0,turret_equipped[0]['name'],upgraded_ice_sheet,1,mage_shot) 
@@ -678,6 +690,11 @@ while run:
       else:
         fire_button.change_cost_color("grey100")
 
+      if fire_button.Hovered():
+        draw_text("Fire Archer",alt_text_font,(255,255,255), 900,520, True)
+        draw_text("Deals more damage to Ice",small_font,(255,255,255), 900,560, True)
+        draw_text("But deals less damage to Earth",small_font,(255,255,255), 900,590, True)
+
       if fire_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_FIRE", None)
         new_turret = Turret(fire_sheet,0,0,turret_equipped[0]['name'],upgraded_fire_sheet,1,archer_shot) 
@@ -691,6 +708,11 @@ while run:
         earth_button.change_cost_color("firebrick2")
       else:
         earth_button.change_cost_color("grey100")
+
+      if earth_button.Hovered():
+        draw_text("Earth Catapult",alt_text_font,(255,255,255), 900,520, True)
+        draw_text("Deals more damage to fire",small_font,(255,255,255), 900,560, True)
+        draw_text("But deals less damage to Ice",small_font,(255,255,255), 900,590, True)
 
       if earth_button.draw(screen):
         turret_equipped = TURRET_DATA.get("TURRET_EARTH", None)
@@ -707,6 +729,11 @@ while run:
       else:
         king_button.change_cost_color("grey100")
 
+      if king_button.Hovered():
+        draw_text("King",alt_text_font,(255,255,255), 900,520, True)
+        draw_text("Towers placed within its range",small_font,(255,255,255), 900,560, True)
+        draw_text("deal 2x the damage to enemies",small_font,(255,255,255), 900,590, True)
+
       if king_button.draw(screen):
         turret_equipped = TURRET_DATA.get("KING", None)
         new_turret = Tower(0,0,turret_equipped[0]['name'],cursor_king) 
@@ -714,6 +741,7 @@ while run:
           placing_turrets = True
         else:
           turret_equipped = None
+
       
       #market
       if world.money < TURRET_DATA["MARKET"][0]["cost"]:
@@ -721,6 +749,11 @@ while run:
       else:
         market_button.change_cost_color("grey100")
 
+      if market_button.Hovered():
+        draw_text("Market",alt_text_font,(255,255,255), 900,520, True)
+        draw_text("Towers placed within its range",small_font,(255,255,255), 900,560, True)
+        draw_text("get twice the gold on kill",small_font,(255,255,255), 900,590, True)
+      
       if market_button.draw(screen):
         turret_equipped = TURRET_DATA.get("MARKET", None)
         new_turret = Tower(0,0,turret_equipped[0]['name'],cursor_market) 
@@ -769,6 +802,10 @@ while run:
         airstrike_ability.change_cost_color("firebrick2")
       else:
         airstrike_ability.change_cost_color("grey100")
+
+      if airstrike_ability.Hovered():
+        draw_text("Arrow Strike",alt_text_font,(255,255,255), 375,125, True)
+  
       if airstrike_ability.draw(screen):
         new_aristrike = airstrike("airstrike_1")
         placing_ability = True
@@ -778,6 +815,10 @@ while run:
         airstrike_ability2.change_cost_color("firebrick2")
       else:
         airstrike_ability2.change_cost_color("grey100")
+    
+      if airstrike_ability2.Hovered():
+        draw_text("Avalanche",alt_text_font,(255,255,255), 375,125, True)
+
       if airstrike_ability2.draw(screen):
         new_aristrike = airstrike("airstrike_2")
         placing_ability = True
@@ -787,6 +828,10 @@ while run:
         airstrike_ability3.change_cost_color("firebrick2")
       else:
         airstrike_ability3.change_cost_color("grey100")
+
+      if airstrike_ability3.Hovered():
+        draw_text("Fire Nova",alt_text_font,(255,255,255), 375,125, True)
+
       if airstrike_ability3.draw(screen):
         new_aristrike = airstrike("airstrike_3")
         placing_ability = True
@@ -796,6 +841,9 @@ while run:
         airstrike_ability4.change_cost_color("firebrick2")
       else:
         airstrike_ability4.change_cost_color("grey100")
+
+      if airstrike_ability4.Hovered():
+        draw_text("Rockfall",alt_text_font,(255,255,255), 375,125, True)
       if airstrike_ability4.draw(screen):
         new_aristrike = airstrike("airstrike_4")
         placing_ability = True
