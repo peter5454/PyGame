@@ -41,6 +41,7 @@ counter = 0
 save_error = False
 menu_counter = 0
 muted = False
+buy_round_song = False
 
 #load images
 #map
@@ -117,6 +118,9 @@ save_button_image = pg.image.load('assets/images/buttons/save_button.png').conve
 menu_button_image = pg.image.load('assets/images/buttons/menu_button.png').convert_alpha()
 menu_base_button_image = pg.image.load('assets/images/buttons/Menu_base_button.png').convert_alpha()
 
+mute_button_image = pg.image.load('assets/images/buttons/mute_button.png').convert_alpha()
+mute_button_pressed_image = pg.image.load('assets/images/buttons/mute_button_pressed.png').convert_alpha()
+
 #create groups
 enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
@@ -165,6 +169,8 @@ menu_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2 + 150, menu_b
 play_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2, menu_base_button_image, "PLAY",0,0,'alt_font',30)
 menu_load_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2 + 100, menu_base_button_image, "LOAD",0,0,'alt_font',30)
 quit_button = Button((c.SCREEN_WIDTH)/2 - 110, c.SCREEN_HEIGHT / 2 + 200, menu_base_button_image, "EXIT",0,0,'alt_font',30)
+mute_button = Button(55,5,mute_button_image)
+pressed_mute_button = Button(55,5, mute_button_pressed_image)
 
 #sounds
 cannon_shot = pg.mixer.Sound('assets/audio/cannon_Sound.mp3')
@@ -176,6 +182,11 @@ mage_shot.set_volume(0.7)
 catapult_shot = pg.mixer.Sound('assets/audio/catapult_sound.mp3')
 catapult_shot.set_volume(0.8)
 place_turret_sound = pg.mixer.Sound('assets/audio/place_sound.mp3')
+
+#music
+Main_menu_song = pg.mixer.Sound('assets/audio/main_theme.mp3')
+Buy_song = pg.mixer.Sound('assets/audio/buy_theme.mp3')
+Battle_song = pg.mixer.Sound('assets/audio/battle_theme.mp3')
 
 #load json data for level
 with open('assets/images/maps/map_1.tmj') as file:
@@ -392,6 +403,7 @@ def load():
 
   
 def main_menu():
+  Main_menu_song.play()
   run2 = True
   menu_bg = pg.transform.scale(menu_background,(1024,768))
   while run2:
@@ -399,9 +411,11 @@ def main_menu():
     screen.blit(medieval, (c.SCREEN_WIDTH/2 - 200,100))
     screen.blit(meltdown, (c.SCREEN_WIDTH/2 - 220,210))
     if play_button.draw(screen):
+      Main_menu_song.fadeout(5)
       return(1)
     if menu_load_button.draw(screen):
       load()
+      Main_menu_song.fadeout(5)
       return(1)
     if quit_button.draw(screen):
       pg.quit()
@@ -438,6 +452,8 @@ def muteGame():
   cannon_shot.set_volume(0)
   catapult_shot.set_volume(0)
   place_turret_sound.set_volume(0)
+  Buy_song.set_volume(0)
+  Battle_song.set_volume(0)
 
 def unmuteGame():
   mage_shot.set_volume(0.7)
@@ -445,6 +461,8 @@ def unmuteGame():
   cannon_shot.set_volume(0.6)
   catapult_shot.set_volume(0.8)
   place_turret_sound.set_volume(1)
+  Buy_song.set_volume(1)
+  Battle_song.set_volume(1)
 
 def buttons_draw2():
   if placing_ability == False:
@@ -476,6 +494,12 @@ run = True
 while run:
   if menu_counter == 0 :
     menu_counter  = main_menu()
+
+  if buy_round_song == False:
+    Buy_song.play(20)
+    buy_round_song = True
+  
+  
 
   clock.tick(c.FPS)
 
@@ -544,8 +568,11 @@ while run:
   if game_over == False:
     #check if the level has been started or not
     if level_started == False:
+      Battle_song.fadeout(5)
       if begin_button.draw(screen):
-        last_enemy_spawn = pg.time.get_ticks()
+        last_enemy_spawn = pg.time.get_ticks()   
+        Battle_song.play(20)
+        Buy_song.fadeout(5)
         world.reset_level()
         if world.level <= c.TOTAL_LEVELS:
           world.process_enemies()
@@ -563,6 +590,7 @@ while run:
 
     #check if wave is finished
     if world.check_level_complete() == True:
+      buy_round_song = False
       world.money += c.LEVEL_COMPLETE_REWARD
       world.level += 1
       print (world.level)
@@ -798,6 +826,16 @@ while run:
     if pause_button.draw(screen):
         paused = True
         game_over = True
+    
+    if muted == True:
+      if pressed_mute_button.draw(screen):
+        muted = False
+        unmuteGame()
+    else:
+      if mute_button.draw(screen):
+        muted = True
+        muteGame()
+
 
   else:
     #game is over
@@ -865,6 +903,7 @@ while run:
 
     
     if paused == False and game_over == True:
+      Battle_song.stop()
 
       buttons_draw2()
       draw_circ(0,0,0,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
