@@ -408,6 +408,11 @@ def load():
   
 def main_menu():
   Main_menu_song.play()
+  global buy_round_song
+  buy_round_song = False
+  Buy_song.stop()
+  Battle_song.stop()
+
   run2 = True
   menu_bg = pg.transform.scale(menu_background,(1024,768))
   while run2:
@@ -494,6 +499,11 @@ def buttons_draw2():
     earth_button.draw2(screen) 
     king_button.draw2(screen)
     market_button.draw2(screen)
+  
+  if not muted:
+    mute_button.draw2(screen)
+  else:
+    pressed_mute_button.draw2(screen)
 
 
 
@@ -915,10 +925,11 @@ while run:
     
     if paused == False and game_over == True:
       Battle_song.stop()
+      Buy_song.stop()
 
       buttons_draw2()
       draw_circ(0,0,0,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
-      if game_outcome == -1:
+      if game_outcome == -1:       
         draw_text("GAME OVER", large_font, "grey0", 310, 230)
       elif game_outcome == 1:
         draw_text("YOU WIN", large_font, "grey0", 315, 230)
@@ -930,6 +941,7 @@ while run:
         level_started = False
         placing_turrets = False
         selected_turret = None
+        buy_round_song = False
         last_enemy_spawn = pg.time.get_ticks()
         world = World(world_data, map_image)
         world.process_data()
