@@ -121,6 +121,10 @@ menu_base_button_image = pg.image.load('assets/images/buttons/Menu_base_button.p
 mute_button_image = pg.image.load('assets/images/buttons/mute_button.png').convert_alpha()
 mute_button_pressed_image = pg.image.load('assets/images/buttons/mute_button_pressed.png').convert_alpha()
 
+#airstrike images
+cursor_ice_airstrike = pg.image.load('assets/images/airstrikes/airstrike_ice_cursor.png').convert_alpha()
+ice_airstrike_sheet = pg.image.load('assets/images/airstrikes/airstrike_ice.png').convert_alpha()
+
 #create groups
 enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
@@ -480,8 +484,12 @@ def buttons_draw2():
   if selected_turret is not None:
     #sidepanel with tower selected
     draw_text(str(selected_turret.type_name),alt_text_font, "grey100", 900, 260,centered=True) #draw name of tower type
-    upgrade_button.draw2(screen)
     sell_button.draw2(screen)
+
+    if selected_turret.turret_type != "KING" and selected_turret.turret_type != "MARKET" and selected_turret.upgrade_level < 2:
+      upgrade_button.draw2(screen)
+    elif selected_turret.upgrade_level == 2:
+      draw_text("Upgraded",alt_text_font, "grey100", 900, 300,centered=True) #draw upgraded text
 
   if not placing_turrets and selected_turret is None:
     #sidepanel default
@@ -629,6 +637,9 @@ while run:
               upgrade_button.change_cost_color("grey100")
             if upgrade_button.draw(screen):
               upgrade_turret(selected_turret)
+          elif selected_turret.upgrade_level == 2: # tower is upgraded
+            draw_text("Upgraded",alt_text_font, "grey100", 900, 300,centered=True) #draw upgraded text
+
           
           #SELL BUTTON
           sell_button.coin_cost(-20,8,10,10,"+"+str(selected_turret.sell_price()), 20) #add coin & sell price to button
