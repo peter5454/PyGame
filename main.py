@@ -40,6 +40,7 @@ paused = False
 counter = 0
 save_error = False
 menu_counter = 0
+muted = False
 
 #load images
 #map
@@ -425,6 +426,20 @@ def reset_game():
   #empty groups
   enemy_group.empty()
   turret_group.empty()
+
+def muteGame():
+  mage_shot.set_volume(0)
+  archer_shot.set_volume(0)
+  cannon_shot.set_volume(0)
+  catapult_shot.set_volume(0)
+  place_turret_sound.set_volume(0)
+
+def unmuteGame():
+  mage_shot.set_volume(0.7)
+  archer_shot.set_volume(0.3)
+  cannon_shot.set_volume(0.6)
+  catapult_shot.set_volume(0.8)
+  place_turret_sound.set_volume(1)
 
 #game loop
 run = True
