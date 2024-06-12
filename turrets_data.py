@@ -8,7 +8,8 @@ TURRET_DATA = {
             "damage": 2,
             "cost": 150,
             "element": "N",
-            "upgrade_cost": 100
+            "upgrade_cost": 100,
+            "type_name" : "Cannon"
         },
         {
             "range": 90,
@@ -28,7 +29,8 @@ TURRET_DATA = {
             "damage": 10,
             "cost": 300,
             "element": "I",
-            "upgrade_cost": 100
+            "upgrade_cost": 100,
+            "type_name" : "Ice Mage"
         },
         {
             "range": 250,
@@ -48,7 +50,8 @@ TURRET_DATA = {
             "damage": 10,
             "cost": 300,
             "element": "F",
-            "upgrade_cost": 100
+            "upgrade_cost": 100,
+            "type_name" : "Fire Archer"
         },
         {
             "range": 250,
@@ -68,7 +71,8 @@ TURRET_DATA = {
             "damage": 10,
             "cost": 300,
             "element": "E",
-            "upgrade_cost": 100
+            "upgrade_cost": 100,
+            "type_name" : "Catapult"
         },
         {
             "range": 250,
@@ -85,7 +89,8 @@ TURRET_DATA = {
             "range" : 200,
             "level": 1,
             "multiplier": 2,
-            "cost": 300
+            "cost": 300,
+            "type_name" : "King"
         }
     ],
     "MARKET": [
@@ -94,7 +99,8 @@ TURRET_DATA = {
             "range" : 200,
             "level": 1,
             "multiplier": 2,
-            "cost": 300
+            "cost": 300,
+            "type_name" : "Market"
         }
     ]
     

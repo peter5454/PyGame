@@ -61,7 +61,7 @@ class Button():
         if self.text:
             if self.type == "alt_font":
                 self.font = self.alt_font
-            text_surface = self.font.render(self.text, True, "grey100")
+            text_surface = self.font.render(self.text, True, self.font_color)
             text_rect = text_surface.get_rect(center=self.rect.center)
             text_rect.x += self.x_offset #move the text right
             text_rect.y += self.y_offset #move text down
@@ -99,3 +99,5 @@ class Button():
     def change_cost_color(self, color='grey100'):
         self.cost_color = color
 
+    def change_text_color(self, color='grey100'):
+        self.font_color = color
