@@ -74,10 +74,13 @@ class Turret(Tower):
         self.damage = self.type[self.upgrade_level - 1].get("damage")
         self.damage_multiplier = 1
         self.reward_multiplier = 1
-        self.cost = self.type[self.upgrade_level - 1].get("cost")
-        self.upgrade_cost = self.type[self.upgrade_level - 1].get("upgrade_cost")
+        self.cost = self.type[0].get("cost")
+        self.upgrade_cost = self.type[0].get("upgrade_cost")
         self.last_shot = pg.time.get_ticks()
-        self.tower_value = self.cost
+        if upgrade_level == 2: 
+            self.tower_value = self.cost + self.upgrade_cost
+        else:
+            self.tower_value = self.cost 
         self.element = self.type[self.upgrade_level - 1].get("element")
         self.sound = sound
 

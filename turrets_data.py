@@ -5,17 +5,17 @@ TURRET_DATA = {
             "range": 90,
             "level": 1,
             "cooldown": 1000,
-            "damage": 2,
+            "damage": 4,
             "cost": 150,
             "element": "N",
             "upgrade_cost": 100,
             "type_name" : "Cannon"
         },
         {
-            "range": 90,
+            "range": 140,
             "level": 2,
             "cooldown": 400,
-            "damage": 7,
+            "damage": 10,
             "element": "N",
             "upgrade_cost": 0
         }
@@ -26,17 +26,17 @@ TURRET_DATA = {
             "range": 200,
             "level": 1,
             "cooldown": 2000,
-            "damage": 10,
+            "damage": 7,
             "cost": 300,
             "element": "I",
-            "upgrade_cost": 100,
+            "upgrade_cost": 300,
             "type_name" : "Ice Mage"
         },
         {
             "range": 250,
             "level": 2,
-            "cooldown": 1000,
-            "damage": 30,
+            "cooldown": 1500,
+            "damage": 15,
             "element": "I",
             "upgrade_cost": 0
         }
@@ -47,17 +47,17 @@ TURRET_DATA = {
             "range": 200,
             "level": 1,
             "cooldown": 2000,
-            "damage": 10,
+            "damage": 7,
             "cost": 300,
             "element": "F",
-            "upgrade_cost": 100,
+            "upgrade_cost": 500,
             "type_name" : "Fire Archer"
         },
         {
             "range": 250,
             "level": 2,
-            "cooldown": 1000,
-            "damage": 30,
+            "cooldown": 1500,
+            "damage": 15,
             "element": "F",
             "upgrade_cost": 0
         }
@@ -71,14 +71,14 @@ TURRET_DATA = {
             "damage": 10,
             "cost": 300,
             "element": "E",
-            "upgrade_cost": 100,
+            "upgrade_cost": 500,
             "type_name" : "Catapult"
         },
         {
             "range": 250,
             "level": 2,
-            "cooldown": 1000,
-            "damage": 30,
+            "cooldown": 1500,
+            "damage": 15,
             "element": "E",
             "upgrade_cost": 0
         }
@@ -89,17 +89,17 @@ TURRET_DATA = {
             "range" : 200,
             "level": 1,
             "multiplier": 2,
-            "cost": 300,
+            "cost": 400,
             "type_name" : "King"
         }
     ],
     "MARKET": [
         {
             "name" : "MARKET",
-            "range" : 200,
+            "range" : 250,
             "level": 1,
-            "multiplier": 2,
-            "cost": 300,
+            "multiplier": 1.5,
+            "cost": 500,
             "type_name" : "Market"
         }
     ]

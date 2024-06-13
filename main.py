@@ -598,7 +598,7 @@ while run:
           level_started = True
     else:
       #spawn enemies
-      if pg.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN:
+      if pg.time.get_ticks() - last_enemy_spawn > c.SPAWN_COOLDOWN[world.level-1]:
         if world.spawned_enemies < len(world.enemy_list):
           enemy_type = world.enemy_list[world.spawned_enemies]
           enemy = Enemy(enemy_type, world.waypoints, enemy_images)

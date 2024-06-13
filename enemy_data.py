@@ -20,12 +20,32 @@ ENEMY_SPAWN_DATA = [
     },
     {
         #3
-        "ice_golem": 5,
-        "fire_golem": 5,
-        "earth_golem": 5,
-        "ice_giant": 1,
-        "fire_giant": 1,
-        "earth_giant": 1
+        "ice_golem": 20,
+        "fire_golem": 20,
+        "earth_golem": 40,
+        "ice_giant": 10,
+        "fire_giant": 10,
+        "earth_giant": 10
+
+    },
+    {
+        #4
+        "ice_golem": 100,
+        "fire_golem": 100,
+        "earth_golem": 100,
+        "ice_giant": 0,
+        "fire_giant": 0,
+        "earth_giant": 100
+
+    },
+    {
+        #5
+        "ice_golem": 500,
+        "fire_golem": 0,
+        "earth_golem": 0,
+        "ice_giant": 0,
+        "fire_giant": 0,
+        "earth_giant": 0
 
     }
 ]
