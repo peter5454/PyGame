@@ -198,6 +198,8 @@ Buy_song.set_volume(0.6)
 Battle_song = pg.mixer.Sound('assets/audio/battle_theme.mp3')
 Battle_song.set_volume(0.5)
 Loss_song = pg.mixer.Sound('assets/audio/loss_theme.mp3')
+Win_song = pg.mixer.Sound('assets/audio/victory_music.mp3')
+
 
 #load json data for level
 with open('assets/images/maps/map_1.tmj') as file:
@@ -473,6 +475,8 @@ def muteGame():
   place_turret_sound.set_volume(0)
   Buy_song.set_volume(0)
   Battle_song.set_volume(0)
+  Win_song.set_volume(0)
+  Loss_song.set_volume(0)
 
 def unmuteGame():
   mage_shot.set_volume(0.7)
@@ -480,8 +484,10 @@ def unmuteGame():
   cannon_shot.set_volume(0.6)
   catapult_shot.set_volume(0.8)
   place_turret_sound.set_volume(1)
-  Buy_song.set_volume(1)
-  Battle_song.set_volume(1)
+  Buy_song.set_volume(0.6)
+  Battle_song.set_volume(0.5)
+  Win_song.set_volume(0.8)
+  Loss_song.set_volume(0.8)
 
 def buttons_draw2():
   if placing_ability == False:
@@ -597,6 +603,8 @@ while run:
 
   if game_over == False:
     Loss_song_played = False
+    Win_song_played =False
+    Win_song.stop()
     Loss_song.stop()
     #check if the level has been started or not
     if level_started == False:
@@ -1022,9 +1030,19 @@ while run:
     if paused == False and game_over == True:
       Battle_song.stop()
       Buy_song.stop()
-
       buttons_draw2()
+      pause_button.draw2(screen)
       draw_circ(0,0,0,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
+      
+      if muted == True:
+        if pressed_mute_button.draw(screen):
+          muted = False
+          unmuteGame()
+      else:
+        if mute_button.draw(screen):
+          muted = True
+          muteGame()
+
       if game_outcome == -1:       
         draw_text("GAME OVER", large_font, "grey100", (c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT/2) - 80, centered=True)
         if Loss_song_played == False:  
@@ -1033,6 +1051,9 @@ while run:
 
       elif game_outcome == 1:
         draw_text("YOU WIN", large_font, "grey100", (c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT/2) - 80, centered=True)
+        if Win_song_played == False:  
+          Win_song.play()
+          Win_song_played = True
 
 
     #restart level
