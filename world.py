@@ -15,6 +15,7 @@ class World():
         self.spawned_enemies = 0
         self.killed_enemies = 0
         self.missed_enemies = 0
+        self.points = 0
 
     def process_data(self):
         #look through data to extract relevant info
@@ -43,6 +44,7 @@ class World():
 
     def check_level_complete(self):
         if (self.killed_enemies + self.missed_enemies) == len(self.enemy_list):
+            self.points += (5 * self.level)
             return True
 
     def reset_level(self):

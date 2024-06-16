@@ -38,7 +38,6 @@ turret_time = 0
 active_airstrike = None
 paused = False
 counter = 0
-save_error = False
 menu_counter = 0
 muted = False
 buy_round_song = False
@@ -150,7 +149,7 @@ market_button.cost(33,-2,str(TURRET_DATA["MARKET"][0].get('cost')), 18)
 #selected tower
 cancel_button = Button(c.SCREEN_WIDTH - 190 ,450, cancel_image, "CANCEL",0,0,"alt_font",24)
 begin_button = Button(c.SCREEN_WIDTH - 242 ,670, start_image, "START ROUND",0,-2,"alt_font",30)
-restart_button = Button(((c.SCREEN_WIDTH)/2 - 110), (c.SCREEN_HEIGHT/2), menu_base_button_image, "RESTART",0,0,'alt_font',30)
+restart_button = Button(((c.SCREEN_WIDTH)/2 - 110), (c.SCREEN_HEIGHT/2) + 40, menu_base_button_image, "RESTART",0,0,'alt_font',30)
 upgrade_button = Button(c.SCREEN_WIDTH - 210, 290, upgrade_image,"UPGRADE",0,-13, "alt_font",22)
 sell_button = Button(c.SCREEN_WIDTH - 210, 360, sell_image, "SELL",0,-13,"alt_font",22)
 
@@ -520,7 +519,11 @@ def buttons_draw2():
     mute_button.draw2(screen)
   else:
     pressed_mute_button.draw2(screen)
-
+    
+  if placing_ability:
+        airstrike_cancel_button.draw2(screen)
+  if selected_turret or placing_turrets:
+    cancel_button.draw2(screen)
 
 
 #game loop
@@ -836,7 +839,7 @@ while run:
         airstrike_ability.change_cost_color("grey100")
 
       if airstrike_ability.Hovered():
-        draw_text("Poison Pit",alt_text_font,(255,255,255), 375,125, True)
+        draw_text("Poison Pit",alt_text_font,(255,255,255), 385,125, True)
   
       if airstrike_ability.draw(screen):
         new_aristrike = airstrike("airstrike_1")
@@ -849,7 +852,7 @@ while run:
         airstrike_ability2.change_cost_color("grey100")
     
       if airstrike_ability2.Hovered():
-        draw_text("Avalanche",alt_text_font,(255,255,255), 375,125, True)
+        draw_text("Avalanche",alt_text_font,(255,255,255), 385,125, True)
 
       if airstrike_ability2.draw(screen):
         new_aristrike = airstrike("airstrike_2")
@@ -862,7 +865,7 @@ while run:
         airstrike_ability3.change_cost_color("grey100")
 
       if airstrike_ability3.Hovered():
-        draw_text("Fire Nova",alt_text_font,(255,255,255), 375,125, True)
+        draw_text("Fire Nova",alt_text_font,(255,255,255), 385,125, True)
 
       if airstrike_ability3.draw(screen):
         new_aristrike = airstrike("airstrike_3")
@@ -875,7 +878,7 @@ while run:
         airstrike_ability4.change_cost_color("grey100")
 
       if airstrike_ability4.Hovered():
-        draw_text("Rockfall",alt_text_font,(255,255,255), 375,125, True)
+        draw_text("Rockfall",alt_text_font,(255,255,255), 385,125, True)
       if airstrike_ability4.draw(screen):
         new_aristrike = airstrike("airstrike_4")
         placing_ability = True
@@ -937,10 +940,6 @@ while run:
     if paused == True:
   
       buttons_draw2()
-
-
-      if placing_ability or selected_turret or placing_turrets:
-        cancel_button.draw2(screen)
       
       if level_started == False:
         begin_button.draw2(screen)
@@ -999,21 +998,18 @@ while run:
         #load button
         if load_button.font_color != "grey60":
           load_button.change_text_color("grey60")
-        if load_button.draw2(screen):
-            save_error = True
+        if load_button.Hovered():
+          draw_text("Cannot load during combat", text_font, "grey100", c.SCREEN_WIDTH/2, (c.SCREEN_HEIGHT/2) + 260, centered=True)
+        load_button.draw2(screen)
 
         #save button
         if save_button.font_color != "grey60":
           save_button.change_text_color("grey60")
-        if save_button.draw2(screen):
-            save_error = True
-            
-        if save_error == True:
-          draw_text("Can't save or load while in a round", error_font, (0, 0, 0), 250, 450)
-          draw_text("Wait until the end", error_font, (0, 0, 0), 350, 500)
+        if save_button.Hovered():
+          draw_text("Cannot save during combat", text_font, "grey100", c.SCREEN_WIDTH/2, (c.SCREEN_HEIGHT/2) + 260, centered=True)
+        save_button.draw2(screen)
 
       if resume_button.draw(screen):
-          save_error = False
           paused = False
           game_over = False
 
@@ -1045,12 +1041,14 @@ while run:
 
       if game_outcome == -1:       
         draw_text("GAME OVER", large_font, "grey100", (c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT/2) - 80, centered=True)
+        draw_text("Final Score:" + str(world.points), large_font, "grey100", (c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT/2) - 20, centered=True)
         if Loss_song_played == False:  
           Loss_song.play()
           Loss_song_played = True
 
       elif game_outcome == 1:
         draw_text("YOU WIN", large_font, "grey100", (c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT/2) - 80, centered=True)
+        draw_text("Final Score:" + str(world.points), large_font, "grey100", (c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT/2) - 20, centered=True)
         if Win_song_played == False:  
           Win_song.play()
           Win_song_played = True
@@ -1062,6 +1060,7 @@ while run:
         level_started = False
         placing_turrets = False
         selected_turret = None
+        placing_ability = False
         buy_round_song = False
         last_enemy_spawn = pg.time.get_ticks()
         world = World(world_data, map_image)

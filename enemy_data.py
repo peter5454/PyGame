@@ -54,31 +54,37 @@ ENEMY_DATA = {
     "ice_golem": {
         "health": 4,
         "element": "I",
-        "speed": 5
+        "speed": 5,
+        "type": "golem"
     },
     "fire_golem": {
         "health": 5,
         "element": "F",
-        "speed": 8
+        "speed": 8,
+        "type": "golem"
     },
     "earth_golem": {
         "health": 15,
         "element": "E",
-        "speed": 1.5
+        "speed": 1.5,
+        "type": "golem"
     },
     "ice_giant": {
         "health": 50,
         "element": "I",
-        "speed": 1.5
+        "speed": 1.5,
+        "type": "giant"
     },
     "fire_giant": {
         "health": 25,
         "element": "F",
-        "speed": 2
+        "speed": 2,
+        "type": "giant"
     },
     "earth_giant": {
         "health": 75,
         "element": "E",
-        "speed": 1
+        "speed": 1,
+        "type": "giant"
     }
 }
