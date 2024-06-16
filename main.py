@@ -42,9 +42,13 @@ save_error = False
 menu_counter = 0
 muted = False
 buy_round_song = False
-show_text = False
+show_saved_text = False
+show_load_text = False
 text_start_time = pg.time.get_ticks()
-text_display_duration = 2000
+load_text_start_time = pg.time.get_ticks()
+text_display_duration = 1500
+text_fade_duration = 500
+text_alpha = 255
 
 #load images
 #map
@@ -215,8 +219,9 @@ error_font = pg.font.Font("assets/fonts/Aller_Bd.ttf", 24)
 small_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 18)
 
 #function for outputting text onto the screen
-def draw_text(text, font, text_col, x, y, centered=False):
+def draw_text(text, font, text_col, x, y, centered=False, alpha = 255):
     img = font.render(text, True, text_col)
+    img.set_alpha(alpha)
     text_rect = img.get_rect()
     
     if centered:
@@ -554,6 +559,7 @@ while run:
   #update time
   current_time = pg.time.get_ticks()
   elapsed_time = current_time - text_start_time
+  load_elapsed_time = current_time - load_text_start_time
 
 
   #####################
@@ -948,17 +954,42 @@ while run:
           selected_turret = None
           placing_ability = False
           placing_turrets = False
+          show_load_text = True
+          load_text_start_time = current_time
+          load_elapsed_time = current_time - load_text_start_time
+        if show_load_text and load_elapsed_time < text_display_duration:
+          if load_elapsed_time < text_fade_duration:
+            #fade in effect
+            text_alpha = int((load_elapsed_time / text_fade_duration) * 255)
+          elif load_elapsed_time > text_display_duration - text_fade_duration:
+            #fade out effect
+            text_alpha = int(((text_display_duration - load_elapsed_time) / text_fade_duration) * 255)
+          else:
+            text_alpha = 255
+          draw_text("Game Loaded", text_font, "grey100", c.SCREEN_WIDTH/2, (c.SCREEN_HEIGHT/2) + 260, centered=True, alpha=text_alpha)
+        else:
+          show_load_text = False
         
         #save button
         if save_button.font_color != "grey100":
           save_button.change_text_color("grey100")
         if save_button.draw(screen):
           save()
-          show_text = True
-        if show_text & elapsed_time > text_display_duration:
-          draw_text("Game Saved", text_font, "grey100", c.SCREEN_WIDTH/2, (c.SCREEN_HEIGHT/2) + 300, centered=True)
+          show_saved_text = True
+          text_start_time = current_time
+          elapsed_time = current_time - text_start_time
+        if show_saved_text and elapsed_time < text_display_duration:
+          if elapsed_time < text_fade_duration:
+            #fade in effect
+            text_alpha = int((elapsed_time / text_fade_duration) * 255)
+          elif elapsed_time > text_display_duration - text_fade_duration:
+            #fade out effect
+            text_alpha = int(((text_display_duration - elapsed_time) / text_fade_duration) * 255)
+          else:
+            text_alpha = 255
+          draw_text("Game Saved", text_font, "grey100", c.SCREEN_WIDTH/2, (c.SCREEN_HEIGHT/2) + 260, centered=True, alpha=text_alpha)
         else:
-          show_text = False
+          show_saved_text = False
 
       draw_text("Paused",extra_large_font, "grey100", (c.SCREEN_WIDTH/2), 180, centered=True)#draw "PAUSED" text
       
