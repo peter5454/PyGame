@@ -52,29 +52,29 @@ ENEMY_SPAWN_DATA = [
 
 ENEMY_DATA = {
     "ice_golem": {
-        "health": 4,
+        "health": 6,
         "element": "I",
         "speed": 5
     },
     "fire_golem": {
-        "health": 5,
+        "health": 3,
         "element": "F",
         "speed": 8
     },
     "earth_golem": {
         "health": 15,
         "element": "E",
-        "speed": 1.5
+        "speed": 2.5
     },
     "ice_giant": {
         "health": 50,
         "element": "I",
-        "speed": 1.5
+        "speed": 2.5
     },
     "fire_giant": {
         "health": 25,
         "element": "F",
-        "speed": 2
+        "speed": 4
     },
     "earth_giant": {
         "health": 75,

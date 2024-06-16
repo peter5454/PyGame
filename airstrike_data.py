@@ -14,7 +14,7 @@ AIRSTRIKE_DATA = {
         "size" : 70,
         "cost" : 300,
         "waves" : 3,
-        "element": "F",
+        "element": "I",
         "spritesheet": 'assets/images/airstrikes/airstrike_ice.png'
     },
     "airstrike_3": {
@@ -23,7 +23,7 @@ AIRSTRIKE_DATA = {
         "size" : 80,
         "cost" : 350,
         "waves" : 3,
-        "element": "E",
+        "element": "F",
         "spritesheet": 'assets/images/airstrikes/airstrike_fire.png'
     },
     "airstrike_4": {
@@ -32,7 +32,7 @@ AIRSTRIKE_DATA = {
         "size" : 80,
         "cost" : 400,
         "waves" : 3,
-        "element": "I",
+        "element": "E",
         "spritesheet": 'assets/images/airstrikes/airstrike_earth.png'
     }
 }

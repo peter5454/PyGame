@@ -1050,7 +1050,7 @@ while run:
     if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
       mouse_pos = pg.mouse.get_pos()
       #check if mouse is on the game area
-      if mouse_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL and mouse_pos[1] > c.SCREEN_HEIGHT-680:
+      if mouse_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL and mouse_pos[1] > c.SCREEN_HEIGHT-640:
         if not paused and not game_over:
           selected_turret = None
           clear_selected()
