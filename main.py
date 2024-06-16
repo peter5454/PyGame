@@ -53,7 +53,7 @@ wood_frame_full = pg.image.load('assets/images/ui_backgrounds/wood_frame_full.pn
 health_bar_side_panel = pg.image.load('assets/images/ui_backgrounds/health_bar.png').convert_alpha()
 gold_bar = pg.image.load('assets/images/ui_backgrounds/gold_bar.png').convert_alpha()
 airstrike_banner = pg.image.load('assets/images/ui_backgrounds/airstrike_banner.png').convert_alpha()
-arrow_strike_ability_image = pg.image.load('assets/images/buttons/arrow_strike_button.png').convert_alpha()
+poison_strike_ability_image = pg.image.load('assets/images/buttons/poison_strike_button.png').convert_alpha()
 ice_strike_ability_image = pg.image.load('assets/images/buttons/ice_strike_button.png').convert_alpha()
 fire_strike_ability_image = pg.image.load('assets/images/buttons/fire_strike_button.png').convert_alpha()
 earth_strike_ability_image = pg.image.load('assets/images/buttons/earth_strike_button.png').convert_alpha()
@@ -121,10 +121,6 @@ menu_base_button_image = pg.image.load('assets/images/buttons/Menu_base_button.p
 mute_button_image = pg.image.load('assets/images/buttons/mute_button.png').convert_alpha()
 mute_button_pressed_image = pg.image.load('assets/images/buttons/mute_button_pressed.png').convert_alpha()
 
-#airstrike images
-cursor_ice_airstrike = pg.image.load('assets/images/airstrikes/airstrike_ice_cursor.png').convert_alpha()
-ice_airstrike_sheet = pg.image.load('assets/images/airstrikes/airstrike_ice.png').convert_alpha()
-
 #create groups
 enemy_group = pg.sprite.Group()
 turret_group = pg.sprite.Group()
@@ -153,7 +149,7 @@ upgrade_button = Button(c.SCREEN_WIDTH - 210, 290, upgrade_image,"UPGRADE",0,-13
 sell_button = Button(c.SCREEN_WIDTH - 210, 360, sell_image, "SELL",0,-13,"alt_font",22)
 
 #airstrike buttons
-airstrike_ability = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 164, 5, arrow_strike_ability_image)
+airstrike_ability = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 164, 5, poison_strike_ability_image)
 airstrike_ability.coin_cost(-22,44,8,45,str(AIRSTRIKE_DATA["airstrike_1"].get("cost")),18)
 airstrike_ability2 = Button((c.SCREEN_WIDTH-c.SIDE_PANEL)/2 - 76, 5, ice_strike_ability_image)
 airstrike_ability2.coin_cost(-22,44,8,45,str(AIRSTRIKE_DATA["airstrike_2"].get("cost")),18)
@@ -815,7 +811,7 @@ while run:
         airstrike_ability.change_cost_color("grey100")
 
       if airstrike_ability.Hovered():
-        draw_text("Arrow Strike",alt_text_font,(255,255,255), 375,125, True)
+        draw_text("Poison Pit",alt_text_font,(255,255,255), 375,125, True)
   
       if airstrike_ability.draw(screen):
         new_aristrike = airstrike("airstrike_1")
@@ -881,16 +877,21 @@ while run:
           placing_ability = False
       else:
         placing_ability = False
+    
+    #activate airstrike
     if active_airstrike:
       active_airstrike.place_ability(enemy_group, screen)
+      active_airstrike.play_animation(screen)
+    
       if active_airstrike.shots_fired < active_airstrike.waves:
-        draw_circ(123, 255, 123, active_airstrike.size, (active_airstrike.x,active_airstrike.y)) #if more airstrikes get more waves change this to include the different colour circles
+          active_airstrike.play_animation(screen)  # Continue playing animation
       if active_airstrike.shots_fired != counter:
-        counter = active_airstrike.shots_fired
-        draw_circ(255, 255, 255, active_airstrike.size, (active_airstrike.x,active_airstrike.y)) #flashes white once the timer is finished
+          counter = active_airstrike.shots_fired
+          active_airstrike.play_animation(screen)  # Flash animation
       if counter >= active_airstrike.waves:
-        counter = 0
-        active_airstrike = None
+          counter = 0
+          active_airstrike.stop_animation()
+          active_airstrike = None
 
     if pause_button.draw(screen):
         paused = True
