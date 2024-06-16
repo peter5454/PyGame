@@ -20,6 +20,7 @@ class Enemy(pg.sprite.Sprite):
         self.image = pg.transform.rotate(self.original_image, self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = self.pos
+        self.type = ENEMY_DATA.get(enemy_type)["type"]
     
     def update(self, world):
         self.move(world)
@@ -65,6 +66,10 @@ class Enemy(pg.sprite.Sprite):
             world.killed_enemies += 1
             #where money used to update
             self.kill()
+            if self.type == "golem":
+                world.points += 1
+            elif self.type == "giant":
+                world.points += 5
     
     def get_coords(self):
         return self.pos.x,self.pos.y
