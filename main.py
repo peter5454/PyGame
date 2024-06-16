@@ -42,6 +42,9 @@ save_error = False
 menu_counter = 0
 muted = False
 buy_round_song = False
+show_text = False
+text_start_time = pg.time.get_ticks()
+text_display_duration = 2000
 
 #load images
 #map
@@ -108,7 +111,6 @@ buy_market_image = pg.image.load('assets/images/buttons/market_buy_button.png').
 
 cancel_image = pg.image.load('assets/images/buttons/cancel.png').convert_alpha()
 start_image = pg.image.load('assets/images/buttons/start_button.png').convert_alpha()
-restart_image = pg.image.load('assets/images/buttons/restart.png').convert_alpha()
 upgrade_image = pg.image.load('assets/images/buttons/upgrade_turret.png').convert_alpha()
 sell_image = pg.image.load('assets/images/buttons/sell_button.png').convert_alpha()
 pause_button_image = pg.image.load('assets/images/buttons/pause_button.png').convert_alpha()
@@ -144,7 +146,7 @@ market_button.cost(33,-2,str(TURRET_DATA["MARKET"][0].get('cost')), 18)
 #selected tower
 cancel_button = Button(c.SCREEN_WIDTH - 190 ,450, cancel_image, "CANCEL",0,0,"alt_font",24)
 begin_button = Button(c.SCREEN_WIDTH - 242 ,670, start_image, "START ROUND",0,-2,"alt_font",30)
-restart_button = Button(312.5 , 320, restart_image)
+restart_button = Button(((c.SCREEN_WIDTH)/2 - 110), (c.SCREEN_HEIGHT/2), menu_base_button_image, "RESTART",0,0,'alt_font',30)
 upgrade_button = Button(c.SCREEN_WIDTH - 210, 290, upgrade_image,"UPGRADE",0,-13, "alt_font",22)
 sell_button = Button(c.SCREEN_WIDTH - 210, 360, sell_image, "SELL",0,-13,"alt_font",22)
 
@@ -174,19 +176,23 @@ pressed_mute_button = Button(55,5, mute_button_pressed_image)
 
 #sounds
 cannon_shot = pg.mixer.Sound('assets/audio/cannon_Sound.mp3')
-cannon_shot.set_volume(0.6)
+cannon_shot.set_volume(1.0)
 archer_shot = pg.mixer.Sound('assets/audio/fire_archer_sound.mp3')
 archer_shot.set_volume(0.3)
 mage_shot = pg.mixer.Sound('assets/audio/mage_sound.mp3')
-mage_shot.set_volume(0.7)
+mage_shot.set_volume(0.6)
 catapult_shot = pg.mixer.Sound('assets/audio/catapult_sound.mp3')
-catapult_shot.set_volume(0.8)
+catapult_shot.set_volume(1.0)
 place_turret_sound = pg.mixer.Sound('assets/audio/place_sound.mp3')
+place_turret_sound.set_volume(0.6)
 
 #music
 Main_menu_song = pg.mixer.Sound('assets/audio/main_theme.mp3')
+Main_menu_song.set_volume(0.7)
 Buy_song = pg.mixer.Sound('assets/audio/buy_theme.mp3')
+Buy_song.set_volume(0.6)
 Battle_song = pg.mixer.Sound('assets/audio/battle_theme.mp3')
+Battle_song.set_volume(0.5)
 
 #load json data for level
 with open('assets/images/maps/map_1.tmj') as file:
@@ -537,8 +543,9 @@ while run:
     turret_group.update(enemy_group, world)
 
 
-    #update airstrike
-
+  #update time
+  current_time = pg.time.get_ticks()
+  elapsed_time = current_time - text_start_time
 
 
   #####################
@@ -935,6 +942,11 @@ while run:
           save_button.change_text_color("grey100")
         if save_button.draw(screen):
           save()
+          show_text = True
+        if show_text & elapsed_time > text_display_duration:
+          draw_text("Game Saved", text_font, "grey100", c.SCREEN_WIDTH/2, (c.SCREEN_HEIGHT/2) + 300, centered=True)
+        else:
+          show_text = False
 
       draw_text("Paused",extra_large_font, "grey100", (c.SCREEN_WIDTH/2), 180, centered=True)#draw "PAUSED" text
       
@@ -979,9 +991,9 @@ while run:
       buttons_draw2()
       draw_circ(0,0,0,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
       if game_outcome == -1:       
-        draw_text("GAME OVER", large_font, "grey0", 310, 230)
+        draw_text("GAME OVER", large_font, "grey100", (c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT/2) - 80, centered=True)
       elif game_outcome == 1:
-        draw_text("YOU WIN", large_font, "grey0", 315, 230)
+        draw_text("YOU WIN", large_font, "grey100", (c.SCREEN_WIDTH/2), (c.SCREEN_HEIGHT/2) - 80, centered=True)
 
 
     #restart level
