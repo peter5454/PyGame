@@ -423,7 +423,6 @@ def main_menu():
   Buy_song.stop()
   Battle_song.stop()
   Loss_song.stop()
-
   run2 = True
   menu_bg = pg.transform.scale(menu_background,(1024,768))
   while run2:
@@ -767,7 +766,7 @@ while run:
       if king_button.Hovered():
         draw_text("King",alt_text_font,(255,255,255), 900,520, True)
         draw_text("Towers placed within its range",small_font,(255,255,255), 900,560, True)
-        draw_text("deal 2x the damage to enemies",small_font,(255,255,255), 900,590, True)
+        draw_text("deal more damage to enemies",small_font,(255,255,255), 900,590, True)
 
       if king_button.draw(screen):
         turret_equipped = TURRET_DATA.get("KING", None)
@@ -787,7 +786,7 @@ while run:
       if market_button.Hovered():
         draw_text("Market",alt_text_font,(255,255,255), 900,520, True)
         draw_text("Towers placed within its range",small_font,(255,255,255), 900,560, True)
-        draw_text("get twice the gold on kill",small_font,(255,255,255), 900,590, True)
+        draw_text("get more gold on kill",small_font,(255,255,255), 900,590, True)
       
       if market_button.draw(screen):
         turret_equipped = TURRET_DATA.get("MARKET", None)
@@ -940,7 +939,7 @@ while run:
     if paused == True:
   
       buttons_draw2()
-      
+
       if level_started == False:
         begin_button.draw2(screen)
         draw_circ(0,0,0,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
@@ -1080,7 +1079,7 @@ while run:
     if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
       mouse_pos = pg.mouse.get_pos()
       #check if mouse is on the game area
-      if mouse_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL and mouse_pos[1] > c.SCREEN_HEIGHT-680:
+      if mouse_pos[0] < c.SCREEN_WIDTH - c.SIDE_PANEL and mouse_pos[1] > c.SCREEN_HEIGHT-640:
         if not paused and not game_over:
           selected_turret = None
           clear_selected()
