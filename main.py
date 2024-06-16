@@ -24,6 +24,20 @@ clock = pg.time.Clock()
 screen = pg.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
 pg.display.set_caption("Medieval Meltdown")
 
+#load fonts for displaying text on the screen
+text_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 24)
+large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 36)
+extra_large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 48)
+alt_text_font = pg.font.Font("assets/fonts/MedievalSharp-Book.ttf", 36)
+alt_text_font = pg.font.Font("assets/fonts/MedievalSharp-Book.ttf", 68)
+small_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 18)
+
+
+loading_text = alt_text_font.render('Loading', True, (255, 255, 255))  # White color text
+text_rect = loading_text.get_rect(center=(c.SCREEN_WIDTH / 2-20, c.SCREEN_HEIGHT / 2-40))
+screen.blit(loading_text, text_rect)
+pg.display.flip()
+
 #game variables
 game_over = False
 game_outcome = 0 # -1 is loss & 1 is win
@@ -210,13 +224,7 @@ world = World(world_data, map_image)
 world.process_data()
 world.process_enemies()
 
-#load fonts for displaying text on the screen
-text_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 24)
-large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 36)
-extra_large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 48)
-alt_text_font = pg.font.Font("assets/fonts/MedievalSharp-Book.ttf", 36)
-error_font = pg.font.Font("assets/fonts/Aller_Bd.ttf", 24)
-small_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 18)
+
 
 #function for outputting text onto the screen
 def draw_text(text, font, text_col, x, y, centered=False, alpha = 255):
