@@ -187,6 +187,7 @@ place_turret_sound = pg.mixer.Sound('assets/audio/place_sound.mp3')
 Main_menu_song = pg.mixer.Sound('assets/audio/main_theme.mp3')
 Buy_song = pg.mixer.Sound('assets/audio/buy_theme.mp3')
 Battle_song = pg.mixer.Sound('assets/audio/battle_theme.mp3')
+Loss_song = pg.mixer.Sound('assets/audio/loss_theme.mp3')
 
 #load json data for level
 with open('assets/images/maps/map_1.tmj') as file:
@@ -409,6 +410,7 @@ def main_menu():
   buy_round_song = False
   Buy_song.stop()
   Battle_song.stop()
+  Loss_song.stop()
 
   run2 = True
   menu_bg = pg.transform.scale(menu_background,(1024,768))
@@ -581,6 +583,8 @@ while run:
 
 
   if game_over == False:
+    Loss_song_played = False
+    Loss_song.stop()
     #check if the level has been started or not
     if level_started == False:
       Battle_song.fadeout(5)
@@ -980,6 +984,9 @@ while run:
       draw_circ(0,0,0,1000,(c.SCREEN_WIDTH/2,c.SCREEN_HEIGHT/2))
       if game_outcome == -1:       
         draw_text("GAME OVER", large_font, "grey0", 310, 230)
+        if Loss_song_played == False:  
+          Loss_song.play()
+          Loss_song_played = True
       elif game_outcome == 1:
         draw_text("YOU WIN", large_font, "grey0", 315, 230)
 
