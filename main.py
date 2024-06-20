@@ -29,11 +29,11 @@ text_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 24)
 large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 36)
 extra_large_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 48)
 alt_text_font = pg.font.Font("assets/fonts/MedievalSharp-Book.ttf", 36)
-alt_text_font = pg.font.Font("assets/fonts/MedievalSharp-Book.ttf", 68)
+large_alt_text_font = pg.font.Font("assets/fonts/MedievalSharp-Book.ttf", 68)
 small_font = pg.font.Font("assets/fonts/Amita-Regular.ttf", 18)
 
 
-loading_text = alt_text_font.render('Loading', True, (255, 255, 255))  # White color text
+loading_text = large_alt_text_font.render('Loading', True, (255, 255, 255))  # White color text
 text_rect = loading_text.get_rect(center=(c.SCREEN_WIDTH / 2-20, c.SCREEN_HEIGHT / 2-40))
 screen.blit(loading_text, text_rect)
 pg.display.flip()
@@ -205,11 +205,11 @@ place_turret_sound.set_volume(0.6)
 
 #music
 Main_menu_song = pg.mixer.Sound('assets/audio/main_theme.mp3')
-Main_menu_song.set_volume(0.7)
+Main_menu_song.set_volume(0.1)
 Buy_song = pg.mixer.Sound('assets/audio/buy_theme.mp3')
-Buy_song.set_volume(0.6)
+Buy_song.set_volume(0.1)
 Battle_song = pg.mixer.Sound('assets/audio/battle_theme.mp3')
-Battle_song.set_volume(0.5)
+Battle_song.set_volume(0.3)
 Loss_song = pg.mixer.Sound('assets/audio/loss_theme.mp3')
 Win_song = pg.mixer.Sound('assets/audio/victory_music.mp3')
 

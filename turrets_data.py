@@ -8,13 +8,13 @@ TURRET_DATA = {
             "damage": 4,
             "cost": 150,
             "element": "N",
-            "upgrade_cost": 100,
+            "upgrade_cost": 200,
             "type_name" : "Cannon"
         },
         {
             "range": 140,
             "level": 2,
-            "cooldown": 400,
+            "cooldown": 600,
             "damage": 10,
             "element": "N",
             "upgrade_cost": 0
@@ -29,7 +29,7 @@ TURRET_DATA = {
             "damage": 7,
             "cost": 300,
             "element": "I",
-            "upgrade_cost": 300,
+            "upgrade_cost": 500,
             "type_name" : "Ice Mage"
         },
         {
@@ -89,7 +89,7 @@ TURRET_DATA = {
             "range" : 200,
             "level": 1,
             "multiplier": 2,
-            "cost": 400,
+            "cost": 800,
             "type_name" : "King"
         }
     ],
@@ -99,7 +99,7 @@ TURRET_DATA = {
             "range" : 250,
             "level": 1,
             "multiplier": 1.5,
-            "cost": 500,
+            "cost": 600,
             "type_name" : "Market"
         }
     ]
