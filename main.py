@@ -155,9 +155,9 @@ fire_button = Button(c.SCREEN_WIDTH - 245 ,360, buy_fire_image)
 fire_button.cost(33,-2,str(TURRET_DATA["TURRET_FIRE"][0].get('cost')), 18)
 earth_button = Button(c.SCREEN_WIDTH - 122 ,360, buy_earth_image)
 earth_button.cost(33,-2,str(TURRET_DATA["TURRET_EARTH"][0].get('cost')), 18)
-king_button = Button(c.SCREEN_WIDTH - 245 ,430, buy_king_image)
+king_button = Button(c.SCREEN_WIDTH - 122 ,430, buy_king_image)
 king_button.cost(33,-2,str(TURRET_DATA["KING"][0].get('cost')), 18)
-market_button = Button(c.SCREEN_WIDTH - 122 ,430, buy_market_image)
+market_button = Button(c.SCREEN_WIDTH - 245 ,430, buy_market_image)
 market_button.cost(33,-2,str(TURRET_DATA["MARKET"][0].get('cost')), 18)
 
 #selected tower
