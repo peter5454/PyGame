@@ -351,7 +351,7 @@ def update_supports(turret_group):
     
 def save():
   file = open("saves/save1/save1_world.csv", "w")
-  file.write('money,health,level' + '\n' + str(world.money) + ','+ str(world.health) + ',' + str(world.level) + ',')
+  file.write('money,health,level,points' + '\n' + str(world.money) + ','+ str(world.health) + ',' + str(world.level) + ','  + str(world.points))
   file.close()
 
   file = open("saves/save1/save1_turrets.csv", "w")
@@ -373,6 +373,7 @@ def load():
       world.money = int(row['money'])
       world.health = int(row['health'])
       world.level = int(row['level'])
+      world.points = int(row['points'])
       world.killed_enemies = 0
       world.missed_enemies = 0 #only works because you cant load and save during rounds
 
