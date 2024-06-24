@@ -4,7 +4,7 @@ TURRET_DATA = {
             "name" : "TURRET_CANNON",
             "range": 90,
             "level": 1,
-            "cooldown": 1000,
+            "cooldown": 1200,
             "damage": 4,
             "cost": 150,
             "element": "N",
@@ -14,7 +14,7 @@ TURRET_DATA = {
         {
             "range": 140,
             "level": 2,
-            "cooldown": 600,
+            "cooldown": 750,
             "damage": 10,
             "element": "N",
             "upgrade_cost": 0
@@ -25,7 +25,7 @@ TURRET_DATA = {
             "name" : "TURRET_ICE",
             "range": 200,
             "level": 1,
-            "cooldown": 2000,
+            "cooldown": 1000,
             "damage": 7,
             "cost": 300,
             "element": "I",
@@ -35,7 +35,7 @@ TURRET_DATA = {
         {
             "range": 250,
             "level": 2,
-            "cooldown": 1500,
+            "cooldown": 500,
             "damage": 15,
             "element": "I",
             "upgrade_cost": 0
@@ -46,7 +46,7 @@ TURRET_DATA = {
             "name" : "TURRET_FIRE",
             "range": 200,
             "level": 1,
-            "cooldown": 2000,
+            "cooldown": 1000,
             "damage": 7,
             "cost": 300,
             "element": "F",
@@ -56,7 +56,7 @@ TURRET_DATA = {
         {
             "range": 250,
             "level": 2,
-            "cooldown": 1500,
+            "cooldown": 500,
             "damage": 15,
             "element": "F",
             "upgrade_cost": 0
@@ -67,7 +67,7 @@ TURRET_DATA = {
             "name" : "TURRET_EARTH",
             "range": 200,
             "level": 1,
-            "cooldown": 2000,
+            "cooldown": 1000,
             "damage": 10,
             "cost": 300,
             "element": "E",
@@ -77,7 +77,7 @@ TURRET_DATA = {
         {
             "range": 250,
             "level": 2,
-            "cooldown": 1500,
+            "cooldown": 500,
             "damage": 15,
             "element": "E",
             "upgrade_cost": 0
